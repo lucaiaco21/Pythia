@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_883eafdeb3c344173d425a4cb48ecd49 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_883eafdeb3c344173d425a4cb48ecd49" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_883eafdeb3c344173d425a4cb48ecd49 = L.map(
+                "map_883eafdeb3c344173d425a4cb48ecd49",
+                {
+                    center: [40.4272512, -3.6988308],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_dc5a5060fea1db8c4673ecd0649b9900 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_dc5a5060fea1db8c4673ecd0649b9900.addTo(map_883eafdeb3c344173d425a4cb48ecd49);
+        
+    
+                var lat_lng_popup_13ab408e77258ce833a77e0b0bd743b1 = L.popup();
+                function latLngPop(e) {
+                    lat_lng_popup_13ab408e77258ce833a77e0b0bd743b1
+                        .setLatLng(e.latlng)
+                        .setContent("Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn(map_883eafdeb3c344173d425a4cb48ecd49);
+                    }
+                map_883eafdeb3c344173d425a4cb48ecd49.on('click', latLngPop);
+            
+    
+            var marker_cluster_d180885ce7a9b74e42ce13122ad9b307 = L.markerClusterGroup(
+                {
+}
+            );
+        
+    
+            var marker_8ed18bc90a889c9ac446efb369c8d57c = L.marker(
+                [40.4141749, -3.6988408],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_2c4c4febf5cd8a16adc7c41f6d42392c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_a62a2c9c4a1e7fb2ba7ca331fbfdd29b = $(`<div id="html_a62a2c9c4a1e7fb2ba7ca331fbfdd29b" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Brown Bear Bakery</b><br>         <span style="font-size: 12pt;">Rating: </b>4.1</b> in </b>261</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.9</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.0</span>     </div>     </div>`)[0];
+                popup_2c4c4febf5cd8a16adc7c41f6d42392c.setContent(html_a62a2c9c4a1e7fb2ba7ca331fbfdd29b);
+            
+        
+
+        marker_8ed18bc90a889c9ac446efb369c8d57c.bindPopup(popup_2c4c4febf5cd8a16adc7c41f6d42392c)
+        ;
+
+        
+    
+    
+            marker_8ed18bc90a889c9ac446efb369c8d57c.bindTooltip(
+                `<div>
+                     Brown Bear Bakery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_29e765033d2128f7eabb2dd812a26a0e = L.marker(
+                [40.4208042, -3.6981885],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_89b3b8a8f25b743e2e111a37cbaa3bc1 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_3d67501874ec2f6fa242f3f33fea30aa = $(`<div id="html_3d67501874ec2f6fa242f3f33fea30aa" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Bucolico Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>4.5</b> in </b>70</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.6</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.6</span>     </div>     </div>`)[0];
+                popup_89b3b8a8f25b743e2e111a37cbaa3bc1.setContent(html_3d67501874ec2f6fa242f3f33fea30aa);
+            
+        
+
+        marker_29e765033d2128f7eabb2dd812a26a0e.bindPopup(popup_89b3b8a8f25b743e2e111a37cbaa3bc1)
+        ;
+
+        
+    
+    
+            marker_29e765033d2128f7eabb2dd812a26a0e.bindTooltip(
+                `<div>
+                     Bucolico Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_ce5e826c17f25a284c7230dba42bc0cf = L.marker(
+                [40.4329764, -3.7147743],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_82328cbc09bf1d76c8dca8fe81155c59 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_416c8bb8f57acee7815cf13e17386ae6 = $(`<div id="html_416c8bb8f57acee7815cf13e17386ae6" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Cafe Green Bakery</b><br>         <span style="font-size: 12pt;">Rating: </b>4.6</b> in </b>68</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.9</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.6</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 5.0</span>     </div>     </div>`)[0];
+                popup_82328cbc09bf1d76c8dca8fe81155c59.setContent(html_416c8bb8f57acee7815cf13e17386ae6);
+            
+        
+
+        marker_ce5e826c17f25a284c7230dba42bc0cf.bindPopup(popup_82328cbc09bf1d76c8dca8fe81155c59)
+        ;
+
+        
+    
+    
+            marker_ce5e826c17f25a284c7230dba42bc0cf.bindTooltip(
+                `<div>
+                     Cafe Green Bakery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_e74fd735dde13090f961fdf6367e9705 = L.marker(
+                [40.4083463, -3.7027678],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_11707df27baade3797fd1eccd87c46f6 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_ef6b7c011002b08d6b07cba9c1210d47 = $(`<div id="html_ef6b7c011002b08d6b07cba9c1210d47" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Cafelito</b><br>         <span style="font-size: 12pt;">Rating: </b>4.4</b> in </b>328</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.3</span>     </div>     </div>`)[0];
+                popup_11707df27baade3797fd1eccd87c46f6.setContent(html_ef6b7c011002b08d6b07cba9c1210d47);
+            
+        
+
+        marker_e74fd735dde13090f961fdf6367e9705.bindPopup(popup_11707df27baade3797fd1eccd87c46f6)
+        ;
+
+        
+    
+    
+            marker_e74fd735dde13090f961fdf6367e9705.bindTooltip(
+                `<div>
+                     Cafelito
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2a2e61ef50dab5a03d6b43e7c8f5f588 = L.marker(
+                [40.4221388, -3.7025164],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_3a1ede6e260aa2307f79a25b57ee405f = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_93fbe3aebb6f935e9289f4908bfcab23 = $(`<div id="html_93fbe3aebb6f935e9289f4908bfcab23" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Café de la Luz</b><br>         <span style="font-size: 12pt;">Rating: </b>4.2</b> in </b>697</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.1</span>     </div>     </div>`)[0];
+                popup_3a1ede6e260aa2307f79a25b57ee405f.setContent(html_93fbe3aebb6f935e9289f4908bfcab23);
+            
+        
+
+        marker_2a2e61ef50dab5a03d6b43e7c8f5f588.bindPopup(popup_3a1ede6e260aa2307f79a25b57ee405f)
+        ;
+
+        
+    
+    
+            marker_2a2e61ef50dab5a03d6b43e7c8f5f588.bindTooltip(
+                `<div>
+                     Café de la Luz
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_555cf5025f51f9eb664bfaaa55771160 = L.marker(
+                [40.4220755, -3.6956977],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_e253143e361ca24f5fec2219a3334391 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7efffabb0242b2a0ea10dca4955d552f = $(`<div id="html_7efffabb0242b2a0ea10dca4955d552f" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Celicioso</b><br>         <span style="font-size: 12pt;">Rating: </b>4.3</b> in </b>1302</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.2</span>     </div>     </div>`)[0];
+                popup_e253143e361ca24f5fec2219a3334391.setContent(html_7efffabb0242b2a0ea10dca4955d552f);
+            
+        
+
+        marker_555cf5025f51f9eb664bfaaa55771160.bindPopup(popup_e253143e361ca24f5fec2219a3334391)
+        ;
+
+        
+    
+    
+            marker_555cf5025f51f9eb664bfaaa55771160.bindTooltip(
+                `<div>
+                     Celicioso
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_a80a2287567ee8aea9a2c920a7eb498a = L.marker(
+                [40.4272512, -3.6988308],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_ef6776bacac26256d6900390af51a3c5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_077a506c6896f4a98fb98d02a90e3039 = $(`<div id="html_077a506c6896f4a98fb98d02a90e3039" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Cereal Hunters Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>3.9</b> in </b>403</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.3</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> nan</span>     </div>     </div>`)[0];
+                popup_ef6776bacac26256d6900390af51a3c5.setContent(html_077a506c6896f4a98fb98d02a90e3039);
+            
+        
+
+        marker_a80a2287567ee8aea9a2c920a7eb498a.bindPopup(popup_ef6776bacac26256d6900390af51a3c5)
+        ;
+
+        
+    
+    
+            marker_a80a2287567ee8aea9a2c920a7eb498a.bindTooltip(
+                `<div>
+                     Cereal Hunters Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_958dabbb35817a847ad588bf41264538 = L.marker(
+                [40.4167707, -3.706803],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_bc3b4666e81f2ca2d49d8dddbbbff951 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_55f5f707834ed2a342a7a67d318c88ad = $(`<div id="html_55f5f707834ed2a342a7a67d318c88ad" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Chocolatería 1902</b><br>         <span style="font-size: 12pt;">Rating: </b>4.1</b> in </b>2612</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.9</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.6</span>     </div>     </div>`)[0];
+                popup_bc3b4666e81f2ca2d49d8dddbbbff951.setContent(html_55f5f707834ed2a342a7a67d318c88ad);
+            
+        
+
+        marker_958dabbb35817a847ad588bf41264538.bindPopup(popup_bc3b4666e81f2ca2d49d8dddbbbff951)
+        ;
+
+        
+    
+    
+            marker_958dabbb35817a847ad588bf41264538.bindTooltip(
+                `<div>
+                     Chocolatería 1902
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_11fd387be487376c501c549078db747d = L.marker(
+                [40.4167707, -3.706803],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_383b1e7ee1550bb88f10f19a74687b05 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7b6851444cec40db9d63b99cb50a00df = $(`<div id="html_7b6851444cec40db9d63b99cb50a00df" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Chocolatería San Ginés</b><br>         <span style="font-size: 12pt;">Rating: </b>4.2</b> in </b>24086</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.9</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.9</span>     </div>     </div>`)[0];
+                popup_383b1e7ee1550bb88f10f19a74687b05.setContent(html_7b6851444cec40db9d63b99cb50a00df);
+            
+        
+
+        marker_11fd387be487376c501c549078db747d.bindPopup(popup_383b1e7ee1550bb88f10f19a74687b05)
+        ;
+
+        
+    
+    
+            marker_11fd387be487376c501c549078db747d.bindTooltip(
+                `<div>
+                     Chocolatería San Ginés
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b7c32c1a055f19080f6f7a6577be6e86 = L.marker(
+                [40.4133967, -3.728403],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_b25a770e5d66c7b034cedf504ef8a8cf = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_064a4534245bf6b83169ccd8f0b0a693 = $(`<div id="html_064a4534245bf6b83169ccd8f0b0a693" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Churrería-Chocolatería Las Farolas</b><br>         <span style="font-size: 12pt;">Rating: </b>3.8</b> in </b>209</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.5</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.9</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 2.7</span>     </div>     </div>`)[0];
+                popup_b25a770e5d66c7b034cedf504ef8a8cf.setContent(html_064a4534245bf6b83169ccd8f0b0a693);
+            
+        
+
+        marker_b7c32c1a055f19080f6f7a6577be6e86.bindPopup(popup_b25a770e5d66c7b034cedf504ef8a8cf)
+        ;
+
+        
+    
+    
+            marker_b7c32c1a055f19080f6f7a6577be6e86.bindTooltip(
+                `<div>
+                     Churrería-Chocolatería Las Farolas
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_8a4fff15d38658fb38f98bdedb48619c = L.marker(
+                [40.4069569, -3.6993372],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_c2782f3ecc8c9dcf7bfc0f1dc1bfa371 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_911f811ac3ccda5a24abc720a6c1a251 = $(`<div id="html_911f811ac3ccda5a24abc720a6c1a251" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Crema Y Nata</b><br>         <span style="font-size: 12pt;">Rating: </b>4.9</b> in </b>157</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 5.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.9</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 5.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 5.0</span>     </div>     </div>`)[0];
+                popup_c2782f3ecc8c9dcf7bfc0f1dc1bfa371.setContent(html_911f811ac3ccda5a24abc720a6c1a251);
+            
+        
+
+        marker_8a4fff15d38658fb38f98bdedb48619c.bindPopup(popup_c2782f3ecc8c9dcf7bfc0f1dc1bfa371)
+        ;
+
+        
+    
+    
+            marker_8a4fff15d38658fb38f98bdedb48619c.bindTooltip(
+                `<div>
+                     Crema Y Nata
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b5942a36e4e0f0c085b446c6a64034ae = L.marker(
+                [40.4108156, -3.6934091],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_b45f0d8e87ce2a32d07e451263805b3c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_b46763ab6daf33d6cbd1ac92bb427d26 = $(`<div id="html_b46763ab6daf33d6cbd1ac92bb427d26" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>El Patio Vertical</b><br>         <span style="font-size: 12pt;">Rating: </b>4.0</b> in </b>284</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.8</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.3</span>     </div>     </div>`)[0];
+                popup_b45f0d8e87ce2a32d07e451263805b3c.setContent(html_b46763ab6daf33d6cbd1ac92bb427d26);
+            
+        
+
+        marker_b5942a36e4e0f0c085b446c6a64034ae.bindPopup(popup_b45f0d8e87ce2a32d07e451263805b3c)
+        ;
+
+        
+    
+    
+            marker_b5942a36e4e0f0c085b446c6a64034ae.bindTooltip(
+                `<div>
+                     El Patio Vertical
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2c1e3ac08e2e7e520e40c9b2c789c3af = L.marker(
+                [40.4126774, -3.7105959],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_5476e4e61afd7438a869a04d49692ff5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_bd74844d10289fcb2fe932002f74c164 = $(`<div id="html_bd74844d10289fcb2fe932002f74c164" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>El Perro de Pavlov</b><br>         <span style="font-size: 12pt;">Rating: </b>4.8</b> in </b>85</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.7</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.8</span>     </div>     </div>`)[0];
+                popup_5476e4e61afd7438a869a04d49692ff5.setContent(html_bd74844d10289fcb2fe932002f74c164);
+            
+        
+
+        marker_2c1e3ac08e2e7e520e40c9b2c789c3af.bindPopup(popup_5476e4e61afd7438a869a04d49692ff5)
+        ;
+
+        
+    
+    
+            marker_2c1e3ac08e2e7e520e40c9b2c789c3af.bindTooltip(
+                `<div>
+                     El Perro de Pavlov
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_24068ed02f441ebeec321a7250962a08 = L.marker(
+                [40.4270528, -3.7092373],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_a0e7292077d65ed039fe118e1ba5fa0c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_2854145241c97407487ff7b4a0651837 = $(`<div id="html_2854145241c97407487ff7b4a0651837" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Federal Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>3.7</b> in </b>1078</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.5</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.7</span>     </div>     </div>`)[0];
+                popup_a0e7292077d65ed039fe118e1ba5fa0c.setContent(html_2854145241c97407487ff7b4a0651837);
+            
+        
+
+        marker_24068ed02f441ebeec321a7250962a08.bindPopup(popup_a0e7292077d65ed039fe118e1ba5fa0c)
+        ;
+
+        
+    
+    
+            marker_24068ed02f441ebeec321a7250962a08.bindTooltip(
+                `<div>
+                     Federal Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_8a3e850c68b35eab793c0b3f6c7dfac0 = L.marker(
+                [40.4238831, -3.7054987],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_d36805a206275daa8d6867226d3b3246 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_c0781e81d6922866e15ad4a27d9e6198 = $(`<div id="html_c0781e81d6922866e15ad4a27d9e6198" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>HanSo Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>4.2</b> in </b>436</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.2</span>     </div>     </div>`)[0];
+                popup_d36805a206275daa8d6867226d3b3246.setContent(html_c0781e81d6922866e15ad4a27d9e6198);
+            
+        
+
+        marker_8a3e850c68b35eab793c0b3f6c7dfac0.bindPopup(popup_d36805a206275daa8d6867226d3b3246)
+        ;
+
+        
+    
+    
+            marker_8a3e850c68b35eab793c0b3f6c7dfac0.bindTooltip(
+                `<div>
+                     HanSo Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_dfbb8308632c41fd8ac7c54f24ed08b5 = L.marker(
+                [40.4250643, -3.6765453],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_da98eeae6e5ef15716b80838c684877a = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_638ff940b7240a45d1814a7276c2301e = $(`<div id="html_638ff940b7240a45d1814a7276c2301e" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Isabel Maestre</b><br>         <span style="font-size: 12pt;">Rating: </b>4.1</b> in </b>19</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 5.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.9</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 5.0</span>     </div>     </div>`)[0];
+                popup_da98eeae6e5ef15716b80838c684877a.setContent(html_638ff940b7240a45d1814a7276c2301e);
+            
+        
+
+        marker_dfbb8308632c41fd8ac7c54f24ed08b5.bindPopup(popup_da98eeae6e5ef15716b80838c684877a)
+        ;
+
+        
+    
+    
+            marker_dfbb8308632c41fd8ac7c54f24ed08b5.bindTooltip(
+                `<div>
+                     Isabel Maestre
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_696f37c5b3a2b3c74c17f54eab2e1322 = L.marker(
+                [40.4314125, -3.7036297],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_fd21a7995a2170eb1ad6f3f51ba29324 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_f2cd0b53760413c325fb45c516497f28 = $(`<div id="html_f2cd0b53760413c325fb45c516497f28" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Kalua Helado Artesanal</b><br>         <span style="font-size: 12pt;">Rating: </b>4.4</b> in </b>448</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.4</span>     </div>     </div>`)[0];
+                popup_fd21a7995a2170eb1ad6f3f51ba29324.setContent(html_f2cd0b53760413c325fb45c516497f28);
+            
+        
+
+        marker_696f37c5b3a2b3c74c17f54eab2e1322.bindPopup(popup_fd21a7995a2170eb1ad6f3f51ba29324)
+        ;
+
+        
+    
+    
+            marker_696f37c5b3a2b3c74c17f54eab2e1322.bindTooltip(
+                `<div>
+                     Kalua Helado Artesanal
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2bd079dfdc1dabf6aa2155d9755e74a0 = L.marker(
+                [40.4253396, -3.701983],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_74ee9f0301ad3af359456f6746bc4fdf = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_04e9dc95cf8cba5e32d6b1a73550d00f = $(`<div id="html_04e9dc95cf8cba5e32d6b1a73550d00f" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>La Cocina de mi Vecina</b><br>         <span style="font-size: 12pt;">Rating: </b>4.4</b> in </b>596</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.4</span>     </div>     </div>`)[0];
+                popup_74ee9f0301ad3af359456f6746bc4fdf.setContent(html_04e9dc95cf8cba5e32d6b1a73550d00f);
+            
+        
+
+        marker_2bd079dfdc1dabf6aa2155d9755e74a0.bindPopup(popup_74ee9f0301ad3af359456f6746bc4fdf)
+        ;
+
+        
+    
+    
+            marker_2bd079dfdc1dabf6aa2155d9755e74a0.bindTooltip(
+                `<div>
+                     La Cocina de mi Vecina
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_d742071049b0e9d638ae271aa2161880 = L.marker(
+                [40.4257114, -3.6969584],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_e1300787ddd1b0c64c485eeb989c79b5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d91c1ec2ceeea46d1a1ef01e108b15da = $(`<div id="html_d91c1ec2ceeea46d1a1ef01e108b15da" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>La Duquesita</b><br>         <span style="font-size: 12pt;">Rating: </b>4.7</b> in </b>321</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.6</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.7</span>     </div>     </div>`)[0];
+                popup_e1300787ddd1b0c64c485eeb989c79b5.setContent(html_d91c1ec2ceeea46d1a1ef01e108b15da);
+            
+        
+
+        marker_d742071049b0e9d638ae271aa2161880.bindPopup(popup_e1300787ddd1b0c64c485eeb989c79b5)
+        ;
+
+        
+    
+    
+            marker_d742071049b0e9d638ae271aa2161880.bindTooltip(
+                `<div>
+                     La Duquesita
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_e375a53982cc4cf810f84b0aa25d3247 = L.marker(
+                [40.4706396, -3.5806217],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_f949c0149e951e955a32b051ae1e39af = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_e5c918ac236e4b8c8b402f5758828fd1 = $(`<div id="html_e5c918ac236e4b8c8b402f5758828fd1" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>La General</b><br>         <span style="font-size: 12pt;">Rating: </b>4.6</b> in </b>419</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.7</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.6</span>     </div>     </div>`)[0];
+                popup_f949c0149e951e955a32b051ae1e39af.setContent(html_e5c918ac236e4b8c8b402f5758828fd1);
+            
+        
+
+        marker_e375a53982cc4cf810f84b0aa25d3247.bindPopup(popup_f949c0149e951e955a32b051ae1e39af)
+        ;
+
+        
+    
+    
+            marker_e375a53982cc4cf810f84b0aa25d3247.bindTooltip(
+                `<div>
+                     La General
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b43026308b3ddb6bf93f4eb516d63cad = L.marker(
+                [40.4143727, -3.6975918],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_0dca135d80bf20408329598617a13738 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_c698a28f2ba599b2886bcaa6a866ae7d = $(`<div id="html_c698a28f2ba599b2886bcaa6a866ae7d" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>La Mejor Tarta de Chocolate Del Mundo</b><br>         <span style="font-size: 12pt;">Rating: </b>3.5</b> in </b>372</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 3.6</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.6</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.9</span>     </div>     </div>`)[0];
+                popup_0dca135d80bf20408329598617a13738.setContent(html_c698a28f2ba599b2886bcaa6a866ae7d);
+            
+        
+
+        marker_b43026308b3ddb6bf93f4eb516d63cad.bindPopup(popup_0dca135d80bf20408329598617a13738)
+        ;
+
+        
+    
+    
+            marker_b43026308b3ddb6bf93f4eb516d63cad.bindTooltip(
+                `<div>
+                     La Mejor Tarta de Chocolate Del Mundo
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_275176d1510831a4ff25601c962dc5bf = L.marker(
+                [40.4352121, -3.7126864],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_af0fdd2fa421184b4c0988306625e67a = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_da856358a7a370b7b8264f3dbe0f6ed8 = $(`<div id="html_da856358a7a370b7b8264f3dbe0f6ed8" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Little Big Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>4.4</b> in </b>214</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.3</span>     </div>     </div>`)[0];
+                popup_af0fdd2fa421184b4c0988306625e67a.setContent(html_da856358a7a370b7b8264f3dbe0f6ed8);
+            
+        
+
+        marker_275176d1510831a4ff25601c962dc5bf.bindPopup(popup_af0fdd2fa421184b4c0988306625e67a)
+        ;
+
+        
+    
+    
+            marker_275176d1510831a4ff25601c962dc5bf.bindTooltip(
+                `<div>
+                     Little Big Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2d8dfc219a9072a41eace06083a3544c = L.marker(
+                [40.4141619, -3.7032321],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_b3ef15f1976fe11d05c8d381588ff857 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_96647d951698d335eeb70803ee0a25ac = $(`<div id="html_96647d951698d335eeb70803ee0a25ac" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Maestro Churrero</b><br>         <span style="font-size: 12pt;">Rating: </b>4.7</b> in </b>694</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.7</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.4</span>     </div>     </div>`)[0];
+                popup_b3ef15f1976fe11d05c8d381588ff857.setContent(html_96647d951698d335eeb70803ee0a25ac);
+            
+        
+
+        marker_2d8dfc219a9072a41eace06083a3544c.bindPopup(popup_b3ef15f1976fe11d05c8d381588ff857)
+        ;
+
+        
+    
+    
+            marker_2d8dfc219a9072a41eace06083a3544c.bindTooltip(
+                `<div>
+                     Maestro Churrero
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b7da6ac42d17a7a64da2b5c4904322ef = L.marker(
+                [40.4352448, -3.6755213],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_2d47c758591918a6ed24ad6f36e6c19c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_c768ecabdd7f2182f8bbbd01e620fece = $(`<div id="html_c768ecabdd7f2182f8bbbd01e620fece" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Mayoma</b><br>         <span style="font-size: 12pt;">Rating: </b>4.8</b> in </b>59</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.9</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.7</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.6</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.8</span>     </div>     </div>`)[0];
+                popup_2d47c758591918a6ed24ad6f36e6c19c.setContent(html_c768ecabdd7f2182f8bbbd01e620fece);
+            
+        
+
+        marker_b7da6ac42d17a7a64da2b5c4904322ef.bindPopup(popup_2d47c758591918a6ed24ad6f36e6c19c)
+        ;
+
+        
+    
+    
+            marker_b7da6ac42d17a7a64da2b5c4904322ef.bindTooltip(
+                `<div>
+                     Mayoma
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_fb6dfce46afa3c4c7d969f2fcc7a2c9b = L.marker(
+                [40.4242404, -3.708689],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_8f6fc4605a8218250b726ffee9cb7e64 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7c4da8783dd8ca3277cbc82871a92493 = $(`<div id="html_7c4da8783dd8ca3277cbc82871a92493" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Mision Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>4.5</b> in </b>103</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.7</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.4</span>     </div>     </div>`)[0];
+                popup_8f6fc4605a8218250b726ffee9cb7e64.setContent(html_7c4da8783dd8ca3277cbc82871a92493);
+            
+        
+
+        marker_fb6dfce46afa3c4c7d969f2fcc7a2c9b.bindPopup(popup_8f6fc4605a8218250b726ffee9cb7e64)
+        ;
+
+        
+    
+    
+            marker_fb6dfce46afa3c4c7d969f2fcc7a2c9b.bindTooltip(
+                `<div>
+                     Mision Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_61e07287c4501d81cadd3450d6e01c16 = L.marker(
+                [40.4218087, -3.6976066],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_940c69b794db389d133a069bf927772f = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_2da94dddd0ea332492a2af6c96938c68 = $(`<div id="html_2da94dddd0ea332492a2af6c96938c68" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Mistura Ice Cream</b><br>         <span style="font-size: 12pt;">Rating: </b>4.4</b> in </b>305</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 10.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.1</span>     </div>     </div>`)[0];
+                popup_940c69b794db389d133a069bf927772f.setContent(html_2da94dddd0ea332492a2af6c96938c68);
+            
+        
+
+        marker_61e07287c4501d81cadd3450d6e01c16.bindPopup(popup_940c69b794db389d133a069bf927772f)
+        ;
+
+        
+    
+    
+            marker_61e07287c4501d81cadd3450d6e01c16.bindTooltip(
+                `<div>
+                     Mistura Ice Cream
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_6bc5e085ba5c234f62ecf90e4607a1fa = L.marker(
+                [40.4116896, -3.6946906],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_ca9f163ad767bf7cea65838f10e2fdf5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7ef5ccf376fd7e1d48fc0e76dca15d84 = $(`<div id="html_7ef5ccf376fd7e1d48fc0e76dca15d84" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Motteau</b><br>         <span style="font-size: 12pt;">Rating: </b>4.8</b> in </b>318</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.9</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.6</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.8</span>     </div>     </div>`)[0];
+                popup_ca9f163ad767bf7cea65838f10e2fdf5.setContent(html_7ef5ccf376fd7e1d48fc0e76dca15d84);
+            
+        
+
+        marker_6bc5e085ba5c234f62ecf90e4607a1fa.bindPopup(popup_ca9f163ad767bf7cea65838f10e2fdf5)
+        ;
+
+        
+    
+    
+            marker_6bc5e085ba5c234f62ecf90e4607a1fa.bindTooltip(
+                `<div>
+                     Motteau
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_1c6085e2ec7636f06b6ddde2f4fd95c3 = L.marker(
+                [40.4107052, -3.6993496],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_b4638ac63c6666f6454c26ad4d9e563c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_8f08669dcdc152057e342db4f771ed00 = $(`<div id="html_8f08669dcdc152057e342db4f771ed00" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Nomade cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>4.5</b> in </b>92</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.6</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.5</span>     </div>     </div>`)[0];
+                popup_b4638ac63c6666f6454c26ad4d9e563c.setContent(html_8f08669dcdc152057e342db4f771ed00);
+            
+        
+
+        marker_1c6085e2ec7636f06b6ddde2f4fd95c3.bindPopup(popup_b4638ac63c6666f6454c26ad4d9e563c)
+        ;
+
+        
+    
+    
+            marker_1c6085e2ec7636f06b6ddde2f4fd95c3.bindTooltip(
+                `<div>
+                     Nomade cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_630618aeb28863a849b10a36509496e6 = L.marker(
+                [40.4345364, -3.7045129],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_d4fe2609a20d18df84dccb3392614bf7 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_6b5f7604b76fe227b05ecf9a6098f8b4 = $(`<div id="html_6b5f7604b76fe227b05ecf9a6098f8b4" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Pastelería Mallorca</b><br>         <span style="font-size: 12pt;">Rating: </b>3.6</b> in </b>775</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 3.7</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.5</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.5</span>     </div>     </div>`)[0];
+                popup_d4fe2609a20d18df84dccb3392614bf7.setContent(html_6b5f7604b76fe227b05ecf9a6098f8b4);
+            
+        
+
+        marker_630618aeb28863a849b10a36509496e6.bindPopup(popup_d4fe2609a20d18df84dccb3392614bf7)
+        ;
+
+        
+    
+    
+            marker_630618aeb28863a849b10a36509496e6.bindTooltip(
+                `<div>
+                     Pastelería Mallorca
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_1683dcc1b4a9016ac850845eef9c90fe = L.marker(
+                [40.413068, -3.6901971],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_709341cb02fd16760d2ea6d50f1bc2e5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_3ebfcb3ff98ccb1400ee0f8a162c62bf = $(`<div id="html_3ebfcb3ff98ccb1400ee0f8a162c62bf" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Plenti</b><br>         <span style="font-size: 12pt;">Rating: </b>4.7</b> in </b>694</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 9.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 11.0</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.8</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.8</span>     </div>     </div>`)[0];
+                popup_709341cb02fd16760d2ea6d50f1bc2e5.setContent(html_3ebfcb3ff98ccb1400ee0f8a162c62bf);
+            
+        
+
+        marker_1683dcc1b4a9016ac850845eef9c90fe.bindPopup(popup_709341cb02fd16760d2ea6d50f1bc2e5)
+        ;
+
+        
+    
+    
+            marker_1683dcc1b4a9016ac850845eef9c90fe.bindTooltip(
+                `<div>
+                     Plenti
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_59b6e915f229882e4d876899eaa58904 = L.marker(
+                [40.4081399, -3.7019197],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_a36f3d685f17d54f32aa461446ce7ad9 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_653b4a28cda0722b1379d82ca25d52d4 = $(`<div id="html_653b4a28cda0722b1379d82ca25d52d4" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Pum Pum Cafe</b><br>         <span style="font-size: 12pt;">Rating: </b>4.0</b> in </b>550</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.9</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.8</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.0</span>     </div>     </div>`)[0];
+                popup_a36f3d685f17d54f32aa461446ce7ad9.setContent(html_653b4a28cda0722b1379d82ca25d52d4);
+            
+        
+
+        marker_59b6e915f229882e4d876899eaa58904.bindPopup(popup_a36f3d685f17d54f32aa461446ce7ad9)
+        ;
+
+        
+    
+    
+            marker_59b6e915f229882e4d876899eaa58904.bindTooltip(
+                `<div>
+                     Pum Pum Cafe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_5b0286ad541f28c69742f96f37d71b66 = L.marker(
+                [40.4422498, -3.7124772],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_de71d2698595a0029bc5916e2c6a3c76 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_04496d7c55f21cf08cf8cc635954a087 = $(`<div id="html_04496d7c55f21cf08cf8cc635954a087" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Salon des Fleurs</b><br>         <span style="font-size: 12pt;">Rating: </b>4.2</b> in </b>145</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.5</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.8</span>     </div>     </div>`)[0];
+                popup_de71d2698595a0029bc5916e2c6a3c76.setContent(html_04496d7c55f21cf08cf8cc635954a087);
+            
+        
+
+        marker_5b0286ad541f28c69742f96f37d71b66.bindPopup(popup_de71d2698595a0029bc5916e2c6a3c76)
+        ;
+
+        
+    
+    
+            marker_5b0286ad541f28c69742f96f37d71b66.bindTooltip(
+                `<div>
+                     Salon des Fleurs
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_db6d2b3d5af5479929037c87f59ee73b = L.marker(
+                [40.4361032, -3.6801423],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_bf62a84ab97fd4eea68d99e9840df58e = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_6fbba01338628c31987f2f4004499bd1 = $(`<div id="html_6fbba01338628c31987f2f4004499bd1" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Sana Locura</b><br>         <span style="font-size: 12pt;">Rating: </b>4.1</b> in </b>169</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.2</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.9</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.1</span>     </div>     </div>`)[0];
+                popup_bf62a84ab97fd4eea68d99e9840df58e.setContent(html_6fbba01338628c31987f2f4004499bd1);
+            
+        
+
+        marker_db6d2b3d5af5479929037c87f59ee73b.bindPopup(popup_bf62a84ab97fd4eea68d99e9840df58e)
+        ;
+
+        
+    
+    
+            marker_db6d2b3d5af5479929037c87f59ee73b.bindTooltip(
+                `<div>
+                     Sana Locura
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7f7ff18bedddb0ee628c0b2893020486 = L.marker(
+                [40.4172021, -3.7096856],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_e084edbfb4b29197ef50f5be36950f52 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7af96a8123585facb322fce5ee603416 = $(`<div id="html_7af96a8123585facb322fce5ee603416" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Santa Eulalia Boulangerie</b><br>         <span style="font-size: 12pt;">Rating: </b>4.3</b> in </b>300</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.8</span>     </div>     </div>`)[0];
+                popup_e084edbfb4b29197ef50f5be36950f52.setContent(html_7af96a8123585facb322fce5ee603416);
+            
+        
+
+        marker_7f7ff18bedddb0ee628c0b2893020486.bindPopup(popup_e084edbfb4b29197ef50f5be36950f52)
+        ;
+
+        
+    
+    
+            marker_7f7ff18bedddb0ee628c0b2893020486.bindTooltip(
+                `<div>
+                     Santa Eulalia Boulangerie
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c24a12f6ea521a240bd19513472e32b8 = L.marker(
+                [40.4187565, -3.7105063],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_a49cf09a9aaa9078d02e021a572a8aba = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_af8d1627011b5da648a89d1706c3e159 = $(`<div id="html_af8d1627011b5da648a89d1706c3e159" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Scarlett</b><br>         <span style="font-size: 12pt;">Rating: </b>4.5</b> in </b>100</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.8</span>     </div>     </div>`)[0];
+                popup_a49cf09a9aaa9078d02e021a572a8aba.setContent(html_af8d1627011b5da648a89d1706c3e159);
+            
+        
+
+        marker_c24a12f6ea521a240bd19513472e32b8.bindPopup(popup_a49cf09a9aaa9078d02e021a572a8aba)
+        ;
+
+        
+    
+    
+            marker_c24a12f6ea521a240bd19513472e32b8.bindTooltip(
+                `<div>
+                     Scarlett
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_5bdd1df3ed4fd08a8e9ea0af850a3f6f = L.marker(
+                [40.4138618, -3.6894207],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_a196e670db4399af69b00c822a901a8b = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_6c5dc65c076951b1cb495250e7880573 = $(`<div id="html_6c5dc65c076951b1cb495250e7880573" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Sucre Salon De Te</b><br>         <span style="font-size: 12pt;">Rating: </b>4.4</b> in </b>126</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.3</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.1</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.0</span>     </div>     </div>`)[0];
+                popup_a196e670db4399af69b00c822a901a8b.setContent(html_6c5dc65c076951b1cb495250e7880573);
+            
+        
+
+        marker_5bdd1df3ed4fd08a8e9ea0af850a3f6f.bindPopup(popup_a196e670db4399af69b00c822a901a8b)
+        ;
+
+        
+    
+    
+            marker_5bdd1df3ed4fd08a8e9ea0af850a3f6f.bindTooltip(
+                `<div>
+                     Sucre Salon De Te
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_a165a42c0a588763b7a5e5409904ddde = L.marker(
+                [40.4273813, -3.7077139],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_b00ff7aa8dee0c53c2dfa5277a387bdb = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_2cd9f3ffccd7017a3a278b1961a8f34d = $(`<div id="html_2cd9f3ffccd7017a3a278b1961a8f34d" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>The Fix</b><br>         <span style="font-size: 12pt;">Rating: </b>4.6</b> in </b>59</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.7</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 4.5</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 4.4</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 4.6</span>     </div>     </div>`)[0];
+                popup_b00ff7aa8dee0c53c2dfa5277a387bdb.setContent(html_2cd9f3ffccd7017a3a278b1961a8f34d);
+            
+        
+
+        marker_a165a42c0a588763b7a5e5409904ddde.bindPopup(popup_b00ff7aa8dee0c53c2dfa5277a387bdb)
+        ;
+
+        
+    
+    
+            marker_a165a42c0a588763b7a5e5409904ddde.bindTooltip(
+                `<div>
+                     The Fix
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_515d0becc227f04cca9d2a4fb19baf18 = L.marker(
+                [40.4169865, -3.7074279],
+                {
+}
+            ).addTo(marker_cluster_d180885ce7a9b74e42ce13122ad9b307);
+        
+    
+        var popup_cdf97f34233e06e9a9721060455f406f = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_db82e41bd6c83ad1aa67055ffbfc29ba = $(`<div id="html_db82e41bd6c83ad1aa67055ffbfc29ba" style="width: 100.0%; height: 100.0%;">     <div style="font-size: 14pt;">         <b>Viena Capellanes</b><br>         <span style="font-size: 12pt;">Rating: </b>3.9</b> in </b>289</b> reviews </span><br>         <span style="font-size: 10pt;"><i>Food:</i> 4.0</span><br>         <span style="font-size: 10pt;"><i>Service:</i> 3.8</span><br>         <span style="font-size: 10pt;"><i>Value:</i> 3.7</span><br>         <span style="font-size: 10pt;"><i>Atmosphere:</i> 3.9</span>     </div>     </div>`)[0];
+                popup_cdf97f34233e06e9a9721060455f406f.setContent(html_db82e41bd6c83ad1aa67055ffbfc29ba);
+            
+        
+
+        marker_515d0becc227f04cca9d2a4fb19baf18.bindPopup(popup_cdf97f34233e06e9a9721060455f406f)
+        ;
+
+        
+    
+    
+            marker_515d0becc227f04cca9d2a4fb19baf18.bindTooltip(
+                `<div>
+                     Viena Capellanes
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            marker_cluster_d180885ce7a9b74e42ce13122ad9b307.addTo(map_883eafdeb3c344173d425a4cb48ecd49);
+        
+    
+            tile_layer_dc5a5060fea1db8c4673ecd0649b9900.addTo(map_883eafdeb3c344173d425a4cb48ecd49);
+        
+    
+            marker_cluster_d180885ce7a9b74e42ce13122ad9b307.addTo(map_883eafdeb3c344173d425a4cb48ecd49);
+        
+</script>
+</html>
