@@ -369,12 +369,12 @@ for tab, (category, data) in zip(tabs, insights_data.items()):
         # Category metrics
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Total Preguntas", len(data["questions"]))
+            st.metric("Feedback Positivos", 100)
         with col2:
-            st.metric("Keywords Únicas", len(set(category_keywords)))
+            st.metric("Feedback Negativos", 60)
         with col3:
-            avg_conf = sum(category_confidences) / len(category_confidences) if category_confidences else 0
-            st.metric("Confianza Promedio", f"{avg_conf:.2f}%")
+            avg_conf = 20
+            st.metric("", f"{avg_conf:.2f}%")
 
         st.markdown("---")
 
