@@ -11,7 +11,7 @@ st.set_page_config(page_title="Predicciones de Ventas", page_icon="💹", layout
 @st.cache_resource
 def load_model():
     """Load the pre-trained Prophet model"""
-    model_path = 2026_01_28_prophet_sales_model.joblib'
+    model_path = '2026_01_28_prophet_sales_model.joblib'
     
     if os.path.exists(model_path):
         try:
