@@ -55,7 +55,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Header
-st.title("🗞️ Análisis de Reseñas de Clientes")
+st.title("🗞️ Análisis de Reseñas de Clientes y de la Competencia")
 st.markdown("""
 Descubre insights accionables basados en las reseñas de clientes de tu competencia en Madrid.
 Estas recomendaciones están respaldadas por análisis de lenguaje natural con IA.
@@ -336,53 +336,14 @@ st.plotly_chart(fig_keywords, use_container_width=True)
 st.divider()
 
 # Madrid Map
-st.header("🗺️ Mapa de Madrid - Ubicaciones de Competidores")
+st.header("🗺️ Mapa de Madrid - Ubicaciones de Competidores y Valores de las Resenas")
 
 # Create Madrid map with sample coffee shop locations
-madrid_locations = pd.DataFrame({
-    'name': [
-        'Café Central', 'La Mallorquina', 'Café Gijón', 'Café Comercial',
-        'Federal Café', 'Hanso Café', 'Toma Café', 'Misión Café',
-        'Café de Oriente', 'Chocolatería San Ginés'
-    ],
-    'lat': [
-        40.4168, 40.4169, 40.4273, 40.4290,
-        40.4215, 40.4312, 40.4198, 40.4256,
-        40.4188, 40.4165
-    ],
-    'lon': [
-        -3.7038, -3.7033, -3.6914, -3.7051,
-        -3.7025, -3.6895, -3.7089, -3.7015,
-        -3.7142, -3.7068
-    ],
-    'reviews': [450, 380, 520, 410, 290, 310, 275, 190, 340, 580],
-    'rating': [4.5, 4.3, 4.7, 4.4, 4.6, 4.5, 4.8, 4.4, 4.3, 4.6]
-})
 
-fig_map = px.scatter_mapbox(
-    madrid_locations,
-    lat='lat',
-    lon='lon',
-    hover_name='name',
-    hover_data={'lat': False, 'lon': False, 'reviews': True, 'rating': True},
-    color='rating',
-    size='reviews',
-    color_continuous_scale='RdYlGn',
-    size_max=20,
-    zoom=12,
-    height=500,
-    title="Cafeterías Analizadas en Madrid"
-)
+with open("my_map.html", "r", encoding="utf-8") as f:
+    html_content = f.read()
 
-fig_map.update_layout(
-    mapbox_style="open-street-map",
-    mapbox=dict(
-        center=dict(lat=40.4168, lon=-3.7038),
-    ),
-    margin={"r": 0, "t": 40, "l": 0, "b": 0}
-)
-
-st.plotly_chart(fig_map, use_container_width=True)
+st.components.v1.html(html_content, width=None, height=650, scrolling=False)
 
 st.divider()
 
