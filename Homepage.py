@@ -38,7 +38,7 @@ st.markdown("""
     }
     .student-name {
         text-align: center;
-        font-size: 1.1rem;
+        font-size: 1.0rem;
         color: #262730;
         padding: 5px;
     }
@@ -91,7 +91,7 @@ with st.container(border=False):
     st.markdown('<div class="group-header">GRUPO 6</div>', unsafe_allow_html=True)
     
     # Grid layout for students (2 columns of 3 names) for better spacing
-    s_col1, s_col2 = st.columns(2)
+    s_col1, s_col2, s_col3 = st.columns(3)
     
     students = [
         "Anabel Jose Baéz Rodríguez",  "Ilan Alexander Arvelo Yagua",
