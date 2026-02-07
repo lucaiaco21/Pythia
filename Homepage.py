@@ -101,7 +101,7 @@ with st.container(border=False):
     
     # Distribute students across two columns
     for i, student in enumerate(students):
-        if i % 2 == 0:
+        if i % 3 == 0:
             with s_col1:
                 st.markdown(f'<div class="student-name">{student}</div>', unsafe_allow_html=True)
         else:
