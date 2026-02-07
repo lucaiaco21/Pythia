@@ -91,7 +91,7 @@ with st.container(border=False):
     st.markdown('<div class="group-header">GRUPO 6</div>', unsafe_allow_html=True)
     
     # Grid layout for students (2 columns of 3 names) for better spacing
-    s_col1, s_col2, s_col3 = st.columns(3)
+    s_col1, s_col2= st.columns(3)
     
     students = [
         "Anabel Jose Baéz Rodríguez",  "Ilan Alexander Arvelo Yagua",
@@ -101,7 +101,7 @@ with st.container(border=False):
     
     # Distribute students across two columns
     for i, student in enumerate(students):
-        if i % 3 == 0:
+        if i % 2 == 0:
             with s_col1:
                 st.markdown(f'<div class="student-name">{student}</div>', unsafe_allow_html=True)
         else:
