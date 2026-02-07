@@ -13,7 +13,7 @@ st.markdown("""
     /* Center the main title and change font */
     .main-title {
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 3rem;
+        font-size: 2.5rem;
         color: #0E1117;
         text-align: center;
         font-weight: 700;
@@ -77,13 +77,16 @@ st.markdown('<div class="main-title">Master data science, big data & business an
 st.markdown("""
 <div class="description">
     Development of an intelligent application (APP) for a Coffee Shop analyzing its market 
-    and predicting 14-day of revenues (€) and quantities of its 3 categories of products 
+    and predicting 14-day of revenues (€) and quantities for its 3 key categories of products 
     (Cafes Clasicos, Dulces & Reposteria, Desayunos & Tostadas).
 </div>
 """, unsafe_allow_html=True)
 
 # 5. Group and Students Section
-# Using a container with a border for a cleaner, modern look (Streamlit 1.30+)
+
+st.write("---") # A subtle divider line
+
+# Using a container withOUT a border for a cleaner, modern look (Streamlit 1.30+)
 with st.container(border=False):
     st.markdown('<div class="group-header">GRUPO 6</div>', unsafe_allow_html=True)
     
