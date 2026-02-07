@@ -84,7 +84,7 @@ st.markdown("""
 
 # 5. Group and Students Section
 # Using a container with a border for a cleaner, modern look (Streamlit 1.30+)
-with st.container(border=True):
+with st.container(border=False):
     st.markdown('<div class="group-header">GRUPO 6</div>', unsafe_allow_html=True)
     
     # Grid layout for students (2 columns of 3 names) for better spacing
