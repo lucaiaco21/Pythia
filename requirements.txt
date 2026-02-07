@@ -1,10 +1,10 @@
-streamlit
-prophet
-pandas
-plotly
-joblib
-requests
-openpyxl
-transformers
-torch
-sentencepiece
+streamlit          # Main app framework
+prophet            # For predictions page
+pandas             # Data processing
+plotly             # Interactive charts
+joblib             # For loading your Prophet model
+requests           # For API calls (if needed)
+openpyxl           # For reading Excel files
+transformers       # FREE AI model (Hugging Face)
+torch              # Required for transformers
+sentencepiece      # Required for tokenization
