@@ -1,459 +1,378 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+from datetime import datetime
+import warnings
+warnings.filterwarnings('ignore')
 
 # Page configuration
-st.set_page_config(page_title="Análisis de Reseñas", page_icon="🗞️", layout="wide")
+st.set_page_config(page_title="AI Review Insights", page_icon="🤖", layout="wide")
 
-# Custom CSS
-st.markdown("""
-    <style>
-    .main {
-        padding: 1rem;
-    }
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 24px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        padding-left: 20px;
-        padding-right: 20px;
-        background-color: #f0f2f6;
-        border-radius: 10px 10px 0 0;
-        font-weight: 600;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #ff4b4b;
-        color: white;
-    }
-    .insight-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        margin: 10px 0;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    .recommendation-card {
-        background-color: #f8f9fa;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 4px solid #667eea;
-        margin: 10px 0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .metric-card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+# ==================== AI MODEL LOADING ====================
 
-# Header
-st.title("🗞️ Análisis de Reseñas de Clientes y de la Competencia")
+@st.cache_resource
+def load_ai_model():
+    """Load the Hugging Face review summarization model - FREE, no API key!"""
+    try:
+        from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+        import torch
+        
+        model_name = "Manish014/review-summariser-gpt-config1"
+        
+        st.info("🤖 Loading AI model... (first time takes 1-2 minutes)")
+        
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+        
+        # Move to GPU if available (faster)
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model = model.to(device)
+        
+        return tokenizer, model, device, None
+        
+    except Exception as e:
+        return None, None, None, f"Error loading model: {str(e)}"
+
+def chunk_reviews(reviews, chunk_size=3):
+    """Split reviews into smaller chunks for better summaries"""
+    for i in range(0, len(reviews), chunk_size):
+        yield reviews[i:i + chunk_size]
+
+def summarize_reviews_ai(reviews, tokenizer, model, device):
+    """
+    Use AI to summarize ALL reviews together
+    Returns a comprehensive summary of what people say
+    """
+    try:
+        # Combine all reviews into chunks
+        all_summaries = []
+        
+        for chunk in chunk_reviews(reviews, chunk_size=3):
+            # Combine chunk of reviews
+            combined = " ".join(chunk)
+            
+            # Limit length
+            if len(combined) > 400:
+                combined = combined[:400]
+            
+            # Prepare for model
+            input_text = f"summarize: {combined}"
+            inputs = tokenizer(input_text, return_tensors="pt", truncation=True, max_length=512)
+            
+            # Move to device
+            inputs = {k: v.to(device) for k, v in inputs.items()}
+            
+            # Generate summary
+            outputs = model.generate(
+                inputs["input_ids"],
+                max_length=100,
+                min_length=30,
+                num_beams=4,
+                length_penalty=2.0,
+                early_stopping=True
+            )
+            
+            # Decode
+            summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
+            all_summaries.append(summary)
+        
+        return all_summaries
+        
+    except Exception as e:
+        return [f"Error: {str(e)}"]
+
+def extract_key_themes(reviews):
+    """Extract common themes/topics from reviews"""
+    # Common keywords for cafeterias
+    themes = {
+        'Coffee': ['coffee', 'espresso', 'latte', 'cappuccino', 'brew', 'beans', 'americano'],
+        'Service': ['service', 'staff', 'barista', 'friendly', 'helpful', 'quick', 'fast'],
+        'Atmosphere': ['atmosphere', 'cozy', 'vibe', 'comfortable', 'relaxing', 'ambiance'],
+        'Food': ['food', 'pastry', 'croissant', 'sandwich', 'cake', 'breakfast', 'lunch'],
+        'Location': ['location', 'convenient', 'parking', 'easy to find', 'accessible'],
+        'Price': ['price', 'value', 'worth', 'affordable', 'reasonable'],
+        'Cleanliness': ['clean', 'tidy', 'spotless', 'neat'],
+        'WiFi/Work': ['wifi', 'work', 'laptop', 'study', 'quiet', 'plugs', 'outlets']
+    }
+    
+    theme_reviews = {}
+    
+    for theme_name, keywords in themes.items():
+        relevant = []
+        for review in reviews:
+            if any(kw in str(review).lower() for kw in keywords):
+                relevant.append(review)
+        
+        if len(relevant) >= 2:  # At least 2 reviews mention it
+            theme_reviews[theme_name] = relevant
+    
+    return theme_reviews
+
+# ==================== MAIN APP ====================
+
+st.title("🤖 AI-Powered Competitor Review Insights")
 st.markdown("""
-Descubre insights accionables basados en las reseñas de clientes de tu competencia en Madrid.
-Estas recomendaciones están respaldadas por análisis de lenguaje natural con IA.
+**Analyze what customers LOVE about your competitors using FREE AI**  
+No API keys needed! Uses Hugging Face's review summarization model.
 """)
-
 st.divider()
 
-# Insights data structure
-insights_data = {
-    "☕ Calidad del Café": {
-        "icon": "☕",
-        "color": "#8B4513",
-        "questions": [
-            {
-                "question": "Among your competitors, the most preferred coffee type is [MASK].",
-                "recommendations": [
-                    {"text": "among your competitors, the most preferred coffee type is breakfast.", "keyword": "breakfast", "confidence": 0.23},
-                    {"text": "among your competitors, the most preferred coffee type is toast.", "keyword": "toast", "confidence": 0.16},
-                    {"text": "among your competitors, the most preferred coffee type is iced.", "keyword": "iced", "confidence": 0.06}
-                ]
-            },
-            {
-                "question": "Customers highly appreciate coffee that is [MASK].",
-                "recommendations": [
-                    {"text": "customers highly appreciate coffee that is delicious.", "keyword": "delicious", "confidence": 12.19},
-                    {"text": "customers highly appreciate coffee that is breakfast.", "keyword": "breakfast", "confidence": 0.07}
-                ]
-            },
-            {
-                "question": "To improve your coffee, focus on making it more [MASK].",
-                "recommendations": [
-                    {"text": "to improve your coffee, focus on making it more delicious.", "keyword": "delicious", "confidence": 0.64},
-                    {"text": "to improve your coffee, focus on making it more friendly.", "keyword": "friendly", "confidence": 0.09}
-                ]
-            },
-            {
-                "question": "The most valued coffee characteristic is [MASK].",
-                "recommendations": [
-                    {"text": "the most valued coffee characteristic is taste.", "keyword": "taste", "confidence": 1.06},
-                    {"text": "the most valued coffee characteristic is food.", "keyword": "food", "confidence": 0.10},
-                    {"text": "the most valued coffee characteristic is cup.", "keyword": "cup", "confidence": 0.07}
-                ]
-            }
-        ]
-    },
-    "🍽️ Calidad de Comida": {
-        "icon": "🍽️",
-        "color": "#FF6347",
-        "questions": [
-            {
-                "question": "Among your competitors, the most preferred food besides coffee is [MASK].",
-                "recommendations": [
-                    {"text": "among your competitors, the most preferred food besides coffee is breakfast.", "keyword": "breakfast", "confidence": 4.66},
-                    {"text": "among your competitors, the most preferred food besides coffee is tea.", "keyword": "tea", "confidence": 2.29},
-                    {"text": "among your competitors, the most preferred food besides coffee is chocolate.", "keyword": "chocolate", "confidence": 1.95}
-                ]
-            },
-            {
-                "question": "Customers value food that is [MASK].",
-                "recommendations": [
-                    {"text": "customers value food that is healthy.", "keyword": "healthy", "confidence": 13.21},
-                    {"text": "customers value food that is delicious.", "keyword": "delicious", "confidence": 7.82},
-                    {"text": "customers value food that is fresh.", "keyword": "fresh", "confidence": 3.26}
-                ]
-            },
-            {
-                "question": "The most appreciated food item is [MASK].",
-                "recommendations": [
-                    {"text": "the most appreciated food item is tea.", "keyword": "tea", "confidence": 0.19},
-                    {"text": "the most appreciated food item is cake.", "keyword": "cake", "confidence": 0.04},
-                    {"text": "the most appreciated food item is peanut.", "keyword": "peanut", "confidence": 0.03}
-                ]
-            },
-            {
-                "question": "Customers frequently praise food for being [MASK].",
-                "recommendations": [
-                    {"text": "customers frequently praise food for being delicious.", "keyword": "delicious", "confidence": 10.66},
-                    {"text": "customers frequently praise food for being healthy.", "keyword": "healthy", "confidence": 4.05},
-                    {"text": "customers frequently praise food for being fresh.", "keyword": "fresh", "confidence": 0.53}
-                ]
-            }
-        ]
-    },
-    "👥 Servicio y Personal": {
-        "icon": "👥",
-        "color": "#4169E1",
-        "questions": [
-            {
-                "question": "Customers in the location value service aspects such as [MASK].",
-                "recommendations": [
-                    {"text": "customers in the location value service aspects such as food.", "keyword": "food", "confidence": 1.33},
-                    {"text": "customers in the location value service aspects such as service.", "keyword": "service", "confidence": 0.81},
-                    {"text": "customers in the location value service aspects such as price.", "keyword": "price", "confidence": 0.11}
-                ]
-            },
-            {
-                "question": "Staff should be more [MASK] to improve customer satisfaction.",
-                "recommendations": [
-                    {"text": "staff should be more friendly to improve customer satisfaction.", "keyword": "friendly", "confidence": 0.10}
-                ]
-            },
-            {
-                "question": "Customers expect staff to be [MASK].",
-                "recommendations": [
-                    {"text": "customers expect staff to be friendly.", "keyword": "friendly", "confidence": 1.90}
-                ]
-            }
-        ]
-    },
-    "🏮 Atmósfera y Ambiente": {
-        "icon": "🏮",
-        "color": "#9370DB",
-        "questions": [
-            {
-                "question": "Customers prefer an atmosphere that is [MASK].",
-                "recommendations": [
-                    {"text": "customers prefer an atmosphere that is comfortable.", "keyword": "comfortable food", "confidence": 6.74},
-                    {"text": "customers prefer an atmosphere that is delicious.", "keyword": "delicious", "confidence": 0.09}
-                ]
-            },
-            {
-                "question": "The most valued ambiance feature is [MASK].",
-                "recommendations": [
-                    {"text": "the most valued ambiance feature is seating.", "keyword": "seating", "confidence": 0.06}
-                ]
-            },
-            {
-                "question": "Customers appreciate spaces that feel [MASK].",
-                "recommendations": [
-                    {"text": "customers appreciate spaces that feel delicious.", "keyword": "delicious", "confidence": 0.10}
-                ]
-            },
-            {
-                "question": "The ideal cafe environment should be [MASK].",
-                "recommendations": [
-                    {"text": "the ideal cafe environment should be vegetarian.", "keyword": "vegetarian", "confidence": 0.07}
-                ]
-            }
-        ]
-    },
-    "📍 Ubicación y Accesibilidad": {
-        "icon": "📍",
-        "color": "#32CD32",
-        "questions": [
-            {
-                "question": "Customers value locations that are [MASK].",
-                "recommendations": [
-                    {"text": "customers value locations that are expensive.", "keyword": "expensive", "confidence": 1.11},
-                    {"text": "customers value locations that are healthy.", "keyword": "healthy", "confidence": 1.02},
-                    {"text": "customers value locations that are friendly.", "keyword": "friendly", "confidence": 0.30}
-                ]
-            },
-            {
-                "question": "The most important location feature is [MASK].",
-                "recommendations": [
-                    {"text": "the most important location feature is city.", "keyword": "city", "confidence": 0.07}
-                ]
-            },
-            {
-                "question": "Customers prefer places that are [MASK] to reach.",
-                "recommendations": [
-                    {"text": "customers prefer places that are expensive to reach.", "keyword": "expensive", "confidence": 0.09},
-                    {"text": "customers prefer places that are pleasant to reach.", "keyword": "pleasant", "confidence": 0.01}
-                ]
-            }
-        ]
-    },
-    "💰 Precio y Valor": {
-        "icon": "💰",
-        "color": "#FFD700",
-        "questions": [
-            {
-                "question": "Customers expect prices to be [MASK].",
-                "recommendations": [
-                    {"text": "customers expect prices to be expensive.", "keyword": "expensive", "confidence": 0.16}
-                ]
-            },
-            {
-                "question": "The most valued pricing aspect is [MASK].",
-                "recommendations": [
-                    {"text": "the most valued pricing aspect is price.", "keyword": "price", "confidence": 2.28},
-                    {"text": "the most valued pricing aspect is quality.", "keyword": "quality", "confidence": 0.24},
-                    {"text": "the most valued pricing aspect is service.", "keyword": "service", "confidence": 0.15}
-                ]
-            },
-            {
-                "question": "Customers appreciate when prices are [MASK].",
-                "recommendations": [
-                    {"text": "customers appreciate when prices are expensive.", "keyword": "expensive", "confidence": 0.15}
-                ]
-            }
-        ]
-    }
-}
+# Sidebar
+with st.sidebar:
+    st.header("📋 How It Works")
+    st.markdown("""
+    This app uses **FREE AI** to analyze positive reviews!
+    
+    **Model:** review-summariser-gpt  
+    **Source:** Hugging Face (open-source)  
+    **Cost:** Completely FREE!
+    
+    ---
+    
+    **File format:**
+    ```csv
+    cafeteria,rating,review
+    Starbucks,5,Great coffee!
+    Local Cafe,4,Love the vibe
+    ```
+    
+    **Tips:**
+    - Focus on 4-5⭐ reviews only
+    - 10-50 reviews per cafe works best
+    - First load takes 1-2 min (downloads AI model)
+    """)
 
-# Overview Dashboard
-st.header("📊 Resumen Ejecutivo")
+# File upload
+st.subheader("📁 Upload Competitor Reviews")
+file = st.file_uploader("Upload CSV or Excel with positive reviews", type=['csv', 'xlsx'])
 
-# Calculate overall statistics
-total_recommendations = sum(len(cat["questions"]) for cat in insights_data.values())
-all_keywords = []
-all_confidences = []
-
-for category, data in insights_data.items():
-    for question in data["questions"]:
-        for rec in question["recommendations"]:
-            all_keywords.append(rec["keyword"])
-            all_confidences.append(rec["confidence"])
-
-# Top metrics
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.markdown(f"""
-    <div class="metric-card">
-        <h3>🎯</h3>
-        <h2>{len(insights_data)}</h2>
-        <p>Categorías</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown(f"""
-    <div class="metric-card">
-        <h3>❓</h3>
-        <h2>{total_recommendations}</h2>
-        <p>Preguntas Analizadas</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col3:
-    st.markdown(f"""
-    <div class="metric-card">
-        <h3>🔑</h3>
-        <h2>{len(set(all_keywords))}</h2>
-        <p>Keywords Únicas</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col4:
-    avg_confidence = sum(all_confidences) / len(all_confidences) if all_confidences else 0
-    st.markdown(f"""
-    <div class="metric-card">
-        <h3>📈</h3>
-        <h2>{avg_confidence:.2f}%</h2>
-        <p>Confianza Promedio</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.divider()
-
-# Top Keywords Visualization
-st.subheader("🔥 Top Keywords por Confianza")
-
-# Create dataframe for top keywords
-keyword_df = pd.DataFrame({
-    'keyword': all_keywords,
-    'confidence': all_confidences
-})
-top_keywords = keyword_df.groupby('keyword')['confidence'].max().sort_values(ascending=False).head(15)
-
-fig_keywords = px.bar(
-    x=top_keywords.values,
-    y=top_keywords.index,
-    orientation='h',
-    labels={'x': 'Confianza (%)', 'y': 'Keyword'},
-    title="Top 15 Keywords Más Relevantes",
-    color=top_keywords.values,
-    color_continuous_scale='Viridis'
-)
-fig_keywords.update_layout(
-    height=500,
-    showlegend=False,
-    template='plotly_white'
-)
-st.plotly_chart(fig_keywords, use_container_width=True)
-
-st.divider()
-
-# Madrid Map
-st.header("🗺️ Mapa de Madrid - Ubicaciones de Competidores y Valores de las Resenas")
-
-# Create Madrid map with sample coffee shop locations
-
-with open("my_map.html", "r", encoding="utf-8") as f:
-    html_content = f.read()
-
-st.components.v1.html(html_content, width=None, height=650, scrolling=False)
-
-st.divider()
-
-# Detailed Insights by Category
-st.header("📋 Insights Detallados por Categoría")
-
-# Create tabs for each category
-tabs = st.tabs(list(insights_data.keys()))
-
-for tab, (category, data) in zip(tabs, insights_data.items()):
-    with tab:
-        st.markdown(f"## {data['icon']} {category.split(' ', 1)[1]}")
-
-        # Category overview
-        category_keywords = []
-        category_confidences = []
-
-        for question in data["questions"]:
-            for rec in question["recommendations"]:
-                category_keywords.append(rec["keyword"])
-                category_confidences.append(rec["confidence"])
-
-        # Category metrics
-        col1, col2, col3 = st.columns(3)
+if file:
+    try:
+        # Load data
+        df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+        st.success(f"✅ {len(df)} reviews loaded")
+        
+        # Normalize columns
+        df.columns = df.columns.str.lower().str.strip()
+        df.rename(columns={
+            'cafe': 'cafeteria',
+            'shop': 'cafeteria',
+            'review': 'comment',
+            'text': 'comment'
+        }, inplace=True)
+        
+        # Validate
+        if not all(col in df.columns for col in ['cafeteria', 'rating', 'comment']):
+            st.error(f"❌ Need columns: cafeteria, rating, comment. Found: {', '.join(df.columns)}")
+            st.stop()
+        
+        # Preview
+        with st.expander("👀 Data Preview"):
+            st.dataframe(df.head())
+        
+        # Filter positive reviews only
+        df_positive = df[df['rating'] >= 4].copy()
+        st.info(f"📊 Analyzing {len(df_positive)} positive reviews (4-5 stars)")
+        
+        # Select cafeteria
+        cafeterias = df_positive['cafeteria'].unique().tolist()
+        
+        col1, col2 = st.columns([3, 1])
         with col1:
-            st.metric("Feedback Positivos", 100)
+            selected = st.selectbox("Select competitor cafeteria:", cafeterias)
         with col2:
-            st.metric("Feedback Negativos", 60)
-        with col3:
-            avg_conf = 20
-            st.metric("", f"{avg_conf:.2f}%")
-
-        st.markdown("---")
-
-        # Display each question with recommendations
-        for idx, question in enumerate(data["questions"], 1):
-            st.markdown(f"### ❓ Pregunta {idx}")
-            st.info(question["question"])
-
-            st.markdown("**💡 Recomendaciones:**")
-
-            # Create visualization for this question's recommendations
-            rec_data = pd.DataFrame(question["recommendations"])
-
-            if len(rec_data) > 1:
-                fig_rec = go.Figure()
-
-                fig_rec.add_trace(go.Bar(
-                    x=rec_data['keyword'],
-                    y=rec_data['confidence'],
-                    text=rec_data['confidence'].apply(lambda x: f'{x:.2f}%'),
-                    textposition='auto',
-                    marker=dict(
-                        color=rec_data['confidence'],
-                        colorscale='Viridis',
-                        showscale=False
-                    )
-                ))
-
-                fig_rec.update_layout(
-                    title=f"Nivel de Confianza por Keyword",
-                    xaxis_title="Keyword",
-                    yaxis_title="Confianza (%)",
-                    height=300,
-                    template='plotly_white'
-                )
-
-                st.plotly_chart(fig_rec, use_container_width=True)
-
-            # Display recommendations as cards
-            for i, rec in enumerate(question["recommendations"], 1):
-                confidence_color = "#28a745" if rec["confidence"] > 5 else "#ffc107" if rec["confidence"] > 1 else "#6c757d"
-
-                st.markdown(f"""
-                <div class="recommendation-card">
-                    <h4 style="margin: 0; color: #333;">#{i} - {rec['keyword'].upper()}</h4>
-                    <p style="margin: 10px 0; color: #666; font-style: italic;">"{rec['text']}"</p>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="flex: 1; background-color: #e9ecef; border-radius: 10px; height: 20px; overflow: hidden;">
-                            <div style="background-color: {confidence_color}; height: 100%; width: {min(rec['confidence'] * 5, 100)}%; border-radius: 10px;"></div>
-                        </div>
-                        <strong style="color: {confidence_color};">{rec['confidence']:.2f}%</strong>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-
+            compare_all = st.checkbox("Analyze all")
+        
+        st.divider()
+        
+        if not compare_all:
+            # ===== SINGLE CAFETERIA ANALYSIS =====
+            df_cafe = df_positive[df_positive['cafeteria'] == selected].copy()
+            
+            st.subheader(f"✨ What People Love About: {selected}")
+            st.caption(f"Based on {len(df_cafe)} positive reviews")
+            
+            # Quick stats
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Positive Reviews", len(df_cafe))
+            col2.metric("Average Rating", f"{df_cafe['rating'].mean():.2f}⭐")
+            col3.metric("5-Star Reviews", len(df_cafe[df_cafe['rating'] == 5]))
+            
+            # AI ANALYSIS BUTTON
+            if st.button("🤖 Analyze with AI", type="primary", use_container_width=True):
+                
+                # Load model
+                tokenizer, model, device, error = load_ai_model()
+                
+                if error:
+                    st.error(error)
+                    st.info("💡 Make sure 'transformers' and 'torch' are in requirements.txt")
+                    st.stop()
+                
+                st.success("✅ AI model loaded successfully!")
+                
+                # Get reviews
+                reviews = df_cafe['comment'].tolist()
+                
+                # 1. OVERALL AI SUMMARY
+                st.markdown("---")
+                st.subheader("📝 AI-Generated Summary")
+                st.caption("What customers love most about this cafeteria")
+                
+                with st.spinner("🤖 AI is reading all positive reviews..."):
+                    summaries = summarize_reviews_ai(reviews, tokenizer, model, device)
+                
+                for i, summary in enumerate(summaries, 1):
+                    st.success(f"**Summary {i}:** {summary}")
+                
+                # 2. THEME-BASED ANALYSIS
+                st.markdown("---")
+                st.subheader("🔍 What People Mention Most")
+                
+                with st.spinner("Extracting key themes..."):
+                    theme_reviews = extract_key_themes(reviews)
+                
+                if theme_reviews:
+                    for theme, theme_revs in theme_reviews.items():
+                        with st.expander(f"☕ {theme} - Mentioned in {len(theme_revs)} reviews"):
+                            
+                            # Show mention count
+                            st.caption(f"📊 {len(theme_revs)}/{len(reviews)} reviews ({len(theme_revs)/len(reviews)*100:.0f}%) mention this")
+                            
+                            # AI summary for this theme
+                            with st.spinner(f"AI analyzing {theme} reviews..."):
+                                theme_summaries = summarize_reviews_ai(theme_revs[:6], tokenizer, model, device)
+                            
+                            st.markdown("**🤖 AI Summary:**")
+                            for summary in theme_summaries:
+                                st.info(summary)
+                            
+                            # Show example reviews
+                            st.markdown("**📋 Example Reviews:**")
+                            for rev in theme_revs[:3]:
+                                st.markdown(f"• *\"{rev[:150]}...\"*")
+                else:
+                    st.warning("Not enough themed reviews found")
+                
+                # 3. OVERALL INSIGHTS
+                st.markdown("---")
+                st.subheader("💡 Key Takeaways")
+                
+                # Count most mentioned words
+                all_text = " ".join(reviews).lower()
+                words = all_text.split()
+                # Remove common words
+                stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'is', 'was', 'are', 'very', 'really', 'so', 'my', 'i', 'me'}
+                words = [w for w in words if len(w) > 3 and w not in stop_words]
+                
+                from collections import Counter
+                top_words = Counter(words).most_common(10)
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("**🔤 Most Mentioned Words:**")
+                    for word, count in top_words:
+                        st.write(f"• **{word}**: {count} times")
+                
+                with col2:
+                    st.markdown("**📊 Review Stats:**")
+                    st.write(f"• Total positive reviews: {len(df_cafe)}")
+                    st.write(f"• Average review length: {df_cafe['comment'].str.len().mean():.0f} characters")
+                    st.write(f"• Themes identified: {len(theme_reviews)}")
+            
+            # Show all reviews
             st.markdown("---")
+            st.subheader("📋 All Positive Reviews")
+            st.dataframe(
+                df_cafe[['rating', 'comment']].sort_values('rating', ascending=False),
+                use_container_width=True
+            )
+        
+        else:
+            # ===== COMPARE ALL CAFETERIAS =====
+            st.subheader("🔄 Quick Comparison")
+            
+            comp_data = []
+            for cafe in cafeterias:
+                df_c = df_positive[df_positive['cafeteria'] == cafe]
+                comp_data.append({
+                    'Cafeteria': cafe,
+                    'Positive Reviews': len(df_c),
+                    'Avg Rating': df_c['rating'].mean(),
+                    '5-Star %': len(df_c[df_c['rating'] == 5]) / len(df_c) * 100
+                })
+            
+            comp_df = pd.DataFrame(comp_data).sort_values('Avg Rating', ascending=False)
+            
+            st.dataframe(
+                comp_df.style.background_gradient(subset=['Avg Rating'], cmap='Greens'),
+                use_container_width=True
+            )
+            
+            # Chart
+            fig = px.bar(
+                comp_df,
+                x='Cafeteria',
+                y='Positive Reviews',
+                color='Avg Rating',
+                title='Positive Reviews Comparison',
+                color_continuous_scale='Greens'
+            )
+            st.plotly_chart(fig, use_container_width=True)
+            
+            st.info("💡 Select individual cafeterias for detailed AI analysis")
+    
+    except Exception as e:
+        st.error(f"❌ Error: {str(e)}")
+        st.exception(e)
 
-# Summary & Action Items
-st.header("🎯 Plan de Acción Recomendado")
-
-st.markdown("""
-### 🏆 Top 3 Prioridades Basadas en los Datos:
-
-1. **Calidad de Comida - "Healthy" (13.21% confianza)**
-   - Los clientes valoran enormemente la comida saludable
-   - **Acción:** Expandir opciones saludables en el menú y destacarlas
-
-2. **Calidad del Café - "Delicious" (12.19% confianza)**
-   - El sabor delicioso del café es altamente apreciado
-   - **Acción:** Invertir en granos de alta calidad y formación de baristas
-
-3. **Calidad de Comida - "Delicious" (10.66% confianza)**
-   - Los clientes elogian frecuentemente la comida deliciosa
-   - **Acción:** Mantener estándares de calidad consistentes
-
-### 📈 Próximos Pasos:
-
-- Revisar el menú actual y alinearlo con las preferencias identificadas
-- Capacitar al personal en las áreas prioritarias (amabilidad, servicio)
-- Implementar sistema de feedback para monitorear mejoras
-- Realizar análisis comparativo mensual con competidores
-""")
+else:
+    st.info("👆 Upload your competitor review data to start")
+    
+    # Example
+    st.markdown("---")
+    st.subheader("📝 Example File Format")
+    
+    example = pd.DataFrame({
+        'cafeteria': ['Starbucks', 'Starbucks', 'Local Coffee Co', 'Blue Bottle'],
+        'rating': [5, 4, 5, 5],
+        'review': [
+            'Great coffee and excellent service! The barista was super friendly and made my latte perfectly.',
+            'Good atmosphere for working. WiFi is fast and plenty of seating. Coffee is consistently good.',
+            'Best espresso in town! Love the cozy vibe and the staff really knows their coffee.',
+            'Amazing pour-over coffee. You can really taste the quality of the beans. Worth the price!'
+        ]
+    })
+    
+    st.dataframe(example, use_container_width=True)
+    
+    st.markdown("""
+    ## ✨ What This App Does
+    
+    ### 🎯 Focus on POSITIVE Reviews
+    - Analyzes only 4-5⭐ reviews
+    - Discovers what customers LOVE
+    - Helps you understand competitor strengths
+    
+    ### 🤖 FREE AI Analysis
+    - Uses Hugging Face's review-summariser model
+    - No API keys or payments needed
+    - Runs locally in your app
+    
+    ### 📊 What You Get
+    1. **Overall AI Summary** - What people love most
+    2. **Theme Analysis** - Coffee, Service, Atmosphere, etc.
+    3. **AI Summaries per Theme** - Detailed insights
+    4. **Example Reviews** - See actual customer comments
+    5. **Word Frequency** - Most mentioned positive words
+    
+    ### 🚀 Perfect For
+    - Understanding competitor strengths
+    - Finding market opportunities
+    - Improving your own cafeteria
+    - Benchmarking against competition
+    
+    **Upload your data and discover what makes competitors successful!**
+    """)
