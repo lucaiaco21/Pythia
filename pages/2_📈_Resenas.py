@@ -6,7 +6,6 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 
-# Page configuration
 st.set_page_config(page_title="AI Review Insights", page_icon="🤖", layout="wide")
 
 # ==================== AI MODEL LOADING ====================
@@ -186,7 +185,221 @@ if file:
         
         st.divider()
         
-        if not compare_all:
+        # Add "Analyze ALL" option
+        analyze_all = st.checkbox("🌟 Analyze ALL Competitors Together", 
+                                  help="Get insights across all cafeterias")
+        
+        if analyze_all:
+            st.subheader("🌍 Combined Analysis: All Competitors")
+            st.caption(f"Analyzing {len(df_positive)} positive reviews across {len(cafeterias)} cafeterias")
+            
+            # Quick stats
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Total Cafeterias", len(cafeterias))
+            col2.metric("Total Positive Reviews", len(df_positive))
+            col3.metric("Average Rating", f"{df_positive['rating'].mean():.2f}⭐")
+            
+            if st.button("🚀 Analyze All Competitors with AI", type="primary", use_container_width=True):
+                # Load model
+                tokenizer, model, device, error = load_ai_model()
+                
+                if error:
+                    st.error(error)
+                    st.stop()
+                
+                st.success("✅ AI model loaded!")
+                
+                # Get ALL positive reviews
+                all_reviews = df_positive['comment'].tolist()
+                
+                # 1. OVERALL INSIGHTS
+                st.markdown("---")
+                st.subheader("📝 Market Insights: What Customers Love")
+                
+                with st.spinner("🤖 AI analyzing all competitor reviews..."):
+                    summaries = summarize_reviews_ai(all_reviews, tokenizer, model, device)
+                
+                for i, summary in enumerate(summaries, 1):
+                    st.markdown(f"""
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                padding: 20px; border-radius: 10px; color: white; margin: 10px 0;
+                                box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <h4>💡 Insight {i}</h4>
+                        <p style="font-size: 16px; margin: 0;">{summary}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # 2. CATEGORY-BASED INSIGHTS
+                st.markdown("---")
+                st.subheader("🎯 Insights by Category")
+                
+                theme_reviews = extract_key_themes(all_reviews)
+                
+                # Define categories with icons
+                category_config = {
+                    'Coffee': {'icon': '☕', 'title': 'Coffee Quality', 'color': '#8B4513'},
+                    'Food': {'icon': '🍽️', 'title': 'Food Quality', 'color': '#FF6347'},
+                    'Service': {'icon': '👥', 'title': 'Service & Staff', 'color': '#4169E1'},
+                    'Atmosphere': {'icon': '🏮', 'title': 'Atmosphere', 'color': '#9370DB'},
+                    'Location': {'icon': '📍', 'title': 'Location', 'color': '#32CD32'},
+                    'Price': {'icon': '💰', 'title': 'Price & Value', 'color': '#FFD700'},
+                    'Cleanliness': {'icon': '✨', 'title': 'Cleanliness', 'color': '#00CED1'},
+                    'WiFi/Work': {'icon': '💻', 'title': 'Work Environment', 'color': '#FF69B4'}
+                }
+                
+                # Create tabs for categories
+                if theme_reviews:
+                    category_tabs = st.tabs([f"{category_config.get(theme, {}).get('icon', '📌')} {category_config.get(theme, {}).get('title', theme)}" 
+                                            for theme in theme_reviews.keys()])
+                    
+                    for tab, (theme, theme_revs) in zip(category_tabs, theme_reviews.items()):
+                        with tab:
+                            config = category_config.get(theme, {'icon': '📌', 'title': theme, 'color': '#666'})
+                            
+                            # Category header
+                            st.markdown(f"## {config['icon']} {config['title']}")
+                            
+                            # Stats
+                            col1, col2 = st.columns(2)
+                            col1.metric("Mentions", f"{len(theme_revs)} reviews")
+                            col2.metric("Frequency", f"{len(theme_revs)/len(all_reviews)*100:.1f}%")
+                            
+                            st.markdown("---")
+                            
+                            # AI Summary for this category
+                            st.markdown("### 🤖 AI-Generated Insights")
+                            
+                            with st.spinner(f"Analyzing {config['title']}..."):
+                                category_summaries = summarize_reviews_ai(theme_revs[:6], tokenizer, model, device)
+                            
+                            for summary in category_summaries:
+                                st.markdown(f"""
+                                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; 
+                                            border-left: 4px solid {config['color']}; margin: 10px 0;
+                                            box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                    <p style="margin: 0; font-size: 15px; color: #333;">
+                                        <strong>💡 {summary}</strong>
+                                    </p>
+                                </div>
+                                """, unsafe_allow_html=True)
+                            
+                            # Action recommendations
+                            st.markdown("### 🎯 Recommended Actions")
+                            
+                            # Generate action based on category
+                            actions = {
+                                'Coffee': [
+                                    "🔹 Source high-quality beans to match competitor standards",
+                                    "🔹 Train baristas on consistency and flavor profiles",
+                                    "🔹 Offer signature blends that customers mention positively"
+                                ],
+                                'Food': [
+                                    "🔹 Expand healthy food options based on customer demand",
+                                    "🔹 Ensure freshness and quality consistency",
+                                    "🔹 Highlight popular items mentioned in reviews"
+                                ],
+                                'Service': [
+                                    "🔹 Train staff on friendliness and customer engagement",
+                                    "🔹 Improve service speed during peak hours",
+                                    "🔹 Implement feedback system for continuous improvement"
+                                ],
+                                'Atmosphere': [
+                                    "🔹 Create comfortable seating arrangements",
+                                    "🔹 Optimize lighting and ambiance",
+                                    "🔹 Maintain cleanliness consistently"
+                                ],
+                                'Location': [
+                                    "🔹 Ensure easy accessibility and clear signage",
+                                    "🔹 Consider parking availability",
+                                    "🔹 Leverage convenient location in marketing"
+                                ],
+                                'Price': [
+                                    "🔹 Align pricing with perceived value",
+                                    "🔹 Offer loyalty programs or promotions",
+                                    "🔹 Communicate value proposition clearly"
+                                ],
+                                'Cleanliness': [
+                                    "🔹 Implement regular cleaning schedules",
+                                    "🔹 Maintain bathroom cleanliness",
+                                    "🔹 Keep tables and floors spotless"
+                                ],
+                                'WiFi/Work': [
+                                    "🔹 Provide fast, reliable WiFi",
+                                    "🔹 Ensure adequate power outlets",
+                                    "🔹 Create quiet work-friendly zones"
+                                ]
+                            }
+                            
+                            for action in actions.get(theme, ["🔹 Focus on customer feedback in this area"]):
+                                st.markdown(action)
+                            
+                            # Example reviews
+                            with st.expander("📋 Example Customer Comments"):
+                                for i, rev in enumerate(theme_revs[:5], 1):
+                                    st.markdown(f"{i}. *\"{rev[:200]}...\"*")
+                
+                # 3. TOP PRIORITIES SECTION
+                st.markdown("---")
+                st.subheader("🏆 Top Action Priorities")
+                
+                # Word frequency to identify top priorities
+                all_text = " ".join(all_reviews).lower()
+                words = all_text.split()
+                stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 
+                             'of', 'with', 'is', 'was', 'are', 'very', 'really', 'so', 'my', 'i', 'me', 'it', 'this', 'that'}
+                words = [w for w in words if len(w) > 3 and w not in stop_words]
+                
+                from collections import Counter
+                top_words = Counter(words).most_common(5)
+                
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+                            padding: 25px; border-radius: 10px; color: white; margin: 15px 0;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h3 style="margin-top: 0;">📊 Market Priorities Based on Customer Feedback</h3>
+                    <p style="font-size: 16px;">Focus your efforts on these areas to match competitor success:</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                priority_num = 1
+                for word, count in top_words:
+                    # Map words to actionable insights
+                    action_map = {
+                        'coffee': 'Invest in premium coffee quality and barista training',
+                        'food': 'Expand healthy and delicious food options',
+                        'service': 'Enhance staff friendliness and service speed',
+                        'great': 'Maintain consistency in what makes competitors great',
+                        'good': 'Focus on overall quality across all touchpoints',
+                        'place': 'Create an inviting and comfortable atmosphere',
+                        'staff': 'Train staff for excellent customer service',
+                        'nice': 'Pay attention to ambiance and cleanliness',
+                        'friendly': 'Prioritize warm, welcoming customer interactions',
+                        'delicious': 'Ensure food and drinks taste exceptional',
+                        'love': 'Replicate the elements customers love most',
+                        'best': 'Aim to be the best in key areas mentioned'
+                    }
+                    
+                    action = action_map.get(word, f'Focus on improving "{word}" quality')
+                    
+                    st.markdown(f"""
+                    <div style="background-color: white; padding: 15px; border-radius: 8px; 
+                                margin: 10px 0; border-left: 4px solid #f5576c;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h4 style="color: #f5576c; margin: 0 0 10px 0;">Priority #{priority_num}: {word.upper()}</h4>
+                        <p style="margin: 0; color: #333; font-size: 15px;">
+                            <strong>Action:</strong> {action}
+                        </p>
+                        <p style="margin: 5px 0 0 0; color: #666; font-size: 13px;">
+                            Mentioned {count} times across all reviews ({count/len(all_reviews)*100:.1f}% frequency)
+                        </p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    priority_num += 1
+                
+                st.success("✨ Analysis complete! Use these insights to improve your cafeteria strategy.")
+        
+        elif not compare_all:
             # ===== SINGLE CAFETERIA ANALYSIS =====
             df_cafe = df_positive[df_positive['cafeteria'] == selected].copy()
             
