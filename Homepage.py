@@ -94,9 +94,9 @@ with st.container(border=False):
     s_col1, s_col2 = st.columns(2)
     
     students = [
-        "Anabel Jose Baéz Rodríguez", "Fatima Tawfik Vázquez", 
-        "Genesis Karollay Hernandéz Gallegos", "Ilan Alexander Arvelo Yagua", 
-        "Luca Iacomino", "Marcio Yassuhiro Iha"
+        "Anabel Jose Baéz Rodríguez",  "Ilan Alexander Arvelo Yagua",
+        "Fatima Tawfik Vázquez", "Luca Iacomino", 
+        "Genesis Karollay Hernandéz Gallegos", "Marcio Yassuhiro Iha"
     ]
     
     # Distribute students across two columns
