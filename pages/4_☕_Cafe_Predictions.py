@@ -13,12 +13,12 @@ from datetime import datetime
 import numpy as np
 
 # ==================== PAGE CONFIGURATION ====================
-st.set_page_config(
-    page_title="Cafe Sales Prediction Dashboard",
-    page_icon="☕",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+#st.set_page_config(
+#    page_title="Cafe Sales Prediction Dashboard",
+#    page_icon="☕",
+#    layout="wide",
+#    initial_sidebar_state="expanded"
+#)
 
 # ==================== CUSTOM CSS (Matching Your Image) ====================
 st.markdown("""
