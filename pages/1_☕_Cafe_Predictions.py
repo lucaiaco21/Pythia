@@ -278,7 +278,7 @@ with st.sidebar:
 
     # Optional uploader: if provided, it always has priority
     uploaded_txt = st.file_uploader(
-        "Upload invoice_layout.txt (optional)",
+        "Upload invoice_layout.txt (or press RUN PREDICT to use demo_dataset.txt)",
         type=["txt"],
         help="If uploaded, this file is used. Otherwise, demo dataset is used."
     )
