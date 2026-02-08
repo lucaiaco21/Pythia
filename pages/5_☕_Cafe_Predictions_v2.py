@@ -308,10 +308,10 @@ if run_prediction:
             st.error(f"Pipeline/prediction error: {e}")
 
 elif "last_prediction" in st.session_state:
-    st.info(":red[Showing last prediction results. Click Run Prediction to generate new forecasts.]")
+    st.error("Showing last prediction results. Click Run Prediction to generate new forecasts.")
     last = st.session_state["last_prediction"]
     st.plotly_chart(create_comparison_chart(last, last["model_name"]), use_container_width=True)
-    display_metrics(last, last["model_name"])  # [file:1]
+    display_metrics(last, last["model_name"])
 
 st.markdown("---")
 st.markdown(
