@@ -27,17 +27,16 @@ st.set_page_config(
 )  # [file:1]
 
 # ==================== CUSTOM CSS (keep your existing CSS here) ====================
-st.markdown("""""", unsafe_allow_html=True)  # [file:1]
+st.markdown("""
+<style>
+/* Main content area: remove the top padding that pushes the title down */
+section.stMain .block-container {
+    padding-top: 0rem;
+}
+</style>
+""", unsafe_allow_html=True)
 
-# ==================== HEADER ====================
-st.markdown(
-    """
-<div class="main-header">
-  <h1>☕ CAFE MADRID predictions Dashboard</h1>
-</div>
-""",
-    unsafe_allow_html=True
-)  # [file:1]
+st.title("CAFE MADRID predictions Dashboard")
 
 # ==================== CONFIG ====================
 MODELCONFIG = {
