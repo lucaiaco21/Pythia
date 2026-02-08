@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-st.sidebar.caption(__file__)
+
 """
 ☕ Cafe Sales Prediction Dashboard - Multi-Scenario Forecasting
 TFM UCM - Page 4
@@ -86,6 +86,7 @@ st.markdown("""
     }
 
     /* Sidebar - lighter, clean background */
+    st.sidebar.caption(__file__)
     [data-testid="stSidebar"] {
         background-color: #F5F5F5;
     }
