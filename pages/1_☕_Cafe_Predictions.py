@@ -21,6 +21,15 @@ DEFAULT_INVOICE_TXT = Path("data/2026_01_Invoice_layout_CafeMadrid.txt")
 
 SCENARIO_NAMES = ["Baseline", "Low Pessimistic", "High Optimistic"]
 
+
+# MUST exist before build_scenarios_* functions
+try:
+    from data_pipeline_etl.prophet_inputs_pipeline import build_prophet_prediction_inputs
+except Exception as e:
+    st.error("Could not import build_prophet_prediction_inputs from data_pipeline_etl.prophet_inputs_pipeline.")
+    st.exception(e)
+    st.stop()
+
 # ------------------ SCENARIO BUILDERS ------------------
 @st.cache_data(show_spinner=False)
 def build_scenarios_from_path(txt_path: str, avg_weather_xlsx_path: str):
