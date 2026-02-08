@@ -265,16 +265,12 @@ def display_metrics(prediction_results: dict, model_name: str):
             continue
         d = details[scenario_name]
 
-            with cols[idx]:
-            # <-- Added explicit scenario label
-            st.markdown(f"**{DISPLAY_NAMES.get(scenario_name, scenario_name)}**")
-
-
-            st.metric(label="Total (14 days)", value=f"{d['sum']:,.0f} {unit}")
-            st.metric(label="Daily Average", value=f"{d['mean']:,.0f} {unit}")
-            st.metric(label="Range", value=f"{d['min']:,.0f} - {d['max']:,.0f}")
-
-
+        with cols[idx]:
+        # <-- Added explicit scenario label
+        st.markdown(f"**{DISPLAY_NAMES.get(scenario_name, scenario_name)}**")
+        st.metric(label="Total (14 days)", value=f"{d['sum']:,.0f} {unit}")
+        st.metric(label="Daily Average", value=f"{d['mean']:,.0f} {unit}")
+        st.metric(label="Range", value=f"{d['min']:,.0f} - {d['max']:,.0f}")
 
 # ==================== SIDEBAR ====================
 with st.sidebar:
