@@ -33,8 +33,7 @@ st.markdown("""""", unsafe_allow_html=True)  # [file:1]
 st.markdown(
     """
 <div class="main-header">
-  <h1>☕ Cafe Sales Prediction Dashboard</h1>
-  <p>📚 TFM UCM - Data Science Project | ☕ Powered by Prophet ML</p>
+  <h1>☕ CAFE MADRID predictions Dashboard</h1>
 </div>
 """,
     unsafe_allow_html=True
