@@ -1,16 +1,27 @@
-# ====== DROP-IN REPLACEMENT: SIDEBAR INPUTS + RUN PREDICTION + MOBILE-FRIENDLY COMPARISON ======
-# Paste this block inside your existing `with st.sidebar:` section (replacing the current Inputs/uploader + run button block)
-# AND paste the "MAIN RENDER" part right after the sidebar block (where you currently handle `if runprediction:`).
-
+import streamlit as st
+import pandas as pd
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-import pandas as pd
-import streamlit as st
+from datetime import datetime
 
-# --- Demo file in your repo ---
+# Uses your existing pipeline import (must exist earlier in your script)
+# from data_pipeline_etl.prophet_inputs_pipeline import build_prophet_prediction_inputs
+
+# ------------------ REQUIRED PATHS (DEFINE BEFORE USE) ------------------
+# Support both filenames: the one in your repo code and the one you attached (hyphens)
+WEATHER_CANDIDATES = [
+    Path("data/2026-01-31 Average Weather 2022 to 2026.xlsx"),
+    Path("data/2026-01-31-Average-Weather-2022-to-2026.xlsx"),
+    Path("2026-01-31 Average Weather 2022 to 2026.xlsx"),
+    Path("2026-01-31-Average-Weather-2022-to-2026.xlsx"),
+]
+AVG_WEATHER_XLSX = next((p for p in WEATHER_CANDIDATES if p.exists()), WEATHER_CANDIDATES[0])
+
 DEFAULT_INVOICE_TXT = Path("data/2026_01_Invoice_layout_CafeMadrid.txt")
 
-# --- Helper: build scenarios from a repo path (demo mode) ---
+SCENARIO_NAMES = ["Baseline", "Low Pessimistic", "High Optimistic"]
+
+# ------------------ SCENARIO BUILDERS ------------------
 @st.cache_data(show_spinner=False)
 def build_scenarios_from_path(txt_path: str, avg_weather_xlsx_path: str):
     baseline_df, low_df, high_df = build_prophet_prediction_inputs(
@@ -20,46 +31,51 @@ def build_scenarios_from_path(txt_path: str, avg_weather_xlsx_path: str):
     )
     return {"Baseline": baseline_df, "Low Pessimistic": low_df, "High Optimistic": high_df}
 
-# --- Helper: build scenarios from uploaded bytes (upload mode) ---
 @st.cache_data(show_spinner=False)
 def build_scenarios_from_upload(txt_bytes: bytes, avg_weather_xlsx_path: str):
     with NamedTemporaryFile(delete=False, suffix=".txt") as tmp:
         tmp.write(txt_bytes)
         tmp_path = tmp.name
+
     baseline_df, low_df, high_df = build_prophet_prediction_inputs(
         raw_txt_path=tmp_path,
         avg_weather_xlsx_path=avg_weather_xlsx_path,
         verbose=False
     )
-    return {"Baseline": baseline_df, "Low Pessimistic": low_df, "High Optimistic": high_df}
+    return {"Baseline": baseline_df, "Low Pessimistic": low_df, "High Optimistic": high_df
 
-# ===================== SIDEBAR UI (replace your current Inputs block with this) =====================
-st.markdown("### Inputs")
+    }
 
-input_mode = st.radio(
-    "Invoice layout source",
-    ["Use demo dataset (recommended)", "Upload new .txt"],
-    index=0
-)
+# ------------------ SIDEBAR UI (put inside your existing `with st.sidebar:` block) ------------------
+with st.sidebar:
+    st.markdown("### Inputs")
 
-uploaded_txt = None
-if input_mode == "Upload new .txt":
-    uploaded_txt = st.file_uploader(
-        "Upload invoice_layout.txt",
-        type=["txt"],
-        help="Upload the raw invoice export text file invoice_layout.txt."
+    input_mode = st.radio(
+        "Invoice layout source",
+        ["Use demo dataset (recommended)", "Upload new .txt"],
+        index=0
     )
-else:
-    st.caption(f"Using demo file: {DEFAULT_INVOICE_TXT.as_posix()}")
 
-st.info("Horizon days of prediction depends on how many days of historic data you have in invoice_layout.txt.")
-st.markdown("---")
-runprediction = st.button("Run Prediction", use_container_width=True, type="primary")
+    uploaded_txt = None
+    if input_mode == "Upload new .txt":
+        uploaded_txt = st.file_uploader("Upload invoice_layout.txt", type=["txt"])
+    else:
+        st.caption(f"Using demo file: {DEFAULT_INVOICE_TXT.as_posix()}")
 
-# ===================== MAIN RENDER (put this where your current `if runprediction:` block is) =====================
+    st.caption(f"Weather file resolved to: {AVG_WEATHER_XLSX.as_posix()}")
+
+    st.markdown("---")
+    runprediction = st.button("Run Prediction", use_container_width=True, type="primary")
+
+# ------------------ RUN PREDICTION (put where your current `if runprediction:` is) ------------------
 if runprediction:
     if not AVG_WEATHER_XLSX.exists():
-        st.error(f"Missing fixed weather file: {AVG_WEATHER_XLSX}")
+        st.error(
+            "Weather file not found. Put it in /data or project root.\n\n"
+            "Expected one of:\n"
+            "- data/2026-01-31 Average Weather 2022 to 2026.xlsx\n"
+            "- data/2026-01-31-Average-Weather-2022-to-2026.xlsx"
+        )
         st.stop()
 
     if input_mode == "Upload new .txt":
@@ -76,24 +92,15 @@ if runprediction:
     prediction_results = run_multi_scenario_prediction(selected_model, scenarios)
 
     if prediction_results and not prediction_results["dataframe"].empty:
-        # Store last prediction (your app already uses this pattern)
         st.session_state["last_prediction"] = prediction_results
-        st.success("Prediction completed successfully!")
 
-        # Chart (already labeled via trace names)
         st.plotly_chart(create_comparison_chart(prediction_results, selected_model), use_container_width=True)
-
-        # Your existing metrics
         display_metrics(prediction_results, selected_model)
 
-        # Scenario comparison table: make labels explicit + add mobile-friendly view
         st.markdown("### Scenario comparison")
 
         df_cmp = prediction_results["dataframe"].copy()
-
-        # Ensure consistent ordering and clearer labels
-        desired_order = ["Baseline", "Low Pessimistic", "High Optimistic"]
-        df_cmp = df_cmp.reindex(columns=[c for c in desired_order if c in df_cmp.columns])
+        df_cmp = df_cmp.reindex(columns=[c for c in SCENARIO_NAMES if c in df_cmp.columns])
         df_cmp = df_cmp.rename(columns={
             "Baseline": "Baseline",
             "Low Pessimistic": "Low (pessimistic)",
@@ -111,15 +118,15 @@ if runprediction:
         else:
             st.dataframe(df_cmp, use_container_width=True)
 
-        st.markdown("---")
         csv_data = df_cmp.reset_index().to_csv(index=False)
         st.download_button(
-            label="Download as CSV",
+            "Download as CSV",
             data=csv_data,
-            filename=f"predictions_{selected_model.replace(' ', '_')}.csv",
+            filename=f"predictions_{selected_model.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.csv",
             mime="text/csv",
             use_container_width=True
         )
     else:
         st.error("Prediction failed or produced empty results. Check your invoice_layout.txt content.")
+
 
