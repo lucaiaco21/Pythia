@@ -31,7 +31,7 @@ st.markdown("""
 <style>
 /* Main content area: remove the top padding that pushes the title down */
 section.stMain .block-container {
-    padding-top: 0rem;
+    padding-top: 1rem;
 }
 </style>
 """, unsafe_allow_html=True)
