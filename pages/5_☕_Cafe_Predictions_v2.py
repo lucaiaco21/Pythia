@@ -252,7 +252,7 @@ with st.sidebar:
         help="Upload the raw invoice export text file (invoice_layout.txt)."
     )  # [file:1]
 
-    st.info("Horizon days of prediction depends on how many days of historic data you have in invoice_layout.txt.")
+    #st.info("Horizon days of prediction depends on how many days of historic data you have in invoice_layout.txt.")
 
     st.markdown("---")
     run_prediction = st.button("Run Prediction", use_container_width=True, type="primary")  # [file:1]
