@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+st.sidebar.caption(__file__)
+
 """
 ☕ Cafe Sales Prediction Dashboard - Multi-Scenario Forecasting (Page 4)
 
