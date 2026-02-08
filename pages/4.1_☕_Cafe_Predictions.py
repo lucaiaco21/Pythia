@@ -53,7 +53,7 @@ st.markdown("""
 # ==================== PIPELINE CONSTANTS & MAPPING ====================
 
 # Static Weather File (Assumed to be in the repository)
-AVG_WEATHER_PATH = "2026-01-31 Average Weather 2022 to 2026.xlsx"
+AVG_WEATHER_PATH = "data/2026-01-31 Average Weather 2022 to 2026.xlsx"
 
 # Full Product Category Mapping
 PRODUCT_TO_CATEGORY = {
