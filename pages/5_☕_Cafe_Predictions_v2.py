@@ -52,7 +52,7 @@ MODELCONFIG = {
         "description": "Total revenue in Euros"
     },
     "Coffee Clásico units": {
-        "file": "2026_02_01_prophet_units_classic_coffee.joblib.joblib",
+        "file": "2026_02_01_prophet_units_classic_coffee.joblib",
         "unit": "units",
         "color_baseline": "#d62728",
         "color_low": "#9467bd",
@@ -60,7 +60,7 @@ MODELCONFIG = {
         "description": "Classic coffee units sold"
     },
     "Pastries & Sweets units": {
-        "file": "2026_02_01_prophet_units_pastries_and_sweets.joblib.joblib",
+        "file": "2026_02_01_prophet_units_pastries_and_sweets.joblib",
         "unit": "units",
         "color_baseline": "#e377c2",
         "color_low": "#7f7f7f",
@@ -75,7 +75,8 @@ MODELCONFIG = {
         "color_high": "#98df8a",
         "description": "Breakfast items units sold"
     }
-}  # [file:1]
+}
+
 
 SCENARIO_NAMES = ["Baseline", "Low Pessimistic", "High Optimistic"]  # [file:1]
 
