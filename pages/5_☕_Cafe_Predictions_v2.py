@@ -104,6 +104,7 @@ def load_model(model_name: str):
         return None
     except Exception as e:
         st.error(f"Error loading model: {e}")
+        st.exception(e)    
         return None  # [file:1]
 
 @st.cache_data(show_spinner=False)
@@ -165,7 +166,8 @@ def run_multi_scenario_prediction(model_name: str, scenarios_dict: dict):
 
         except Exception as e:
             st.error(f"Prediction failed for {scenario_name}: {e}")
-            continue
+            st.exception(e)
+            #continue
 
     if all_predictions.empty:
         return {"dataframe": pd.DataFrame(), "details": {}, "model_name": model_name}
