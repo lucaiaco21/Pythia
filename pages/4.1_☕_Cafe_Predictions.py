@@ -52,7 +52,7 @@ st.markdown("""
 
 # ==================== PIPELINE CONSTANTS & MAPPING ====================
 
-# Static Weather File (Assumed to be in the repository)
+# Static Weather File (Updated to 'data/' folder)
 AVG_WEATHER_PATH = "data/2026-01-31 Average Weather 2022 to 2026.xlsx"
 
 # Full Product Category Mapping
@@ -529,7 +529,8 @@ def build_prophet_prediction_inputs(
     visitantes_baseline: int = 1934,
     visitantes_low: int = 1419,
     visitantes_high: int = 2739,
-    drop_weather_cols: tuple = ("tmax", "tmin", "prec"),
+    # CHANGE: Default empty tuple so we don't drop weather cols by default
+    drop_weather_cols: tuple = (), 
     drop_calendar_cols: tuple = ("day", "month"),
     verbose: bool = True,
 ):
@@ -618,6 +619,7 @@ def build_prophet_prediction_inputs(
         avg_weather_df = pd.read_excel(avg_weather_xlsx_path)
         future_df = future_df.merge(avg_weather_df, on=["month", "day"], how="left")
         
+        # Calculate derived features but KEEP originals
         if "tmax" in future_df.columns and "tmin" in future_df.columns:
             future_df["temp_range"] = future_df["tmax"] - future_df["tmin"]
         if "prec" in future_df.columns:
@@ -632,25 +634,33 @@ def build_prophet_prediction_inputs(
 
     future_df = future_df.rename(columns={"date_day": "ds"})
 
-    # ---- I) Build three scenarios
-    future_1 = future_df.copy()
-    future_2 = future_df.copy()
-    future_3 = future_df.copy()
+    # ---- I) Build three scenarios (RENAMED TO MATCH SOURCE)
+    future_1_baseline_df = future_df.copy()
+    future_2_lowcxf_df = future_df.copy()
+    future_3_highcxf_df = future_df.copy()
     
-    future_1["visitantes_cxf"] = visitantes_baseline
-    future_2["visitantes_cxf"] = visitantes_low
-    future_3["visitantes_cxf"] = visitantes_high
+    future_1_baseline_df["visitantes_cxf"] = visitantes_baseline
+    future_2_lowcxf_df["visitantes_cxf"] = visitantes_low
+    future_3_highcxf_df["visitantes_cxf"] = visitantes_high
     
     cols_to_drop = list(drop_calendar_cols) + list(drop_weather_cols)
-    extra_drop = [c for c in future_1.columns if c.startswith("units_")] + ["is_rain", "is_heavy_rain"]
+    extra_drop = [c for c in future_1_baseline_df.columns if c.startswith("units_")] 
     
-    final_cols = ["ds", "invoices_lag_14", "tmed", "temp_range", "is_hot", "is_cold", "visitantes_cxf"]
+    # CHANGE: Added 'tmax', 'tmin', 'prec' to final_cols so they are passed to the model
+    final_cols = [
+        "ds", "invoices_lag_14", "tmed", "temp_range", 
+        "is_hot", "is_cold", "visitantes_cxf",
+        "tmax", "tmin", "prec", "is_rain", "is_heavy_rain"
+    ]
     
     def clean_cols(df):
+        # Only drop columns that are explicitly in the drop lists
         df = df.drop(columns=cols_to_drop+extra_drop, errors="ignore")
-        return df.reindex(columns=final_cols)
+        # Filter to keep available columns that match final_cols
+        available_cols = [c for c in final_cols if c in df.columns]
+        return df[available_cols]
 
-    return clean_cols(future_1), clean_cols(future_2), clean_cols(future_3)
+    return clean_cols(future_1_baseline_df), clean_cols(future_2_lowcxf_df), clean_cols(future_3_highcxf_df)
 
 
 # ==================== MAIN UI ====================
@@ -670,18 +680,16 @@ uploaded_file = st.sidebar.file_uploader("Upload Invoice Layout (.txt)", type=["
 
 st.sidebar.info(f"Using static weather file:\n**{AVG_WEATHER_PATH}**")
 
-# Load Model (assuming standard location or user path, keeping placeholder if not dynamic)
-# NOTE: Ensure your model file is accessible. 
-# Here we scan for a .joblib file if a specific path isn't hardcoded in previous logic
+# Load Model
 model_path = None
-# You might want to define a specific model path here:
-# model_path = "path/to/your/model.joblib" 
-# For now, let's assume it searches for one or uses a placeholder logic
-if not model_path:
-    # Basic search for a model in current directory
-    possible_models = list(Path(".").glob("*.joblib"))
-    if possible_models:
-        model_path = possible_models[0]
+# Search for a .joblib model in the current directory or models folder
+possible_models = list(Path(".").glob("*.joblib"))
+if not possible_models:
+    # Try models folder
+    possible_models = list(Path("models").glob("*.joblib"))
+
+if possible_models:
+    model_path = possible_models[0]
 
 loaded_model = None
 if model_path:
@@ -704,27 +712,28 @@ if uploaded_file is not None and loaded_model is not None:
         content = uploaded_file.read().decode("latin-1")
         
         with st.spinner("Processing invoices and generating scenarios..."):
-            f1, f2, f3 = build_prophet_prediction_inputs(content, AVG_WEATHER_PATH)
+            # Calling the function which now returns the named DFs
+            f1_base, f2_low, f3_high = build_prophet_prediction_inputs(content, AVG_WEATHER_PATH)
             
-        if f1.empty:
+        if f1_base.empty:
             st.error("Failed to generate input data. Check logs/files.")
         else:
             # Define Scenarios
             scenarios = {
                 "Baseline": {
-                    "data": f1,
+                    "data": f1_base,
                     "description": "Expected normal conditions",
                     "icon": "📊",
                     "color": "#3498DB"
                 },
                 "Low (Pessimistic)": {
-                    "data": f2,
+                    "data": f2_low,
                     "description": "Conservative estimate",
                     "icon": "📉",
                     "color": "#E74C3C"
                 },
                 "High (Optimistic)": {
-                    "data": f3,
+                    "data": f3_high,
                     "description": "Best case scenario",
                     "icon": "📈",
                     "color": "#2ECC71"
@@ -818,4 +827,3 @@ elif uploaded_file is None:
 
 elif loaded_model is None:
     st.error("Model not loaded. Please ensure the .joblib file is in the application directory.")
-
