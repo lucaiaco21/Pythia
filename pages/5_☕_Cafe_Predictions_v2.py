@@ -240,9 +240,9 @@ with st.sidebar:
         help="Select the metric you want to forecast."
     )  # [file:1]
 
-    st.markdown("---")
-    st.markdown(f"**Description:** {MODELCONFIG[selected_model]['description']}")
-    st.markdown(f"**Unit:** {MODELCONFIG[selected_model]['unit']}")
+    #st.markdown("---")
+    #st.markdown(f"**Description:** {MODELCONFIG[selected_model]['description']}")
+    #st.markdown(f"**Unit:** {MODELCONFIG[selected_model]['unit']}")
 
     st.markdown("---")
     st.markdown("## Inputs")
