@@ -31,6 +31,8 @@ except Exception as e:
     st.stop()
 
 # ------------------ SCENARIO BUILDERS ------------------
+#DEFAULT_INVOICE_TXT = Path("data/2026_01_Invoice_layout_CafeMadrid.txt")
+
 @st.cache_data(show_spinner=False)
 def build_scenarios_from_path(txt_path: str, avg_weather_xlsx_path: str):
     baseline_df, low_df, high_df = build_prophet_prediction_inputs(
@@ -38,7 +40,12 @@ def build_scenarios_from_path(txt_path: str, avg_weather_xlsx_path: str):
         avg_weather_xlsx_path=avg_weather_xlsx_path,
         verbose=False
     )
-    return {"Baseline": baseline_df, "Low Pessimistic": low_df, "High Optimistic": high_df}
+    return {
+        "Baseline": baseline_df,
+        "Low Pessimistic": low_df,
+        "High Optimistic": high_df
+    }
+
 
 @st.cache_data(show_spinner=False)
 def build_scenarios_from_upload(txt_bytes: bytes, avg_weather_xlsx_path: str):
@@ -46,7 +53,7 @@ def build_scenarios_from_upload(txt_bytes: bytes, avg_weather_xlsx_path: str):
         tmp.write(txt_bytes)
         tmp_path = tmp.name
 
-    baseline_df, low_df, high_df = build_prophet_prediction_inputs(
+    baseline_df, low_df, high_df = build_prophet_prediction_(
         raw_txt_path=tmp_path,
         avg_weather_xlsx_path=avg_weather_xlsx_path,
         verbose=False
@@ -56,25 +63,29 @@ def build_scenarios_from_upload(txt_bytes: bytes, avg_weather_xlsx_path: str):
     }
 
 # ------------------ SIDEBAR UI (put inside your existing `with st.sidebar:` block) ------------------
-with st.sidebar:
-    st.markdown("### Inputs")
+st.markdown("### Inputs")
 
-    input_mode = st.radio(
-        "Invoice layout source",
-        ["Use demo dataset (recommended)", "Upload new .txt"],
-        index=0
+input_mode = st.radio(
+    "Invoice layout source",
+    ["Use demo dataset (recommended)", "Upload new .txt"],
+    index=0
+)
+
+uploaded_txt = None
+if input_mode == "Upload new .txt":
+    uploaded_txt = st.file_uploader(
+        "Upload invoice_layout.txt",
+        type=["txt"],
+        help="Upload the raw invoice export text file invoice_layout.txt."
     )
+else:
+    st.caption(f"Using demo file: {DEFAULT_INVOICE_TXT.as_posix()}")
 
-    uploaded_txt = None
-    if input_mode == "Upload new .txt":
-        uploaded_txt = st.file_uploader("Upload invoice_layout.txt", type=["txt"])
-    else:
-        st.caption(f"Using demo file: {DEFAULT_INVOICE_TXT.as_posix()}")
+st.caption(f"Weather file: {AVG_WEATHER_XLSX.as_posix()}")
 
-    st.caption(f"Weather file resolved to: {AVG_WEATHER_XLSX.as_posix()}")
+st.markdown("---")
+runprediction = st.button("Run Prediction", use_container_width=True, type="primary")
 
-    st.markdown("---")
-    runprediction = st.button("Run Prediction", use_container_width=True, type="primary")
 
 # ------------------ RUN PREDICTION (put where your current `if runprediction:` is) ------------------
 if runprediction:
