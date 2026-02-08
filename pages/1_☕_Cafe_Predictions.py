@@ -34,7 +34,6 @@ st.markdown(
     """
 <div class="main-header">
   <h1>☕ Cafe Sales Prediction Dashboard</h1>
-  <p>Upload invoice_layout.txt to predict the next 14 days using Prophet ML model</p>
   <p>📚 TFM UCM - Data Science Project | ☕ Powered by Prophet ML</p>
 </div>
 """,
