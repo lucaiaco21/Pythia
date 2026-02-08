@@ -44,7 +44,7 @@ st.markdown(
 # ==================== CONFIG ====================
 MODELCONFIG = {
     "Ventas Totales": {
-        "file": "models/20260201_prophet_total_revenue_model.joblib",
+        "file": "2026_02_01_prophet_total_revenue_model.joblib",
         "unit": "€",
         "color_baseline": "#1f77b4",
         "color_low": "#ff7f0e",
@@ -52,7 +52,7 @@ MODELCONFIG = {
         "description": "Total revenue in Euros"
     },
     "Coffee Clásico units": {
-        "file": "20260201_prophet_units_classic_coffee_model.joblib",
+        "file": "2026_02_01_prophet_units_classic_coffee.joblib.joblib",
         "unit": "units",
         "color_baseline": "#d62728",
         "color_low": "#9467bd",
@@ -60,7 +60,7 @@ MODELCONFIG = {
         "description": "Classic coffee units sold"
     },
     "Pastries & Sweets units": {
-        "file": "20260201_prophet_units_pastries_and_sweets_model.joblib",
+        "file": "2026_02_01_prophet_units_pastries_and_sweets.joblib.joblib",
         "unit": "units",
         "color_baseline": "#e377c2",
         "color_low": "#7f7f7f",
@@ -68,7 +68,7 @@ MODELCONFIG = {
         "description": "Pastries and sweets units sold"
     },
     "Desayunos/Tostadas units": {
-        "file": "20260201_prophet_units_DESAYUNOS_TOSTADAS_PANES_model.joblib",
+        "file": "2026_02_01_prophet_units_DESAYUNOS_TOSTADAS_PANES_model.joblib",
         "unit": "units",
         "color_baseline": "#17becf",
         "color_low": "#ff9896",
