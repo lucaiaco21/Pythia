@@ -264,11 +264,6 @@ with st.sidebar:
     )  # [file:1]
 
 # ==================== MAIN ====================
-<!-- col1, col2 = st.columns([2, 1]) -->
-<!-- with col1: -->
-<!--     st.markdown(f"### Currently Selected: {selected_model}") -->
-<!-- with col2:-->
-<!--     st.markdown(f"### Unit: {MODELCONFIG[selected_model]['unit']}")  -->
 
 st.markdown("---")
 
