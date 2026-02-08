@@ -44,7 +44,7 @@ st.markdown(
 # ==================== CONFIG ====================
 MODELCONFIG = {
     "Ventas Totales": {
-        "file": "20260201_prophet_total_revenue_model.joblib",
+        "file": "models/20260201_prophet_total_revenue_model.joblib",
         "unit": "€",
         "color_baseline": "#1f77b4",
         "color_low": "#ff7f0e",
