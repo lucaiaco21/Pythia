@@ -254,14 +254,26 @@ def display_metrics(prediction_results: dict, model_name: str):
     st.markdown("### Scenario Comparison")
     cols = st.columns(3)
 
+    DISPLAY_NAMES = {
+    "Baseline": "Baseline",
+    "Low Pessimistic": "Low (Pessimistic)",
+    "High Optimistic": "High (Optimistic)"
+    }
+    
     for idx, scenario_name in enumerate(SCENARIO_NAMES):
         if scenario_name not in details:
             continue
         d = details[scenario_name]
-        with cols[idx]:
+
+            with cols[idx]:
+            # <-- Added explicit scenario label
+            st.markdown(f"**{DISPLAY_NAMES.get(scenario_name, scenario_name)}**")
+
+
             st.metric(label="Total (14 days)", value=f"{d['sum']:,.0f} {unit}")
             st.metric(label="Daily Average", value=f"{d['mean']:,.0f} {unit}")
             st.metric(label="Range", value=f"{d['min']:,.0f} - {d['max']:,.0f}")
+
 
 
 # ==================== SIDEBAR ====================
@@ -283,8 +295,8 @@ with st.sidebar:
         help="If uploaded, this file is used. Otherwise, demo dataset is used."
     )
 
-    st.caption(f"Demo dataset fallback: {DEFAULT_INVOICE_TXT.as_posix()}")
-    st.caption(f"Weather file: {AVG_WEATHER_XLSX.as_posix()}")
+    st.caption(f"Demo_dataset.txt: {DEFAULT_INVOICE_TXT.as_posix()}")
+    st.caption(f"Weather file: /n{AVG_WEATHER_XLSX.as_posix()}")
 
     st.markdown("---")
     run_prediction = st.button("Run Prediction", use_container_width=True, type="primary")
