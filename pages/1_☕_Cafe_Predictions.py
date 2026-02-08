@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-☕ Cafe Sales Prediction Dashboard - Multi-Scenario Forecasting (Page 4)
+☕ Cafe Sales Prediction Dashboard - Multi-Scenario Forecasting (Page 4)S
 
 Upgrade: scenarios are built from uploaded invoice_layout.txt using
 data_pipeline_etl/prophet_inputs_pipeline.py + fixed weather xlsx in /data.
@@ -264,12 +264,12 @@ with st.sidebar:
     )  # [file:1]
 
 # ==================== MAIN ====================
-col1, col2 = st.columns([2, 1])
+<!-- col1, col2 = st.columns([2, 1])
 with col1:
     st.markdown(f"### Currently Selected: {selected_model}")
 with col2:
     st.markdown(f"### Unit: {MODELCONFIG[selected_model]['unit']}")  # [file:1]
-
+-->
 st.markdown("---")
 
 if run_prediction:
