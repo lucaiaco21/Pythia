@@ -15,7 +15,8 @@ st.set_page_config(
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv('competitor_insights.csv')
+    st.subheader("📁 Upload Competitor Reviews")
+    df = st.file_uploader("Upload CSV or Excel with positive reviews", type=['csv', 'xlsx'])
     return df
 
 # Filter out meaningless keywords
