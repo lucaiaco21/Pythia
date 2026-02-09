@@ -226,7 +226,6 @@ def create_comparison_chart(prediction_results: dict, model_name: str):
                     marker=dict(size=8, symbol="circle"),
                     hovertemplate=(
                         f"<b>{scenario}</b><br>"
-                        "Date: %{x|%Y-%m-%d}<br>"
                         f"Value: %{{y}} {config['unit']}<extra></extra>"
                     )
                 )
