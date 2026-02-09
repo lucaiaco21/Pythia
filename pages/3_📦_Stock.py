@@ -157,51 +157,91 @@ with col2:
     # Nearby Competitors
     st.markdown('<div class="section-title">Nearby Competitors</div>', unsafe_allow_html=True)
     
+    # Initialize session state for selected restaurant
+    if 'selected_restaurant' not in st.session_state:
+        st.session_state.selected_restaurant = None
+    
     restaurants = sorted(df['restaurant'].unique())
     
-    for restaurant in restaurants:
-        restaurant_data = df[df['restaurant'] == restaurant]
-        num_categories = len(restaurant_data)
-        
-        with st.expander(f"☕ {restaurant} ({num_categories} categories)", expanded=False):
-            # Category tabs for this restaurant
-            category_tab = st.selectbox(
-                "Select category to view",
-                ['All Insights'] + sorted(restaurant_data['category'].unique().tolist()),
-                key=f"cat_{restaurant}"
-            )
+    # If no restaurant is selected, show the list
+    if st.session_state.selected_restaurant is None:
+        for restaurant in restaurants:
+            restaurant_data = df[df['restaurant'] == restaurant]
+            num_categories = len(restaurant_data)
             
-            if category_tab == 'All Insights':
-                # Show all categories
-                for _, row in restaurant_data.iterrows():
-                    st.markdown(f"**📁 {row['category']}**")
-                    if row['ai_summary'] and str(row['ai_summary']).strip():
-                        st.info(row['ai_summary'])
-                    
-                    # Show top keywords
-                    if 'top_products' in row and row['top_products']:
-                        keywords = parse_top_products(row['top_products'])
-                        if keywords:
-                            keyword_text = ", ".join([f"{prod} ({count})" for prod, count in keywords[:5]])
-                            st.caption(f"🔑 Key terms: {keyword_text}")
-                    st.markdown("---")
-            else:
-                # Show specific category
-                cat_data = restaurant_data[restaurant_data['category'] == category_tab].iloc[0]
+            # Create clickable card
+            if st.button(f"☕ {restaurant}", key=f"btn_{restaurant}", use_container_width=True):
+                st.session_state.selected_restaurant = restaurant
+                st.rerun()
+            
+            # Show quick preview
+            st.caption(f"{num_categories} categories analyzed")
+            st.markdown("---")
+    
+    else:
+        # Show detailed view for selected restaurant
+        selected = st.session_state.selected_restaurant
+        restaurant_data = df[df['restaurant'] == selected]
+        
+        # Back button
+        if st.button("← Back to all competitors", key="back_btn"):
+            st.session_state.selected_restaurant = None
+            st.rerun()
+        
+        st.markdown(f"### {selected}")
+        st.caption(f"{len(restaurant_data)} categories")
+        st.markdown("---")
+        
+        # Get top insights for this restaurant
+        restaurant_insights = []
+        for _, row in restaurant_data.iterrows():
+            if row['ai_summary'] and str(row['ai_summary']).strip():
+                keywords = parse_top_products(row.get('top_products', ''))
+                keyword_count = sum(count for _, count in keywords[:3])
                 
-                st.markdown(f"**📁 {cat_data['category']}**")
-                if cat_data['ai_summary'] and str(cat_data['ai_summary']).strip():
-                    st.info(cat_data['ai_summary'])
+                restaurant_insights.append({
+                    'text': row['ai_summary'],
+                    'category': row['category'],
+                    'keywords': keywords[:5],
+                    'importance': keyword_count
+                })
+        
+        # Sort by importance
+        restaurant_insights.sort(key=lambda x: x['importance'], reverse=True)
+        
+        # Show top 3 insights
+        st.markdown("**🌟 Top Insights**")
+        for i, insight in enumerate(restaurant_insights[:3], 1):
+            st.markdown(f"""
+            <div class="theme-item">
+                <strong>{i}. {insight['category']}</strong><br>
+                {insight['text']}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Show keywords if available
+            if insight['keywords']:
+                keyword_text = ", ".join([f"{prod} ({count})" for prod, count in insight['keywords']])
+                st.caption(f"🔑 {keyword_text}")
+        
+        st.markdown("---")
+        
+        # Show all categories in expandable sections
+        st.markdown("**📁 All Categories**")
+        for _, row in restaurant_data.iterrows():
+            with st.expander(f"{row['category']}", expanded=False):
+                if row['ai_summary'] and str(row['ai_summary']).strip():
+                    st.write(row['ai_summary'])
                 
-                # Show top keywords
-                if 'top_products' in cat_data and cat_data['top_products']:
-                    keywords = parse_top_products(cat_data['top_products'])
+                # Show keywords
+                if 'top_products' in row and row['top_products']:
+                    keywords = parse_top_products(row['top_products'])
                     if keywords:
-                        st.markdown("**Top Keywords:**")
+                        st.markdown("**Keywords:**")
                         cols = st.columns(3)
                         for idx, (prod, count) in enumerate(keywords[:6]):
                             with cols[idx % 3]:
-                                st.metric(prod, count)
+                                st.metric(prod, count, label_visibility="visible")
 
 # Footer
 st.markdown("---")
