@@ -15,6 +15,7 @@ import joblib
 from pathlib import Path
 from datetime import datetime
 from tempfile import NamedTemporaryFile
+from io import BytesIO
 
 from data_pipeline_etl.prophet_inputs_pipeline import build_prophet_prediction_inputs
 
@@ -349,14 +350,25 @@ if run_prediction:
             display_metrics(prediction_results, selected_model)
 
             st.markdown("---")
-            csv_data = prediction_results["dataframe"].reset_index().to_csv(index=False)
+            # Build Excel in memory
+            excel_buffer = BytesIO()
+            with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
+                prediction_results["dataframe"].reset_index().to_excel(
+                    writer,
+                    index=False,
+                    sheet_name="predictions"
+                )
+            
+            excel_buffer.seek(0)
+            
             st.download_button(
-                label="Download as CSV",
-                data=csv_data,
-                file_name=f"predictions_{selected_model.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.csv",
-                mime="text/csv",
+                label="Download as Excel",
+                data=excel_buffer,
+                file_name=f"predictions_{selected_model.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 use_container_width=True
             )
+
 
             with st.expander("View Raw Data"):
                 st.dataframe(
