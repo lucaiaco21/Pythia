@@ -41,16 +41,6 @@ st.markdown("""
         border-radius: 0.5rem;
         margin-bottom: 0.75rem;
     }
-    .category-badge {
-        display: inline-block;
-        background: #d97706;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 1rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
     .stExpander {
         background: #fef3c7;
         border-radius: 0.5rem;
@@ -107,20 +97,23 @@ def parse_top_products(top_products_str):
     return products
 
 def get_overall_insights(df, limit=4):
-    """Get the most important insights across all categories"""
+    """Get general insights from AI summaries"""
     insights = []
     
     for _, row in df.iterrows():
         if row['ai_summary'] and str(row['ai_summary']).strip():
-            # Extract keywords from this category
+            # Extract keywords from this category to estimate importance
             keywords = parse_top_products(row.get('top_products', ''))
             keyword_count = sum(count for _, count in keywords[:3])  # Top 3 keywords
             
+            # Calculate text length as another importance factor
+            text_length = len(row['ai_summary'])
+            importance_score = keyword_count * 10 + text_length
+            
             insights.append({
                 'text': row['ai_summary'],
-                'category': row['category'],
                 'restaurant': row['restaurant'],
-                'importance': keyword_count  # Use keyword frequency as importance proxy
+                'importance': importance_score
             })
     
     # Sort by importance and return top N
@@ -146,42 +139,19 @@ st.markdown("---")
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    # Key Customer Themes
+    # Key Customer Themes - General Insights
     st.markdown('<div class="section-title">Key Customer Themes</div>', unsafe_allow_html=True)
     
-    # Category filter
-    all_categories = ['Most Relevant'] + sorted(df['category'].unique().tolist())
-    selected_theme_category = st.selectbox(
-        "Filter by category",
-        all_categories,
-        key="theme_category",
-        label_visibility="collapsed"
-    )
+    # Get top general insights from AI summaries
+    top_insights = get_overall_insights(df, limit=4)
     
-    if selected_theme_category == 'Most Relevant':
-        # Show overall top insights
-        top_insights = get_overall_insights(df, limit=4)
-        
-        for insight in top_insights:
-            st.markdown(f"""
-            <div class="theme-item">
-                <span class="category-badge">{insight['category'][:25]}</span><br>
-                {insight['text'][:180]}...
-            </div>
-            """, unsafe_allow_html=True)
-    else:
-        # Show insights for specific category
-        category_data = df[df['category'] == selected_theme_category]
-        
-        for _, row in category_data.head(4).iterrows():
-            if row['ai_summary'] and str(row['ai_summary']).strip():
-                st.markdown(f"""
-                <div class="theme-item">
-                    <span class="category-badge">{selected_theme_category[:25]}</span><br>
-                    <strong>{row['restaurant']}</strong><br>
-                    {row['ai_summary'][:150]}...
-                </div>
-                """, unsafe_allow_html=True)
+    for insight in top_insights:
+        st.markdown(f"""
+        <div class="theme-item">
+            <strong>🏪 {insight['restaurant']}</strong><br>
+            {insight['text']}
+        </div>
+        """, unsafe_allow_html=True)
 
 with col2:
     # Nearby Competitors
