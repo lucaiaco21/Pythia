@@ -378,11 +378,15 @@ if run_prediction:
 
 
             with st.expander("View Raw Data"):
+                raw_df = prediction_results["dataframe"].reset_index().copy()
+                raw_df["Date"] = pd.to_datetime(raw_df["Date"]).dt.strftime("%Y-%m-%d")
+                
                 st.dataframe(
-                    prediction_results["dataframe"].reset_index(),
+                    raw_df,
                     use_container_width=True,
                     height=400
                 )
+
         else:
             st.error("Prediction failed or produced empty results. Check input TXT format/content.")
 
