@@ -23,4 +23,9 @@ with st.expander("Data Preview"):
 cafeterias = df['restaurant'].unique().tolist()
 
 
-col1, col2 = st.columns([3,1])
+col1, col2 = st.columns(2)
+
+with col1:
+    selected = st.selectbox("Select competitor cafeteria:", cafeterias)
+with col2:
+    compare_all = st.checkbox("Analyze all")
