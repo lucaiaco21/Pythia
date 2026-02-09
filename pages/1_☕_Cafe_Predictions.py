@@ -353,12 +353,19 @@ if run_prediction:
             # Build Excel in memory
             excel_buffer = BytesIO()
             with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
-                prediction_results["dataframe"].reset_index().to_excel(
+                # 1) Create a copy for export
+                export_df = prediction_results["dataframe"].reset_index().copy()
+                
+                # 2) Format Date as YYYY-MM-DD (no hour)
+                export_df["Date"] = pd.to_datetime(export_df["Date"]).dt.strftime("%Y-%m-%d")
+                
+                # 3) Write formatted dataframe
+                export_df.to_excel(
                     writer,
                     index=False,
                     sheet_name="predictions"
                 )
-            
+                
             excel_buffer.seek(0)
             
             st.download_button(
