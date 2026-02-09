@@ -23,7 +23,7 @@ with st.expander("Data Preview"):
 cafeterias = df['restaurant'].unique().tolist()
 
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns(2, vertical_alignment="bottom")
 
 with col1:
     selected = st.selectbox("Select competitor cafeteria:", cafeterias)
