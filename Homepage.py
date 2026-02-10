@@ -88,7 +88,7 @@ st.write("---") # A subtle divider line
 
 # Using a container withOUT a border for a cleaner, modern look (Streamlit 1.30+)
 with st.container(border=False):
-    st.markdown('<div class="group-header">GRUPO 6</div>', unsafe_allow_html=True)
+    st.markdown('<div class="group-header">Alumnos del Grupo 3</div>', unsafe_allow_html=True)
     
     # Grid layout for students (2 columns of 3 names) for better spacing
     s_col1, s_col2= st.columns(2)
