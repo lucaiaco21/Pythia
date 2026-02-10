@@ -147,11 +147,11 @@ if page == "🏠 Your Cafeteria":
     st.markdown("## 🗺️ Restaurant Location & Review Heatmap")
 
     # Check if map file exists
-    map_path = Path("images/my_map.html")
+    map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
     has_map = map_path.exists()
 
     if has_map:
-        with open("images/my_map.html", 'r', encoding='utf-8') as f:
+        with open("images/mapa_cafeterias_seeccionadas_madrid_20260210.html", 'r', encoding='utf-8') as f:
             map_html = f.read()
         components.html(map_html, height=500, scrolling=True)
     else:
@@ -571,12 +571,12 @@ elif page == "🔍 Competitor Analysis":
         return insights[:limit]
 
     # Top Section - Map
-    map_path = Path("images/my_map.html")
+    map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
     has_map = map_path.exists()
     
     if has_map:
         st.markdown('<div class="section-title">📍 Location Map</div>', unsafe_allow_html=True)
-        with open("images/my_map.html", 'r', encoding='utf-8') as f:
+        with open("images/mapa_cafeterias_seeccionadas_madrid_20260210.html", 'r', encoding='utf-8') as f:
             map_html = f.read()
         components.html(map_html, height=400, scrolling=True)
     else:
