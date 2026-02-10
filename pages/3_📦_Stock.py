@@ -88,7 +88,7 @@ if page == "🏠 Your Cafeteria":
 
     # Star rating data (from your analysis)
     star_data = {
-        'Rating': ['⭐⭐⭐⭐⭐ Five Stars', '⭐⭐⭐⭐ Four Stars', '⭐⭐⭐ Three Stars', '⭐ One Star', '⭐⭐ Two Stars'],
+        'Rating': ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐, '⭐⭐],
         'Count': [1588, 497, 228, 113, 84],
         'Stars': [5, 4, 3, 1, 2]
     }
