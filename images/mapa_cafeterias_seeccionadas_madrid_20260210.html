@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_8381253eadbddda0d51d52fcfbbf6b67 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 700.0px;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_8381253eadbddda0d51d52fcfbbf6b67" ></div>
+        
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+    
+    <div style="
+        position: absolute;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;              /* moved from left to right */
+        background: rgba(255,255,255,0.94);
+        border: 1.5px solid #b8b8b8;   /* lighter grey border */
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #3f3f3f;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12);  /* softer shadow */
+    ">
+      <b>Overall Rating (terciles)</b><br>
+      <span style="color:#d7191c;">●</span> Low (&lt; 4.2)<br>
+      <span style="color:#f1c40f;">●</span> Mid (4.2 – 4.50)<br>
+      <span style="color:#1a9641;">●</span> High (&gt; 4.5)
+    </div>
+    
+</body>
+<script>
+    
+    
+            var map_8381253eadbddda0d51d52fcfbbf6b67 = L.map(
+                "map_8381253eadbddda0d51d52fcfbbf6b67",
+                {
+                    center: [40.422367881578936, -3.6982845421052626],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 13,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_8381253eadbddda0d51d52fcfbbf6b67);
+
+            
+
+        
+    
+            var tile_layer_d0880fd0c8caa110464b02827d25f847 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d0880fd0c8caa110464b02827d25f847.addTo(map_8381253eadbddda0d51d52fcfbbf6b67);
+        
+    
+            var marker_cluster_868afb20ca67a678c27364a91d06f0d3 = L.markerClusterGroup(
+                {
+  "disableClusteringAtZoom": 16,
+  "showCoverageOnHover": false,
+}
+            );
+            marker_cluster_868afb20ca67a678c27364a91d06f0d3.options.iconCreateFunction =
+                function(cluster) {
+  return L.divIcon({
+    html: '<div style="background:#1f78b4;color:white;border:2px solid white;border-radius:50%;width:38px;height:38px;line-height:34px;text-align:center;font-weight:700;">' + cluster.getChildCount() + '</div>',
+    className: 'marker-cluster-custom',
+    iconSize: [38, 38]
+  });
+};
+        
+    
+            var circle_marker_c3c48884dcfb6d27aef035ba251f735a = L.circleMarker(
+                [40.4141749, -3.6988408],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_8c0c7883d033de760a179ebd31c48c69 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_99b97935954f788f872ccdb12557a71d = $(`<div id="html_99b97935954f788f872ccdb12557a71d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Brown Bear Bakery       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.1       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.1 | <b>Service:</b> 3.8<br>         <b>Value:</b> 3.9 | <b>Atmosphere:</b> 4.0       </div>     </div>     </div>`)[0];
+                popup_8c0c7883d033de760a179ebd31c48c69.setContent(html_99b97935954f788f872ccdb12557a71d);
+            
+        
+
+        circle_marker_c3c48884dcfb6d27aef035ba251f735a.bindPopup(popup_8c0c7883d033de760a179ebd31c48c69)
+        ;
+
+        
+    
+    
+            circle_marker_c3c48884dcfb6d27aef035ba251f735a.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Brown Bear Bakery</div>
+      <div style="font-size:15px;">⭐ 4.1</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_85441b2a0a123a9524308b083a0bfb74 = L.circleMarker(
+                [40.4208042, -3.6981885],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_afd1ccf72107be500e8a350e76b54c95 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_2c9b7dc5e64225196bd4b6ef436c7c33 = $(`<div id="html_2c9b7dc5e64225196bd4b6ef436c7c33" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Bucolico Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.5       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.6 | <b>Service:</b> 4.4<br>         <b>Value:</b> 4.3 | <b>Atmosphere:</b> 4.6       </div>     </div>     </div>`)[0];
+                popup_afd1ccf72107be500e8a350e76b54c95.setContent(html_2c9b7dc5e64225196bd4b6ef436c7c33);
+            
+        
+
+        circle_marker_85441b2a0a123a9524308b083a0bfb74.bindPopup(popup_afd1ccf72107be500e8a350e76b54c95)
+        ;
+
+        
+    
+    
+            circle_marker_85441b2a0a123a9524308b083a0bfb74.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Bucolico Cafe</div>
+      <div style="font-size:15px;">⭐ 4.5</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6b3e4848f6973663c34defe654ceea4a = L.circleMarker(
+                [40.4329764, -3.7147743],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_9e1f71c6445e078ce35d1dbec9ab0dd9 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_3c87c7ee8eb3e6a2884377048bf837fb = $(`<div id="html_3c87c7ee8eb3e6a2884377048bf837fb" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Cafe Green Bakery       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.6       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.8 | <b>Service:</b> 4.9<br>         <b>Value:</b> 4.6 | <b>Atmosphere:</b> 5.0       </div>     </div>     </div>`)[0];
+                popup_9e1f71c6445e078ce35d1dbec9ab0dd9.setContent(html_3c87c7ee8eb3e6a2884377048bf837fb);
+            
+        
+
+        circle_marker_6b3e4848f6973663c34defe654ceea4a.bindPopup(popup_9e1f71c6445e078ce35d1dbec9ab0dd9)
+        ;
+
+        
+    
+    
+            circle_marker_6b3e4848f6973663c34defe654ceea4a.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Cafe Green Bakery</div>
+      <div style="font-size:15px;">⭐ 4.6</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0c6bbacd9a5b864b8242344b274a6d97 = L.circleMarker(
+                [40.4083463, -3.7027678],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_ecfdf2d7aa1343a6ab520687fd639b15 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_93bd6eec86eb5496e31d6b70958b853e = $(`<div id="html_93bd6eec86eb5496e31d6b70958b853e" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Cafelito       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.4       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.3 | <b>Service:</b> 4.3<br>         <b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.3       </div>     </div>     </div>`)[0];
+                popup_ecfdf2d7aa1343a6ab520687fd639b15.setContent(html_93bd6eec86eb5496e31d6b70958b853e);
+            
+        
+
+        circle_marker_0c6bbacd9a5b864b8242344b274a6d97.bindPopup(popup_ecfdf2d7aa1343a6ab520687fd639b15)
+        ;
+
+        
+    
+    
+            circle_marker_0c6bbacd9a5b864b8242344b274a6d97.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Cafelito</div>
+      <div style="font-size:15px;">⭐ 4.4</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_817bd985141fcea5294a966256683eb0 = L.circleMarker(
+                [40.4221388, -3.7025164],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_6511f5b1a00fa4212d58dc52da3b11ff = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_34bf00628f4dfc373a9ebc11c9627e52 = $(`<div id="html_34bf00628f4dfc373a9ebc11c9627e52" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Café de la Luz       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.2       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.2 | <b>Service:</b> 4.1<br>         <b>Value:</b> 4.0 | <b>Atmosphere:</b> 4.1       </div>     </div>     </div>`)[0];
+                popup_6511f5b1a00fa4212d58dc52da3b11ff.setContent(html_34bf00628f4dfc373a9ebc11c9627e52);
+            
+        
+
+        circle_marker_817bd985141fcea5294a966256683eb0.bindPopup(popup_6511f5b1a00fa4212d58dc52da3b11ff)
+        ;
+
+        
+    
+    
+            circle_marker_817bd985141fcea5294a966256683eb0.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Café de la Luz</div>
+      <div style="font-size:15px;">⭐ 4.2</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0e840a69ccbe458765b01fa3a6bbf54e = L.circleMarker(
+                [40.4220755, -3.6956977],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_e69330c151fad9cc03e4c5995214b914 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_10a1b02d50f17c0395c0b57bbd964236 = $(`<div id="html_10a1b02d50f17c0395c0b57bbd964236" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Celicioso       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.3       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.5 | <b>Service:</b> 4.2<br>         <b>Value:</b> 4.0 | <b>Atmosphere:</b> 4.2       </div>     </div>     </div>`)[0];
+                popup_e69330c151fad9cc03e4c5995214b914.setContent(html_10a1b02d50f17c0395c0b57bbd964236);
+            
+        
+
+        circle_marker_0e840a69ccbe458765b01fa3a6bbf54e.bindPopup(popup_e69330c151fad9cc03e4c5995214b914)
+        ;
+
+        
+    
+    
+            circle_marker_0e840a69ccbe458765b01fa3a6bbf54e.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Celicioso</div>
+      <div style="font-size:15px;">⭐ 4.3</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_dacb70e87c971cae5df49775b7d90604 = L.circleMarker(
+                [40.4272512, -3.6988308],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_2c4b4770b25cea82c6433a3d0f87af27 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_0ee1989e5ee78ffa0e68cc922261770d = $(`<div id="html_0ee1989e5ee78ffa0e68cc922261770d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Cereal Hunters Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 3.9       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.0 | <b>Service:</b> 3.8<br>         <b>Value:</b> 3.3 | <b>Atmosphere:</b> nan       </div>     </div>     </div>`)[0];
+                popup_2c4b4770b25cea82c6433a3d0f87af27.setContent(html_0ee1989e5ee78ffa0e68cc922261770d);
+            
+        
+
+        circle_marker_dacb70e87c971cae5df49775b7d90604.bindPopup(popup_2c4b4770b25cea82c6433a3d0f87af27)
+        ;
+
+        
+    
+    
+            circle_marker_dacb70e87c971cae5df49775b7d90604.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Cereal Hunters Cafe</div>
+      <div style="font-size:15px;">⭐ 3.9</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_dc815eceb8c9849977935cefc139735e = L.circleMarker(
+                [40.4167707, -3.706803],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_1875772ed04c02cf8d6bbde793dc815a = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_62275a7090a287e80910cc5d77413d1c = $(`<div id="html_62275a7090a287e80910cc5d77413d1c" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Chocolatería 1902       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.1       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.1 | <b>Service:</b> 3.9<br>         <b>Value:</b> 4.0 | <b>Atmosphere:</b> 3.6       </div>     </div>     </div>`)[0];
+                popup_1875772ed04c02cf8d6bbde793dc815a.setContent(html_62275a7090a287e80910cc5d77413d1c);
+            
+        
+
+        circle_marker_dc815eceb8c9849977935cefc139735e.bindPopup(popup_1875772ed04c02cf8d6bbde793dc815a)
+        ;
+
+        
+    
+    
+            circle_marker_dc815eceb8c9849977935cefc139735e.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Chocolatería 1902</div>
+      <div style="font-size:15px;">⭐ 4.1</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6d84b47d99c845e8e4ee035262b5e881 = L.circleMarker(
+                [40.4167707, -3.706803],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_7166c23ae74e309a7d76f729c438161e = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_a5fa38338c79577640a6d56d8129e6d8 = $(`<div id="html_a5fa38338c79577640a6d56d8129e6d8" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Chocolatería San Ginés       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.2       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.2 | <b>Service:</b> 3.8<br>         <b>Value:</b> 3.9 | <b>Atmosphere:</b> 3.9       </div>     </div>     </div>`)[0];
+                popup_7166c23ae74e309a7d76f729c438161e.setContent(html_a5fa38338c79577640a6d56d8129e6d8);
+            
+        
+
+        circle_marker_6d84b47d99c845e8e4ee035262b5e881.bindPopup(popup_7166c23ae74e309a7d76f729c438161e)
+        ;
+
+        
+    
+    
+            circle_marker_6d84b47d99c845e8e4ee035262b5e881.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Chocolatería San Ginés</div>
+      <div style="font-size:15px;">⭐ 4.2</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_67b8235a451e3c1ced991d3ef5e910b2 = L.circleMarker(
+                [40.4133967, -3.728403],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_d57b5db2f7f9a231b8066b10ada32ded = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_941589c4cf9dbceae8b53e59b2d78a55 = $(`<div id="html_941589c4cf9dbceae8b53e59b2d78a55" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Churrería-Chocolatería Las Farolas       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 3.8       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.0 | <b>Service:</b> 3.5<br>         <b>Value:</b> 3.9 | <b>Atmosphere:</b> 2.7       </div>     </div>     </div>`)[0];
+                popup_d57b5db2f7f9a231b8066b10ada32ded.setContent(html_941589c4cf9dbceae8b53e59b2d78a55);
+            
+        
+
+        circle_marker_67b8235a451e3c1ced991d3ef5e910b2.bindPopup(popup_d57b5db2f7f9a231b8066b10ada32ded)
+        ;
+
+        
+    
+    
+            circle_marker_67b8235a451e3c1ced991d3ef5e910b2.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Churrería-Chocolatería Las Farolas</div>
+      <div style="font-size:15px;">⭐ 3.8</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_026327c93992471b3cb998d1c3358c8c = L.circleMarker(
+                [40.4069569, -3.6993372],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_abb65c627eaa97f31ba2074a1e0232de = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_b9efe700577f6c4390c0bdf77ace8e47 = $(`<div id="html_b9efe700577f6c4390c0bdf77ace8e47" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Crema Y Nata       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.9       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 5.0 | <b>Service:</b> 4.9<br>         <b>Value:</b> 5.0 | <b>Atmosphere:</b> 5.0       </div>     </div>     </div>`)[0];
+                popup_abb65c627eaa97f31ba2074a1e0232de.setContent(html_b9efe700577f6c4390c0bdf77ace8e47);
+            
+        
+
+        circle_marker_026327c93992471b3cb998d1c3358c8c.bindPopup(popup_abb65c627eaa97f31ba2074a1e0232de)
+        ;
+
+        
+    
+    
+            circle_marker_026327c93992471b3cb998d1c3358c8c.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Crema Y Nata</div>
+      <div style="font-size:15px;">⭐ 4.9</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_96ed0eff5753a1bbb17bb54ca48442d8 = L.circleMarker(
+                [40.4108156, -3.6934091],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_c30a75d9ac0ad692ee66a68f7a39c724 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_e9577b0dcb44a90d417ca085a8711181 = $(`<div id="html_e9577b0dcb44a90d417ca085a8711181" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         El Patio Vertical       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.0       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.0 | <b>Service:</b> 4.0<br>         <b>Value:</b> 3.8 | <b>Atmosphere:</b> 4.3       </div>     </div>     </div>`)[0];
+                popup_c30a75d9ac0ad692ee66a68f7a39c724.setContent(html_e9577b0dcb44a90d417ca085a8711181);
+            
+        
+
+        circle_marker_96ed0eff5753a1bbb17bb54ca48442d8.bindPopup(popup_c30a75d9ac0ad692ee66a68f7a39c724)
+        ;
+
+        
+    
+    
+            circle_marker_96ed0eff5753a1bbb17bb54ca48442d8.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">El Patio Vertical</div>
+      <div style="font-size:15px;">⭐ 4.0</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4011e0a03ca73584bd4ed9b8e50e8d00 = L.circleMarker(
+                [40.4126774, -3.7105959],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_b15a54c3f4c1795c83192b4dcd000169 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_3fde8aba9d7c32a5a5b9732025bff880 = $(`<div id="html_3fde8aba9d7c32a5a5b9732025bff880" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         El Perro de Pavlov       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.8       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.8 | <b>Service:</b> 4.8<br>         <b>Value:</b> 4.7 | <b>Atmosphere:</b> 4.8       </div>     </div>     </div>`)[0];
+                popup_b15a54c3f4c1795c83192b4dcd000169.setContent(html_3fde8aba9d7c32a5a5b9732025bff880);
+            
+        
+
+        circle_marker_4011e0a03ca73584bd4ed9b8e50e8d00.bindPopup(popup_b15a54c3f4c1795c83192b4dcd000169)
+        ;
+
+        
+    
+    
+            circle_marker_4011e0a03ca73584bd4ed9b8e50e8d00.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">El Perro de Pavlov</div>
+      <div style="font-size:15px;">⭐ 4.8</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6e02b48c8dff0694909796fa6ea34014 = L.circleMarker(
+                [40.4270528, -3.7092373],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_6151cd931cb1e2c72566aa0ec027bac6 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_1af7754b197a32ce6de61fd830789f09 = $(`<div id="html_1af7754b197a32ce6de61fd830789f09" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Federal Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 3.7       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.0 | <b>Service:</b> 3.4<br>         <b>Value:</b> 3.5 | <b>Atmosphere:</b> 3.7       </div>     </div>     </div>`)[0];
+                popup_6151cd931cb1e2c72566aa0ec027bac6.setContent(html_1af7754b197a32ce6de61fd830789f09);
+            
+        
+
+        circle_marker_6e02b48c8dff0694909796fa6ea34014.bindPopup(popup_6151cd931cb1e2c72566aa0ec027bac6)
+        ;
+
+        
+    
+    
+            circle_marker_6e02b48c8dff0694909796fa6ea34014.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Federal Cafe</div>
+      <div style="font-size:15px;">⭐ 3.7</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c07d4e46ea3da2efe61376b57ba3ce70 = L.circleMarker(
+                [40.4238831, -3.7054987],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_7fa5f1da554623a29e19e5fd704817a6 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_1ec9ac0ee4eb146de09e420ab2040773 = $(`<div id="html_1ec9ac0ee4eb146de09e420ab2040773" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         HanSo Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.2       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.3 | <b>Service:</b> 4.1<br>         <b>Value:</b> 4.0 | <b>Atmosphere:</b> 4.2       </div>     </div>     </div>`)[0];
+                popup_7fa5f1da554623a29e19e5fd704817a6.setContent(html_1ec9ac0ee4eb146de09e420ab2040773);
+            
+        
+
+        circle_marker_c07d4e46ea3da2efe61376b57ba3ce70.bindPopup(popup_7fa5f1da554623a29e19e5fd704817a6)
+        ;
+
+        
+    
+    
+            circle_marker_c07d4e46ea3da2efe61376b57ba3ce70.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">HanSo Cafe</div>
+      <div style="font-size:15px;">⭐ 4.2</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0b155b4edfb14c29e0f54bf4a49996d5 = L.circleMarker(
+                [40.4250643, -3.6765453],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_0a4bc2405859b7c6c5f1a99fb93bc288 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_202eac886ea0e2a5eaed6c8c9ba7a636 = $(`<div id="html_202eac886ea0e2a5eaed6c8c9ba7a636" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Isabel Maestre       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.1       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 5.0 | <b>Service:</b> 4.9<br>         <b>Value:</b> 4.4 | <b>Atmosphere:</b> 5.0       </div>     </div>     </div>`)[0];
+                popup_0a4bc2405859b7c6c5f1a99fb93bc288.setContent(html_202eac886ea0e2a5eaed6c8c9ba7a636);
+            
+        
+
+        circle_marker_0b155b4edfb14c29e0f54bf4a49996d5.bindPopup(popup_0a4bc2405859b7c6c5f1a99fb93bc288)
+        ;
+
+        
+    
+    
+            circle_marker_0b155b4edfb14c29e0f54bf4a49996d5.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Isabel Maestre</div>
+      <div style="font-size:15px;">⭐ 4.1</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3b7e8a3ccd2fae1c68bd9c42629a0932 = L.circleMarker(
+                [40.4314125, -3.7036297],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_93fcc7e5c6e4cc562f9811dd1acd08f6 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_a6181f2d2fc03dff0909edd96bb483c6 = $(`<div id="html_a6181f2d2fc03dff0909edd96bb483c6" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Kalua Helado Artesanal       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.4       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.5 | <b>Service:</b> 4.3<br>         <b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.4       </div>     </div>     </div>`)[0];
+                popup_93fcc7e5c6e4cc562f9811dd1acd08f6.setContent(html_a6181f2d2fc03dff0909edd96bb483c6);
+            
+        
+
+        circle_marker_3b7e8a3ccd2fae1c68bd9c42629a0932.bindPopup(popup_93fcc7e5c6e4cc562f9811dd1acd08f6)
+        ;
+
+        
+    
+    
+            circle_marker_3b7e8a3ccd2fae1c68bd9c42629a0932.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Kalua Helado Artesanal</div>
+      <div style="font-size:15px;">⭐ 4.4</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f5ab09eb3b03b4c01cac777916edc588 = L.circleMarker(
+                [40.4253396, -3.701983],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_748bbb5769bbf2d126bde4f3ade86bcc = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_3a027f2e7043526b76d32e496e705d6d = $(`<div id="html_3a027f2e7043526b76d32e496e705d6d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         La Cocina de mi Vecina       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.4       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.5 | <b>Service:</b> 4.3<br>         <b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.4       </div>     </div>     </div>`)[0];
+                popup_748bbb5769bbf2d126bde4f3ade86bcc.setContent(html_3a027f2e7043526b76d32e496e705d6d);
+            
+        
+
+        circle_marker_f5ab09eb3b03b4c01cac777916edc588.bindPopup(popup_748bbb5769bbf2d126bde4f3ade86bcc)
+        ;
+
+        
+    
+    
+            circle_marker_f5ab09eb3b03b4c01cac777916edc588.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">La Cocina de mi Vecina</div>
+      <div style="font-size:15px;">⭐ 4.4</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ea1a6a60616e03461b941dba2d5bc34a = L.circleMarker(
+                [40.4257114, -3.6969584],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_7490127a5e771e1e0919e46fa7af6f6a = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_18d26c3c056aab892ed471dea0589786 = $(`<div id="html_18d26c3c056aab892ed471dea0589786" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         La Duquesita       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.7       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.8 | <b>Service:</b> 4.6<br>         <b>Value:</b> 4.5 | <b>Atmosphere:</b> 4.7       </div>     </div>     </div>`)[0];
+                popup_7490127a5e771e1e0919e46fa7af6f6a.setContent(html_18d26c3c056aab892ed471dea0589786);
+            
+        
+
+        circle_marker_ea1a6a60616e03461b941dba2d5bc34a.bindPopup(popup_7490127a5e771e1e0919e46fa7af6f6a)
+        ;
+
+        
+    
+    
+            circle_marker_ea1a6a60616e03461b941dba2d5bc34a.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">La Duquesita</div>
+      <div style="font-size:15px;">⭐ 4.7</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e1d1532074879a9187df611bd042d894 = L.circleMarker(
+                [40.4706396, -3.5806217],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_858b3a3a7c064a56da36a46d448d8fbb = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_0ab6ab97837decdbb12656fdabfb7a5c = $(`<div id="html_0ab6ab97837decdbb12656fdabfb7a5c" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         La General       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.6       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.7 | <b>Service:</b> 4.5<br>         <b>Value:</b> 4.4 | <b>Atmosphere:</b> 4.6       </div>     </div>     </div>`)[0];
+                popup_858b3a3a7c064a56da36a46d448d8fbb.setContent(html_0ab6ab97837decdbb12656fdabfb7a5c);
+            
+        
+
+        circle_marker_e1d1532074879a9187df611bd042d894.bindPopup(popup_858b3a3a7c064a56da36a46d448d8fbb)
+        ;
+
+        
+    
+    
+            circle_marker_e1d1532074879a9187df611bd042d894.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">La General</div>
+      <div style="font-size:15px;">⭐ 4.6</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_652242040de037245cc6611a46610334 = L.circleMarker(
+                [40.4143727, -3.6975918],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_aac14901124e4db365aafaa1deb6cfbb = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_5b10d56e03ef1506302c5a4fba63c154 = $(`<div id="html_5b10d56e03ef1506302c5a4fba63c154" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         La Mejor Tarta de Chocolate Del Mundo       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 3.5       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 3.6 | <b>Service:</b> 3.6<br>         <b>Value:</b> 3.0 | <b>Atmosphere:</b> 3.9       </div>     </div>     </div>`)[0];
+                popup_aac14901124e4db365aafaa1deb6cfbb.setContent(html_5b10d56e03ef1506302c5a4fba63c154);
+            
+        
+
+        circle_marker_652242040de037245cc6611a46610334.bindPopup(popup_aac14901124e4db365aafaa1deb6cfbb)
+        ;
+
+        
+    
+    
+            circle_marker_652242040de037245cc6611a46610334.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">La Mejor Tarta de Chocolate Del Mundo</div>
+      <div style="font-size:15px;">⭐ 3.5</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_59ba25384984258d28f03ecc465e8e91 = L.circleMarker(
+                [40.4352121, -3.7126864],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_15303f1f35449395413ac1de7aa86c4a = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_eac731cfd4f07196e4b2fbf68397871f = $(`<div id="html_eac731cfd4f07196e4b2fbf68397871f" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Little Big Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.4       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.4 | <b>Service:</b> 4.4<br>         <b>Value:</b> 4.1 | <b>Atmosphere:</b> 4.3       </div>     </div>     </div>`)[0];
+                popup_15303f1f35449395413ac1de7aa86c4a.setContent(html_eac731cfd4f07196e4b2fbf68397871f);
+            
+        
+
+        circle_marker_59ba25384984258d28f03ecc465e8e91.bindPopup(popup_15303f1f35449395413ac1de7aa86c4a)
+        ;
+
+        
+    
+    
+            circle_marker_59ba25384984258d28f03ecc465e8e91.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Little Big Cafe</div>
+      <div style="font-size:15px;">⭐ 4.4</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cf7da16552294197d6856c8ddbaccd53 = L.circleMarker(
+                [40.4141619, -3.7032321],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_d07d747d9d044d8e3d3dda14cf7d5048 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_01ce2b3626c090401494a42c026bf26f = $(`<div id="html_01ce2b3626c090401494a42c026bf26f" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Maestro Churrero       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.7       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.8 | <b>Service:</b> 4.8<br>         <b>Value:</b> 4.7 | <b>Atmosphere:</b> 4.4       </div>     </div>     </div>`)[0];
+                popup_d07d747d9d044d8e3d3dda14cf7d5048.setContent(html_01ce2b3626c090401494a42c026bf26f);
+            
+        
+
+        circle_marker_cf7da16552294197d6856c8ddbaccd53.bindPopup(popup_d07d747d9d044d8e3d3dda14cf7d5048)
+        ;
+
+        
+    
+    
+            circle_marker_cf7da16552294197d6856c8ddbaccd53.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Maestro Churrero</div>
+      <div style="font-size:15px;">⭐ 4.7</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f6a2b53c81986c363b0699762f6d74f8 = L.circleMarker(
+                [40.4352448, -3.6755213],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_baee350f149d86badb150ed1d617abc4 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_cb74ed84dc076e6696b058050b985007 = $(`<div id="html_cb74ed84dc076e6696b058050b985007" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Mayoma       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.8       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.9 | <b>Service:</b> 4.7<br>         <b>Value:</b> 4.6 | <b>Atmosphere:</b> 4.8       </div>     </div>     </div>`)[0];
+                popup_baee350f149d86badb150ed1d617abc4.setContent(html_cb74ed84dc076e6696b058050b985007);
+            
+        
+
+        circle_marker_f6a2b53c81986c363b0699762f6d74f8.bindPopup(popup_baee350f149d86badb150ed1d617abc4)
+        ;
+
+        
+    
+    
+            circle_marker_f6a2b53c81986c363b0699762f6d74f8.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Mayoma</div>
+      <div style="font-size:15px;">⭐ 4.8</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4470f5fb2dcb45c5330e2258ab8cf68b = L.circleMarker(
+                [40.4242404, -3.708689],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_54b09325fc0cea70ccf4322ac447732a = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_686c7abbc9f13ccb231156a798e8fb53 = $(`<div id="html_686c7abbc9f13ccb231156a798e8fb53" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Mision Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.5       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.7 | <b>Service:</b> 4.3<br>         <b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.4       </div>     </div>     </div>`)[0];
+                popup_54b09325fc0cea70ccf4322ac447732a.setContent(html_686c7abbc9f13ccb231156a798e8fb53);
+            
+        
+
+        circle_marker_4470f5fb2dcb45c5330e2258ab8cf68b.bindPopup(popup_54b09325fc0cea70ccf4322ac447732a)
+        ;
+
+        
+    
+    
+            circle_marker_4470f5fb2dcb45c5330e2258ab8cf68b.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Mision Cafe</div>
+      <div style="font-size:15px;">⭐ 4.5</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ff2ce99085b076fdee7083eb622d5e66 = L.circleMarker(
+                [40.4218087, -3.6976066],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_74fcac6ce3f5ddb8a77df0b4d94ab3a1 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_993b3e2e83fcd44d63d30a28cbab87dc = $(`<div id="html_993b3e2e83fcd44d63d30a28cbab87dc" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Mistura Ice Cream       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.4       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 10.0 | <b>Service:</b> 4.4<br>         <b>Value:</b> 4.5 | <b>Atmosphere:</b> 4.1       </div>     </div>     </div>`)[0];
+                popup_74fcac6ce3f5ddb8a77df0b4d94ab3a1.setContent(html_993b3e2e83fcd44d63d30a28cbab87dc);
+            
+        
+
+        circle_marker_ff2ce99085b076fdee7083eb622d5e66.bindPopup(popup_74fcac6ce3f5ddb8a77df0b4d94ab3a1)
+        ;
+
+        
+    
+    
+            circle_marker_ff2ce99085b076fdee7083eb622d5e66.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Mistura Ice Cream</div>
+      <div style="font-size:15px;">⭐ 4.4</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d9997db76b785ee268e88e5b8560cd32 = L.circleMarker(
+                [40.4116896, -3.6946906],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_cb084c47549e444644b5165407818e8b = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_deca5676563b6a8d7a8bcf16bbbc73bb = $(`<div id="html_deca5676563b6a8d7a8bcf16bbbc73bb" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Motteau       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.8       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.9 | <b>Service:</b> 4.8<br>         <b>Value:</b> 4.6 | <b>Atmosphere:</b> 4.8       </div>     </div>     </div>`)[0];
+                popup_cb084c47549e444644b5165407818e8b.setContent(html_deca5676563b6a8d7a8bcf16bbbc73bb);
+            
+        
+
+        circle_marker_d9997db76b785ee268e88e5b8560cd32.bindPopup(popup_cb084c47549e444644b5165407818e8b)
+        ;
+
+        
+    
+    
+            circle_marker_d9997db76b785ee268e88e5b8560cd32.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Motteau</div>
+      <div style="font-size:15px;">⭐ 4.8</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a7ea1d8d7316022902b0adf956f02bfb = L.circleMarker(
+                [40.4107052, -3.6993496],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_41263faee9af0729cd0e524e36bddaa8 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_add3bd4c931a882b956ae7b4b6d72ec7 = $(`<div id="html_add3bd4c931a882b956ae7b4b6d72ec7" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Nomade cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.5       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.6 | <b>Service:</b> 4.4<br>         <b>Value:</b> 4.3 | <b>Atmosphere:</b> 4.5       </div>     </div>     </div>`)[0];
+                popup_41263faee9af0729cd0e524e36bddaa8.setContent(html_add3bd4c931a882b956ae7b4b6d72ec7);
+            
+        
+
+        circle_marker_a7ea1d8d7316022902b0adf956f02bfb.bindPopup(popup_41263faee9af0729cd0e524e36bddaa8)
+        ;
+
+        
+    
+    
+            circle_marker_a7ea1d8d7316022902b0adf956f02bfb.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Nomade cafe</div>
+      <div style="font-size:15px;">⭐ 4.5</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_984749694e11297554654e23fe6e26d1 = L.circleMarker(
+                [40.4345364, -3.7045129],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_76f19689524e8eec27f9c77e5d57737f = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_84ad1f61ed4c2ab411bf1c5a289b19f5 = $(`<div id="html_84ad1f61ed4c2ab411bf1c5a289b19f5" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Pastelería Mallorca       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 3.6       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 3.7 | <b>Service:</b> 3.4<br>         <b>Value:</b> 3.5 | <b>Atmosphere:</b> 3.5       </div>     </div>     </div>`)[0];
+                popup_76f19689524e8eec27f9c77e5d57737f.setContent(html_84ad1f61ed4c2ab411bf1c5a289b19f5);
+            
+        
+
+        circle_marker_984749694e11297554654e23fe6e26d1.bindPopup(popup_76f19689524e8eec27f9c77e5d57737f)
+        ;
+
+        
+    
+    
+            circle_marker_984749694e11297554654e23fe6e26d1.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Pastelería Mallorca</div>
+      <div style="font-size:15px;">⭐ 3.6</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5803e3df6cfbff29406218eb6ef3ec00 = L.circleMarker(
+                [40.413068, -3.6901971],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_27b52fa6830fe6250502c9865924f9a5 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_11dd0727f2dc9540cbb5e40eb3dc537e = $(`<div id="html_11dd0727f2dc9540cbb5e40eb3dc537e" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Plenti       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.7       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 9.0 | <b>Service:</b> 11.0<br>         <b>Value:</b> 4.8 | <b>Atmosphere:</b> 4.8       </div>     </div>     </div>`)[0];
+                popup_27b52fa6830fe6250502c9865924f9a5.setContent(html_11dd0727f2dc9540cbb5e40eb3dc537e);
+            
+        
+
+        circle_marker_5803e3df6cfbff29406218eb6ef3ec00.bindPopup(popup_27b52fa6830fe6250502c9865924f9a5)
+        ;
+
+        
+    
+    
+            circle_marker_5803e3df6cfbff29406218eb6ef3ec00.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Plenti</div>
+      <div style="font-size:15px;">⭐ 4.7</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1979f3249ab86523f6e896a3065c5d20 = L.circleMarker(
+                [40.4081399, -3.7019197],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_0ecd1b2ded52c0e6ae39142a48ad9b60 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_7ceab96c6b5755e576d4e2b94bb9b2e6 = $(`<div id="html_7ceab96c6b5755e576d4e2b94bb9b2e6" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Pum Pum Cafe       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.0       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.1 | <b>Service:</b> 3.9<br>         <b>Value:</b> 3.8 | <b>Atmosphere:</b> 4.0       </div>     </div>     </div>`)[0];
+                popup_0ecd1b2ded52c0e6ae39142a48ad9b60.setContent(html_7ceab96c6b5755e576d4e2b94bb9b2e6);
+            
+        
+
+        circle_marker_1979f3249ab86523f6e896a3065c5d20.bindPopup(popup_0ecd1b2ded52c0e6ae39142a48ad9b60)
+        ;
+
+        
+    
+    
+            circle_marker_1979f3249ab86523f6e896a3065c5d20.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Pum Pum Cafe</div>
+      <div style="font-size:15px;">⭐ 4.0</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4d97dff012d4ded63a7e6d85fbdc260f = L.circleMarker(
+                [40.4422498, -3.7124772],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_5248dfab34ce2463611e92688776211c = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_02857514c8351fc50e26d2a344fd6278 = $(`<div id="html_02857514c8351fc50e26d2a344fd6278" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Salon des Fleurs       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.2       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.0 | <b>Service:</b> 4.0<br>         <b>Value:</b> 3.5 | <b>Atmosphere:</b> 3.8       </div>     </div>     </div>`)[0];
+                popup_5248dfab34ce2463611e92688776211c.setContent(html_02857514c8351fc50e26d2a344fd6278);
+            
+        
+
+        circle_marker_4d97dff012d4ded63a7e6d85fbdc260f.bindPopup(popup_5248dfab34ce2463611e92688776211c)
+        ;
+
+        
+    
+    
+            circle_marker_4d97dff012d4ded63a7e6d85fbdc260f.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Salon des Fleurs</div>
+      <div style="font-size:15px;">⭐ 4.2</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0884fe6c7e58ac6e1126054176c9724c = L.circleMarker(
+                [40.4361032, -3.6801423],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_75ddf209ad7f9e06231b1f1221fa86af = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_ede2cdae24c2d74b1c87ec63847c6ddd = $(`<div id="html_ede2cdae24c2d74b1c87ec63847c6ddd" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Sana Locura       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.1       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.2 | <b>Service:</b> 4.0<br>         <b>Value:</b> 3.9 | <b>Atmosphere:</b> 4.1       </div>     </div>     </div>`)[0];
+                popup_75ddf209ad7f9e06231b1f1221fa86af.setContent(html_ede2cdae24c2d74b1c87ec63847c6ddd);
+            
+        
+
+        circle_marker_0884fe6c7e58ac6e1126054176c9724c.bindPopup(popup_75ddf209ad7f9e06231b1f1221fa86af)
+        ;
+
+        
+    
+    
+            circle_marker_0884fe6c7e58ac6e1126054176c9724c.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Sana Locura</div>
+      <div style="font-size:15px;">⭐ 4.1</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b7666ac328792a0258a1e856dd0014aa = L.circleMarker(
+                [40.4172021, -3.7096856],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_c7b80b3ec431b5ba212486415c5f61ea = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_5208173f4e5def7c5f1e1d0b8244b946 = $(`<div id="html_5208173f4e5def7c5f1e1d0b8244b946" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Santa Eulalia Boulangerie       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.3       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.4 | <b>Service:</b> 4.1<br>         <b>Value:</b> 4.0 | <b>Atmosphere:</b> 3.8       </div>     </div>     </div>`)[0];
+                popup_c7b80b3ec431b5ba212486415c5f61ea.setContent(html_5208173f4e5def7c5f1e1d0b8244b946);
+            
+        
+
+        circle_marker_b7666ac328792a0258a1e856dd0014aa.bindPopup(popup_c7b80b3ec431b5ba212486415c5f61ea)
+        ;
+
+        
+    
+    
+            circle_marker_b7666ac328792a0258a1e856dd0014aa.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Santa Eulalia Boulangerie</div>
+      <div style="font-size:15px;">⭐ 4.3</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_314882c47c3fad70ceaf324e8c0c5a05 = L.circleMarker(
+                [40.4187565, -3.7105063],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_411b6c48c5209984fb640b8456518080 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_8635af77ba7c17cced2d0233aa8e2c96 = $(`<div id="html_8635af77ba7c17cced2d0233aa8e2c96" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Scarlett       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.5       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.4 | <b>Service:</b> 4.4<br>         <b>Value:</b> 4.3 | <b>Atmosphere:</b> 3.8       </div>     </div>     </div>`)[0];
+                popup_411b6c48c5209984fb640b8456518080.setContent(html_8635af77ba7c17cced2d0233aa8e2c96);
+            
+        
+
+        circle_marker_314882c47c3fad70ceaf324e8c0c5a05.bindPopup(popup_411b6c48c5209984fb640b8456518080)
+        ;
+
+        
+    
+    
+            circle_marker_314882c47c3fad70ceaf324e8c0c5a05.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Scarlett</div>
+      <div style="font-size:15px;">⭐ 4.5</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_045a384f7d58e45b0eab693b4489e0e1 = L.circleMarker(
+                [40.4138618, -3.6894207],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f1c40f", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_1a87baef08b284bdb9ac0cce15c26cfd = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_96ed2d5594bbf8f6e74305002d4c061a = $(`<div id="html_96ed2d5594bbf8f6e74305002d4c061a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Sucre Salon De Te       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.4       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.3 | <b>Service:</b> 4.1<br>         <b>Value:</b> 4.1 | <b>Atmosphere:</b> 4.0       </div>     </div>     </div>`)[0];
+                popup_1a87baef08b284bdb9ac0cce15c26cfd.setContent(html_96ed2d5594bbf8f6e74305002d4c061a);
+            
+        
+
+        circle_marker_045a384f7d58e45b0eab693b4489e0e1.bindPopup(popup_1a87baef08b284bdb9ac0cce15c26cfd)
+        ;
+
+        
+    
+    
+            circle_marker_045a384f7d58e45b0eab693b4489e0e1.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Sucre Salon De Te</div>
+      <div style="font-size:15px;">⭐ 4.4</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7ae6bf99999116f40c0163ca5674f0ea = L.circleMarker(
+                [40.4273813, -3.7077139],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1a9641", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_22c017a7c0daf8bc446df1a205cdbf89 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_a781c3b8dab6b12696557d771c326681 = $(`<div id="html_a781c3b8dab6b12696557d771c326681" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         The Fix       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 4.6       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.7 | <b>Service:</b> 4.5<br>         <b>Value:</b> 4.4 | <b>Atmosphere:</b> 4.6       </div>     </div>     </div>`)[0];
+                popup_22c017a7c0daf8bc446df1a205cdbf89.setContent(html_a781c3b8dab6b12696557d771c326681);
+            
+        
+
+        circle_marker_7ae6bf99999116f40c0163ca5674f0ea.bindPopup(popup_22c017a7c0daf8bc446df1a205cdbf89)
+        ;
+
+        
+    
+    
+            circle_marker_7ae6bf99999116f40c0163ca5674f0ea.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">The Fix</div>
+      <div style="font-size:15px;">⭐ 4.6</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e04f2ef7b28e0631f369c26d5fa54023 = L.circleMarker(
+                [40.4169865, -3.7074279],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d7191c", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 1.2}
+            ).addTo(marker_cluster_868afb20ca67a678c27364a91d06f0d3);
+        
+    
+        var popup_9014fefc1f035b8c1486e0ffec19ecdd = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_d64507a13509b135252db315f88cca10 = $(`<div id="html_d64507a13509b135252db315f88cca10" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.35; min-width: 220px;">       <div style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px;">         Viena Capellanes       </div>       <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px;">         ⭐ 3.9       </div>       <div style="text-align: center; font-size: 16px; line-height: 1.4;">         <b>Food:</b> 4.0 | <b>Service:</b> 3.8<br>         <b>Value:</b> 3.7 | <b>Atmosphere:</b> 3.9       </div>     </div>     </div>`)[0];
+                popup_9014fefc1f035b8c1486e0ffec19ecdd.setContent(html_d64507a13509b135252db315f88cca10);
+            
+        
+
+        circle_marker_e04f2ef7b28e0631f369c26d5fa54023.bindPopup(popup_9014fefc1f035b8c1486e0ffec19ecdd)
+        ;
+
+        
+    
+    
+            circle_marker_e04f2ef7b28e0631f369c26d5fa54023.bindTooltip(
+                `<div>
+                     
+    <div style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; min-width: 150px;">
+      <div style="font-size:16px; font-weight:800;">Viena Capellanes</div>
+      <div style="font-size:15px;">⭐ 3.9</div>
+    </div>
+    
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            marker_cluster_868afb20ca67a678c27364a91d06f0d3.addTo(map_8381253eadbddda0d51d52fcfbbf6b67);
+        
+    
+            tile_layer_d0880fd0c8caa110464b02827d25f847.addTo(map_8381253eadbddda0d51d52fcfbbf6b67);
+        
+    
+            marker_cluster_868afb20ca67a678c27364a91d06f0d3.addTo(map_8381253eadbddda0d51d52fcfbbf6b67);
+        
+</script>
+</html>
