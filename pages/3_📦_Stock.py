@@ -153,7 +153,7 @@ if page == "🏠 Your Cafeteria":
     if has_map:
         with open("images/mapa_cafeterias_seeccionadas_madrid_20260210.html", 'r', encoding='utf-8') as f:
             map_html = f.read()
-        components.html(map_html, height=500, scrolling=True)
+        components.html(map_html, height=380, scrolling=False)
     else:
         st.info("📍 **Map Location:** Place your 'my_map.html' file in the same directory to display the map.")
 
@@ -578,7 +578,7 @@ elif page == "🔍 Competitor Analysis":
         st.markdown('<div class="section-title">📍 Location Map</div>', unsafe_allow_html=True)
         with open("images/mapa_cafeterias_seeccionadas_madrid_20260210.html", 'r', encoding='utf-8') as f:
             map_html = f.read()
-        components.html(map_html, height=400, scrolling=True)
+        components.html(map_html, height=380, scrolling=False)
     else:
         st.info("💡 Place your 'my_map.html' file in the same directory to display the location map")
 
