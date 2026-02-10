@@ -54,7 +54,7 @@ with col1:
     # Use 'use_column_width' to make it responsive, or set explicit width
     # Assuming 'LOGO_UCM.jpg' is in the root directory
     try:
-        image_ucm = Image.open('logo/LOGO_UCM.png')
+        image_ucm = Image.open('images/LOGO_UCM.png')
         st.image(image_ucm, width=280) # Adjust width as needed for emphasis
     except FileNotFoundError:
         st.error("UCM Logo not found. Please upload 'LOGO_UCM.png'")
@@ -64,7 +64,7 @@ with col2:
     st.write("") 
     st.write("") # Spacer to push logo down slightly if needed
     try:
-        image_ntic = Image.open('logo/LOGO_ntic.png')
+        image_ntic = Image.open('images/LOGO_ntic.png')
         st.image(image_ntic, width=150) # Smaller width for NTIC
     except FileNotFoundError:
         st.error("NTIC Logo not found. Please upload 'LOGO_ntic.png'")
