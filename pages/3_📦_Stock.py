@@ -88,7 +88,7 @@ if page == "🏠 Your Cafeteria":
 
     # Star rating data (from your analysis)
     star_data = {
-        'Rating': ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐, '⭐⭐],
+        'Rating': ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐, '⭐⭐'],
         'Count': [1588, 497, 228, 113, 84],
         'Stars': [5, 4, 3, 1, 2]
     }
@@ -104,35 +104,35 @@ if page == "🏠 Your Cafeteria":
 
     with col1:
         st.metric(
-            label="⭐⭐⭐⭐⭐ Five Stars",
+            label="⭐⭐⭐⭐⭐",
             value=f"{df_stars[df_stars['Stars']==5]['Count'].values[0]:,}",
             delta=f"{df_stars[df_stars['Stars']==5]['Percentage'].values[0]}%"
         )
 
     with col2:
         st.metric(
-            label="⭐⭐⭐⭐ Four Stars",
+            label="⭐⭐⭐⭐",
             value=f"{df_stars[df_stars['Stars']==4]['Count'].values[0]:,}",
             delta=f"{df_stars[df_stars['Stars']==4]['Percentage'].values[0]}%"
         )
 
     with col3:
         st.metric(
-            label="⭐⭐⭐ Three Stars",
+            label="⭐⭐⭐",
             value=f"{df_stars[df_stars['Stars']==3]['Count'].values[0]:,}",
             delta=f"{df_stars[df_stars['Stars']==3]['Percentage'].values[0]}%"
         )
 
     with col4:
         st.metric(
-            label="⭐⭐ Two Stars",
+            label="⭐⭐",
             value=f"{df_stars[df_stars['Stars']==2]['Count'].values[0]:,}",
             delta=f"{df_stars[df_stars['Stars']==2]['Percentage'].values[0]}%"
         )
 
     with col5:
         st.metric(
-            label="⭐ One Star",
+            label="⭐",
             value=f"{df_stars[df_stars['Stars']==1]['Count'].values[0]:,}",
             delta=f"{df_stars[df_stars['Stars']==1]['Percentage'].values[0]}%"
         )
