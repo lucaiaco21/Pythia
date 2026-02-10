@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_c942246ce29678bda006aca7431d9d03 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_c942246ce29678bda006aca7431d9d03" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_c942246ce29678bda006aca7431d9d03 = L.map(
+                "map_c942246ce29678bda006aca7431d9d03",
+                {
+                    center: [40.4272512, -3.6988308],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": false,
+  "heigh": 650,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_c942246ce29678bda006aca7431d9d03);
+
+            
+
+        
+    
+            var tile_layer_5923eb9f007530266777ee2c20bcdf43 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_5923eb9f007530266777ee2c20bcdf43.addTo(map_c942246ce29678bda006aca7431d9d03);
+        
+    
+                var lat_lng_popup_adf2aa2986ca82c099590c23c5e590a8 = L.popup();
+                function latLngPop(e) {
+                    lat_lng_popup_adf2aa2986ca82c099590c23c5e590a8
+                        .setLatLng(e.latlng)
+                        .setContent("Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn(map_c942246ce29678bda006aca7431d9d03);
+                    }
+                map_c942246ce29678bda006aca7431d9d03.on('click', latLngPop);
+            
+    
+            var marker_cluster_f95c8565131f3fd1968a9b80d338fdad = L.markerClusterGroup(
+                {
+  "disableClusteringAtZoom": 16,
+  "showCoverageOnHover": false,
+}
+            );
+            marker_cluster_f95c8565131f3fd1968a9b80d338fdad.options.iconCreateFunction =
+                function(cluster) {
+  return L.divIcon({
+    html: '<div style="background:#1f78b4;color:white;border:2px solid white;border-radius:50%;width:38px;height:38px;line-height:34px;text-align:center;font-weight:700;">' + cluster.getChildCount() + '</div>',
+    className: 'marker-cluster-custom',
+    iconSize: [38, 38]
+  });
+};
+        
+    
+            var circle_marker_8793fe79b444cc0c17f2451f0f45f796 = L.circleMarker(
+                [40.4141749, -3.6988408],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.038873605350878, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_14e75d6223ee48c6bd5b5ab59c2dd3b9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b21be22b7c795b383c7e9b9b026e409e = $(`<div id="html_b21be22b7c795b383c7e9b9b026e409e" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Brown Bear Bakery</div>       <div><b>Overall:</b> 4.1</div>       <div><b>Food:</b> 4.1 | <b>Service:</b> 3.8</div>       <div><b>Value:</b> 3.9 | <b>Atmosphere:</b> 4.0</div>     </div>     </div>`)[0];
+                popup_14e75d6223ee48c6bd5b5ab59c2dd3b9.setContent(html_b21be22b7c795b383c7e9b9b026e409e);
+            
+        
+
+        circle_marker_8793fe79b444cc0c17f2451f0f45f796.bindPopup(popup_14e75d6223ee48c6bd5b5ab59c2dd3b9)
+        ;
+
+        
+    
+    
+            circle_marker_8793fe79b444cc0c17f2451f0f45f796.bindTooltip(
+                `<div>
+                     Brown Bear Bakery | ⭐ 4.1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4ef0c5ac0359a2a8f14f12b7351a1af3 = L.circleMarker(
+                [40.4208042, -3.6981885],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.091650066335189, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_6cf0b481dc5491afb3595b62eb83d37d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_16b792622babce2f89940f29f54f0451 = $(`<div id="html_16b792622babce2f89940f29f54f0451" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Bucolico Cafe</div>       <div><b>Overall:</b> 4.5</div>       <div><b>Food:</b> 4.6 | <b>Service:</b> 4.4</div>       <div><b>Value:</b> 4.3 | <b>Atmosphere:</b> 4.6</div>     </div>     </div>`)[0];
+                popup_6cf0b481dc5491afb3595b62eb83d37d.setContent(html_16b792622babce2f89940f29f54f0451);
+            
+        
+
+        circle_marker_4ef0c5ac0359a2a8f14f12b7351a1af3.bindPopup(popup_6cf0b481dc5491afb3595b62eb83d37d)
+        ;
+
+        
+    
+    
+            circle_marker_4ef0c5ac0359a2a8f14f12b7351a1af3.bindTooltip(
+                `<div>
+                     Bucolico Cafe | ⭐ 4.5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_893fad5f0fb32705defd0ad36432b083 = L.circleMarker(
+                [40.4329764, -3.7147743],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.061552812808831, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_abddde418a51875fc9f6b150695eb893 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_797e606c2daa175c3f3ae9802e1d3d8a = $(`<div id="html_797e606c2daa175c3f3ae9802e1d3d8a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Cafe Green Bakery</div>       <div><b>Overall:</b> 4.6</div>       <div><b>Food:</b> 4.8 | <b>Service:</b> 4.9</div>       <div><b>Value:</b> 4.6 | <b>Atmosphere:</b> 5.0</div>     </div>     </div>`)[0];
+                popup_abddde418a51875fc9f6b150695eb893.setContent(html_797e606c2daa175c3f3ae9802e1d3d8a);
+            
+        
+
+        circle_marker_893fad5f0fb32705defd0ad36432b083.bindPopup(popup_abddde418a51875fc9f6b150695eb893)
+        ;
+
+        
+    
+    
+            circle_marker_893fad5f0fb32705defd0ad36432b083.bindTooltip(
+                `<div>
+                     Cafe Green Bakery | ⭐ 4.6
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0d16035bd930ec1fb88db17b3ccbc54e = L.circleMarker(
+                [40.4083463, -3.7027678],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.527692569068709, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_461bdb921ad97921116b53592a6eb47d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f89d057be400518865f84353189d5853 = $(`<div id="html_f89d057be400518865f84353189d5853" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Cafelito</div>       <div><b>Overall:</b> 4.4</div>       <div><b>Food:</b> 4.3 | <b>Service:</b> 4.3</div>       <div><b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.3</div>     </div>     </div>`)[0];
+                popup_461bdb921ad97921116b53592a6eb47d.setContent(html_f89d057be400518865f84353189d5853);
+            
+        
+
+        circle_marker_0d16035bd930ec1fb88db17b3ccbc54e.bindPopup(popup_461bdb921ad97921116b53592a6eb47d)
+        ;
+
+        
+    
+    
+            circle_marker_0d16035bd930ec1fb88db17b3ccbc54e.bindTooltip(
+                `<div>
+                     Cafelito | ⭐ 4.4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9c2b47b47fcea9e83da9ed32334872c3 = L.circleMarker(
+                [40.4221388, -3.7025164],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.600189391222042, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_e19ab552d181393153a17090dec936bb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_370418fa9e83270c055c4e5afbb6ea32 = $(`<div id="html_370418fa9e83270c055c4e5afbb6ea32" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Café de la Luz</div>       <div><b>Overall:</b> 4.2</div>       <div><b>Food:</b> 4.2 | <b>Service:</b> 4.1</div>       <div><b>Value:</b> 4.0 | <b>Atmosphere:</b> 4.1</div>     </div>     </div>`)[0];
+                popup_e19ab552d181393153a17090dec936bb.setContent(html_370418fa9e83270c055c4e5afbb6ea32);
+            
+        
+
+        circle_marker_9c2b47b47fcea9e83da9ed32334872c3.bindPopup(popup_e19ab552d181393153a17090dec936bb)
+        ;
+
+        
+    
+    
+            circle_marker_9c2b47b47fcea9e83da9ed32334872c3.bindTooltip(
+                `<div>
+                     Café de la Luz | ⭐ 4.2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_20afab7dc0e3b672ec94491d9e6ea074 = L.circleMarker(
+                [40.4220755, -3.6956977],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_420bef2baef31fd5bda6b89631c4a215 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e3258f78a1cfececeeffee1cf3f8555f = $(`<div id="html_e3258f78a1cfececeeffee1cf3f8555f" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Celicioso</div>       <div><b>Overall:</b> 4.3</div>       <div><b>Food:</b> 4.5 | <b>Service:</b> 4.2</div>       <div><b>Value:</b> 4.0 | <b>Atmosphere:</b> 4.2</div>     </div>     </div>`)[0];
+                popup_420bef2baef31fd5bda6b89631c4a215.setContent(html_e3258f78a1cfececeeffee1cf3f8555f);
+            
+        
+
+        circle_marker_20afab7dc0e3b672ec94491d9e6ea074.bindPopup(popup_420bef2baef31fd5bda6b89631c4a215)
+        ;
+
+        
+    
+    
+            circle_marker_20afab7dc0e3b672ec94491d9e6ea074.bindTooltip(
+                `<div>
+                     Celicioso | ⭐ 4.3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_18676aa66227c01105e3fd8b697fd0da = L.circleMarker(
+                [40.4272512, -3.6988308],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e76f51", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.018714974971182, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_b5321de9c74e46bdee619547aad59b2f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_19dbc086f16fd12dc1f3a1f0340b1ddd = $(`<div id="html_19dbc086f16fd12dc1f3a1f0340b1ddd" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Cereal Hunters Cafe</div>       <div><b>Overall:</b> 3.9</div>       <div><b>Food:</b> 4.0 | <b>Service:</b> 3.8</div>       <div><b>Value:</b> 3.3 | <b>Atmosphere:</b> nan</div>     </div>     </div>`)[0];
+                popup_b5321de9c74e46bdee619547aad59b2f.setContent(html_19dbc086f16fd12dc1f3a1f0340b1ddd);
+            
+        
+
+        circle_marker_18676aa66227c01105e3fd8b697fd0da.bindPopup(popup_b5321de9c74e46bdee619547aad59b2f)
+        ;
+
+        
+    
+    
+            circle_marker_18676aa66227c01105e3fd8b697fd0da.bindTooltip(
+                `<div>
+                     Cereal Hunters Cafe | ⭐ 3.9
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d9de52d0906dbb3eee2cd7dedd2c2a3e = L.circleMarker(
+                [40.4167707, -3.706803],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_931eded701e5c836e33954ac5553668e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6356950c42748e5451d512e1875b9f60 = $(`<div id="html_6356950c42748e5451d512e1875b9f60" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Chocolatería 1902</div>       <div><b>Overall:</b> 4.1</div>       <div><b>Food:</b> 4.1 | <b>Service:</b> 3.9</div>       <div><b>Value:</b> 4.0 | <b>Atmosphere:</b> 3.6</div>     </div>     </div>`)[0];
+                popup_931eded701e5c836e33954ac5553668e.setContent(html_6356950c42748e5451d512e1875b9f60);
+            
+        
+
+        circle_marker_d9de52d0906dbb3eee2cd7dedd2c2a3e.bindPopup(popup_931eded701e5c836e33954ac5553668e)
+        ;
+
+        
+    
+    
+            circle_marker_d9de52d0906dbb3eee2cd7dedd2c2a3e.bindTooltip(
+                `<div>
+                     Chocolatería 1902 | ⭐ 4.1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f20f3576ca0cca4566df9de807a2c3ea = L.circleMarker(
+                [40.4167707, -3.706803],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_96ec4a2c2f665e9f916836f2d863b0d4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7d42b2b3919407c95587e0c1ad30125b = $(`<div id="html_7d42b2b3919407c95587e0c1ad30125b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Chocolatería San Ginés</div>       <div><b>Overall:</b> 4.2</div>       <div><b>Food:</b> 4.2 | <b>Service:</b> 3.8</div>       <div><b>Value:</b> 3.9 | <b>Atmosphere:</b> 3.9</div>     </div>     </div>`)[0];
+                popup_96ec4a2c2f665e9f916836f2d863b0d4.setContent(html_7d42b2b3919407c95587e0c1ad30125b);
+            
+        
+
+        circle_marker_f20f3576ca0cca4566df9de807a2c3ea.bindPopup(popup_96ec4a2c2f665e9f916836f2d863b0d4)
+        ;
+
+        
+    
+    
+            circle_marker_f20f3576ca0cca4566df9de807a2c3ea.bindTooltip(
+                `<div>
+                     Chocolatería San Ginés | ⭐ 4.2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2da0494d684d84e02e888104f56cd5d5 = L.circleMarker(
+                [40.4133967, -3.728403],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e76f51", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.61420807370024, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_9262815a13e3be3fadcb10288f172f62 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2da3998b3c5bc03ac82870f629fcba91 = $(`<div id="html_2da3998b3c5bc03ac82870f629fcba91" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Churrería-Chocolatería Las Farolas</div>       <div><b>Overall:</b> 3.8</div>       <div><b>Food:</b> 4.0 | <b>Service:</b> 3.5</div>       <div><b>Value:</b> 3.9 | <b>Atmosphere:</b> 2.7</div>     </div>     </div>`)[0];
+                popup_9262815a13e3be3fadcb10288f172f62.setContent(html_2da3998b3c5bc03ac82870f629fcba91);
+            
+        
+
+        circle_marker_2da0494d684d84e02e888104f56cd5d5.bindPopup(popup_9262815a13e3be3fadcb10288f172f62)
+        ;
+
+        
+    
+    
+            circle_marker_2da0494d684d84e02e888104f56cd5d5.bindTooltip(
+                `<div>
+                     Churrería-Chocolatería Las Farolas | ⭐ 3.8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f73837785c832236012f4b1876722d52 = L.circleMarker(
+                [40.4069569, -3.6993372],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.132491021535417, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_d0a62a2a08210358c76b6954b6b77d1e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5e47087b91dc193b3dd38a564b0f7da3 = $(`<div id="html_5e47087b91dc193b3dd38a564b0f7da3" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Crema Y Nata</div>       <div><b>Overall:</b> 4.9</div>       <div><b>Food:</b> 5.0 | <b>Service:</b> 4.9</div>       <div><b>Value:</b> 5.0 | <b>Atmosphere:</b> 5.0</div>     </div>     </div>`)[0];
+                popup_d0a62a2a08210358c76b6954b6b77d1e.setContent(html_5e47087b91dc193b3dd38a564b0f7da3);
+            
+        
+
+        circle_marker_f73837785c832236012f4b1876722d52.bindPopup(popup_d0a62a2a08210358c76b6954b6b77d1e)
+        ;
+
+        
+    
+    
+            circle_marker_f73837785c832236012f4b1876722d52.bindTooltip(
+                `<div>
+                     Crema Y Nata | ⭐ 4.9
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f179840c9f97fbcaadfaf0e43c16816f = L.circleMarker(
+                [40.4108156, -3.6934091],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.21307488658818, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_5bba00b85e24a497bb21db29d9db6c8a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f0c1affab3e66954071b95ed2a4212f5 = $(`<div id="html_f0c1affab3e66954071b95ed2a4212f5" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">El Patio Vertical</div>       <div><b>Overall:</b> 4.0</div>       <div><b>Food:</b> 4.0 | <b>Service:</b> 4.0</div>       <div><b>Value:</b> 3.8 | <b>Atmosphere:</b> 4.3</div>     </div>     </div>`)[0];
+                popup_5bba00b85e24a497bb21db29d9db6c8a.setContent(html_f0c1affab3e66954071b95ed2a4212f5);
+            
+        
+
+        circle_marker_f179840c9f97fbcaadfaf0e43c16816f.bindPopup(popup_5bba00b85e24a497bb21db29d9db6c8a)
+        ;
+
+        
+    
+    
+            circle_marker_f179840c9f97fbcaadfaf0e43c16816f.bindTooltip(
+                `<div>
+                     El Patio Vertical | ⭐ 4.0
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0cb0b5e1780e846bde94b2ed2b87dcb6 = L.circleMarker(
+                [40.4126774, -3.7105959],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.304886114323222, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_dbb570e954c69a4aa8c84bdb1406c6a7 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a557d8b6de6af4622ab6bef1e347ba22 = $(`<div id="html_a557d8b6de6af4622ab6bef1e347ba22" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">El Perro de Pavlov</div>       <div><b>Overall:</b> 4.8</div>       <div><b>Food:</b> 4.8 | <b>Service:</b> 4.8</div>       <div><b>Value:</b> 4.7 | <b>Atmosphere:</b> 4.8</div>     </div>     </div>`)[0];
+                popup_dbb570e954c69a4aa8c84bdb1406c6a7.setContent(html_a557d8b6de6af4622ab6bef1e347ba22);
+            
+        
+
+        circle_marker_0cb0b5e1780e846bde94b2ed2b87dcb6.bindPopup(popup_dbb570e954c69a4aa8c84bdb1406c6a7)
+        ;
+
+        
+    
+    
+            circle_marker_0cb0b5e1780e846bde94b2ed2b87dcb6.bindTooltip(
+                `<div>
+                     El Perro de Pavlov | ⭐ 4.8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_05c1c27d80c0f923df9bd407c60c4177 = L.circleMarker(
+                [40.4270528, -3.7092373],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e76f51", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_63fa4f3ab60aa7919a6f2442b319814d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e3681acb91bb915261ab387038107397 = $(`<div id="html_e3681acb91bb915261ab387038107397" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Federal Cafe</div>       <div><b>Overall:</b> 3.7</div>       <div><b>Food:</b> 4.0 | <b>Service:</b> 3.4</div>       <div><b>Value:</b> 3.5 | <b>Atmosphere:</b> 3.7</div>     </div>     </div>`)[0];
+                popup_63fa4f3ab60aa7919a6f2442b319814d.setContent(html_e3681acb91bb915261ab387038107397);
+            
+        
+
+        circle_marker_05c1c27d80c0f923df9bd407c60c4177.bindPopup(popup_63fa4f3ab60aa7919a6f2442b319814d)
+        ;
+
+        
+    
+    
+            circle_marker_05c1c27d80c0f923df9bd407c60c4177.bindTooltip(
+                `<div>
+                     Federal Cafe | ⭐ 3.7
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f9beb26b3a53e8c558db0e08983b1ad7 = L.circleMarker(
+                [40.4238831, -3.7054987],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.220153254455276, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_e70c46b8a59b719a3f53f444ea63c621 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_94d8d0d11f22b6b68669bbe12979edf2 = $(`<div id="html_94d8d0d11f22b6b68669bbe12979edf2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">HanSo Cafe</div>       <div><b>Overall:</b> 4.2</div>       <div><b>Food:</b> 4.3 | <b>Service:</b> 4.1</div>       <div><b>Value:</b> 4.0 | <b>Atmosphere:</b> 4.2</div>     </div>     </div>`)[0];
+                popup_e70c46b8a59b719a3f53f444ea63c621.setContent(html_94d8d0d11f22b6b68669bbe12979edf2);
+            
+        
+
+        circle_marker_f9beb26b3a53e8c558db0e08983b1ad7.bindPopup(popup_e70c46b8a59b719a3f53f444ea63c621)
+        ;
+
+        
+    
+    
+            circle_marker_f9beb26b3a53e8c558db0e08983b1ad7.bindTooltip(
+                `<div>
+                     HanSo Cafe | ⭐ 4.2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1041fc740b8bfbf6f8c9e394762f31d1 = L.circleMarker(
+                [40.4250643, -3.6765453],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.089724735885168, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_2a57169eb0c9cae7867aedce644912ea = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_81ba6213da7afe62eade4ec76084f568 = $(`<div id="html_81ba6213da7afe62eade4ec76084f568" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Isabel Maestre</div>       <div><b>Overall:</b> 4.1</div>       <div><b>Food:</b> 5.0 | <b>Service:</b> 4.9</div>       <div><b>Value:</b> 4.4 | <b>Atmosphere:</b> 5.0</div>     </div>     </div>`)[0];
+                popup_2a57169eb0c9cae7867aedce644912ea.setContent(html_81ba6213da7afe62eade4ec76084f568);
+            
+        
+
+        circle_marker_1041fc740b8bfbf6f8c9e394762f31d1.bindPopup(popup_2a57169eb0c9cae7867aedce644912ea)
+        ;
+
+        
+    
+    
+            circle_marker_1041fc740b8bfbf6f8c9e394762f31d1.bindTooltip(
+                `<div>
+                     Isabel Maestre | ⭐ 4.1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_df6c3e3d6091bb2c59111a3924225d26 = L.circleMarker(
+                [40.4314125, -3.7036297],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.291502622129181, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_7148e5496900a2397b973602ee93d600 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bb52a4e6ce8de477992d4bf9d7043864 = $(`<div id="html_bb52a4e6ce8de477992d4bf9d7043864" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Kalua Helado Artesanal</div>       <div><b>Overall:</b> 4.4</div>       <div><b>Food:</b> 4.5 | <b>Service:</b> 4.3</div>       <div><b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.4</div>     </div>     </div>`)[0];
+                popup_7148e5496900a2397b973602ee93d600.setContent(html_bb52a4e6ce8de477992d4bf9d7043864);
+            
+        
+
+        circle_marker_df6c3e3d6091bb2c59111a3924225d26.bindPopup(popup_7148e5496900a2397b973602ee93d600)
+        ;
+
+        
+    
+    
+            circle_marker_df6c3e3d6091bb2c59111a3924225d26.bindTooltip(
+                `<div>
+                     Kalua Helado Artesanal | ⭐ 4.4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cb0bcdfa3b91561c0702856dcd723eeb = L.circleMarker(
+                [40.4253396, -3.701983],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.103277807866851, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_27fbbb08b20d0053740281aa6252dc16 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8e27a5740a63f86ec75b6c38c25226ad = $(`<div id="html_8e27a5740a63f86ec75b6c38c25226ad" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">La Cocina de mi Vecina</div>       <div><b>Overall:</b> 4.4</div>       <div><b>Food:</b> 4.5 | <b>Service:</b> 4.3</div>       <div><b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.4</div>     </div>     </div>`)[0];
+                popup_27fbbb08b20d0053740281aa6252dc16.setContent(html_8e27a5740a63f86ec75b6c38c25226ad);
+            
+        
+
+        circle_marker_cb0bcdfa3b91561c0702856dcd723eeb.bindPopup(popup_27fbbb08b20d0053740281aa6252dc16)
+        ;
+
+        
+    
+    
+            circle_marker_cb0bcdfa3b91561c0702856dcd723eeb.bindTooltip(
+                `<div>
+                     La Cocina de mi Vecina | ⭐ 4.4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cc4725204e41cb13d05984cc5e31eab0 = L.circleMarker(
+                [40.4257114, -3.6969584],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.47911821679223, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_1278acace1b718265545f405f4f55a8c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_49354c62efee55f4c54165dd8b3ba195 = $(`<div id="html_49354c62efee55f4c54165dd8b3ba195" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">La Duquesita</div>       <div><b>Overall:</b> 4.7</div>       <div><b>Food:</b> 4.8 | <b>Service:</b> 4.6</div>       <div><b>Value:</b> 4.5 | <b>Atmosphere:</b> 4.7</div>     </div>     </div>`)[0];
+                popup_1278acace1b718265545f405f4f55a8c.setContent(html_49354c62efee55f4c54165dd8b3ba195);
+            
+        
+
+        circle_marker_cc4725204e41cb13d05984cc5e31eab0.bindPopup(popup_1278acace1b718265545f405f4f55a8c)
+        ;
+
+        
+    
+    
+            circle_marker_cc4725204e41cb13d05984cc5e31eab0.bindTooltip(
+                `<div>
+                     La Duquesita | ⭐ 4.7
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_82341913bb62569bc4b564cf75d22e24 = L.circleMarker(
+                [40.4706396, -3.5806217],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.11737237261468, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_7fb0fa5b98ebc1afe407794ba8f1cc34 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b225031898acf0eab14c94be44e323cf = $(`<div id="html_b225031898acf0eab14c94be44e323cf" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">La General</div>       <div><b>Overall:</b> 4.6</div>       <div><b>Food:</b> 4.7 | <b>Service:</b> 4.5</div>       <div><b>Value:</b> 4.4 | <b>Atmosphere:</b> 4.6</div>     </div>     </div>`)[0];
+                popup_7fb0fa5b98ebc1afe407794ba8f1cc34.setContent(html_b225031898acf0eab14c94be44e323cf);
+            
+        
+
+        circle_marker_82341913bb62569bc4b564cf75d22e24.bindPopup(popup_7fb0fa5b98ebc1afe407794ba8f1cc34)
+        ;
+
+        
+    
+    
+            circle_marker_82341913bb62569bc4b564cf75d22e24.bindTooltip(
+                `<div>
+                     La General | ⭐ 4.6
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f451501e1a334aae679dafff31790e36 = L.circleMarker(
+                [40.4143727, -3.6975918],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e76f51", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.821825380496477, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_395b98bb14c72517d1f595aa9dce31f5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b2b44bf43863373ded23708414a836ec = $(`<div id="html_b2b44bf43863373ded23708414a836ec" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">La Mejor Tarta de Chocolate Del Mundo</div>       <div><b>Overall:</b> 3.5</div>       <div><b>Food:</b> 3.6 | <b>Service:</b> 3.6</div>       <div><b>Value:</b> 3.0 | <b>Atmosphere:</b> 3.9</div>     </div>     </div>`)[0];
+                popup_395b98bb14c72517d1f595aa9dce31f5.setContent(html_b2b44bf43863373ded23708414a836ec);
+            
+        
+
+        circle_marker_f451501e1a334aae679dafff31790e36.bindPopup(popup_395b98bb14c72517d1f595aa9dce31f5)
+        ;
+
+        
+    
+    
+            circle_marker_f451501e1a334aae679dafff31790e36.bindTooltip(
+                `<div>
+                     La Mejor Tarta de Chocolate Del Mundo | ⭐ 3.5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b07aea90abe4b291203f51f24ad8c001 = L.circleMarker(
+                [40.4352121, -3.7126864],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.657184709581948, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_9248f4a53b77833807d54da9dff1bf7d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6828276f394c1ac6b75ff857e7fa8409 = $(`<div id="html_6828276f394c1ac6b75ff857e7fa8409" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Little Big Cafe</div>       <div><b>Overall:</b> 4.4</div>       <div><b>Food:</b> 4.4 | <b>Service:</b> 4.4</div>       <div><b>Value:</b> 4.1 | <b>Atmosphere:</b> 4.3</div>     </div>     </div>`)[0];
+                popup_9248f4a53b77833807d54da9dff1bf7d.setContent(html_6828276f394c1ac6b75ff857e7fa8409);
+            
+        
+
+        circle_marker_b07aea90abe4b291203f51f24ad8c001.bindPopup(popup_9248f4a53b77833807d54da9dff1bf7d)
+        ;
+
+        
+    
+    
+            circle_marker_b07aea90abe4b291203f51f24ad8c001.bindTooltip(
+                `<div>
+                     Little Big Cafe | ⭐ 4.4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8940118e9304330144e7f725d15bae10 = L.circleMarker(
+                [40.4141619, -3.7032321],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.585969936159746, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_7e8b46a0a6eb0b08cabc9fb6723deb1b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_02c2b65d7836011ba0428fda44b016e2 = $(`<div id="html_02c2b65d7836011ba0428fda44b016e2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Maestro Churrero</div>       <div><b>Overall:</b> 4.7</div>       <div><b>Food:</b> 4.8 | <b>Service:</b> 4.8</div>       <div><b>Value:</b> 4.7 | <b>Atmosphere:</b> 4.4</div>     </div>     </div>`)[0];
+                popup_7e8b46a0a6eb0b08cabc9fb6723deb1b.setContent(html_02c2b65d7836011ba0428fda44b016e2);
+            
+        
+
+        circle_marker_8940118e9304330144e7f725d15bae10.bindPopup(popup_7e8b46a0a6eb0b08cabc9fb6723deb1b)
+        ;
+
+        
+    
+    
+            circle_marker_8940118e9304330144e7f725d15bae10.bindTooltip(
+                `<div>
+                     Maestro Churrero | ⭐ 4.7
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f1b91db71b414af0233f1a0458c46c13 = L.circleMarker(
+                [40.4352448, -3.6755213],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.920286436967152, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_019d356d027390044119c494713d671e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ac8bf10deec4153270f61d073114b954 = $(`<div id="html_ac8bf10deec4153270f61d073114b954" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Mayoma</div>       <div><b>Overall:</b> 4.8</div>       <div><b>Food:</b> 4.9 | <b>Service:</b> 4.7</div>       <div><b>Value:</b> 4.6 | <b>Atmosphere:</b> 4.8</div>     </div>     </div>`)[0];
+                popup_019d356d027390044119c494713d671e.setContent(html_ac8bf10deec4153270f61d073114b954);
+            
+        
+
+        circle_marker_f1b91db71b414af0233f1a0458c46c13.bindPopup(popup_019d356d027390044119c494713d671e)
+        ;
+
+        
+    
+    
+            circle_marker_f1b91db71b414af0233f1a0458c46c13.bindTooltip(
+                `<div>
+                     Mayoma | ⭐ 4.8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3e3689b76a6c90d9b6ade0f7c41538ee = L.circleMarker(
+                [40.4242404, -3.708689],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.537222891273055, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_e7796b8fc1762b03851dcf0aa297b9e6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_81b5f5594f44bbb1b9ecc8862e3c4dad = $(`<div id="html_81b5f5594f44bbb1b9ecc8862e3c4dad" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Mision Cafe</div>       <div><b>Overall:</b> 4.5</div>       <div><b>Food:</b> 4.7 | <b>Service:</b> 4.3</div>       <div><b>Value:</b> 4.2 | <b>Atmosphere:</b> 4.4</div>     </div>     </div>`)[0];
+                popup_e7796b8fc1762b03851dcf0aa297b9e6.setContent(html_81b5f5594f44bbb1b9ecc8862e3c4dad);
+            
+        
+
+        circle_marker_3e3689b76a6c90d9b6ade0f7c41538ee.bindPopup(popup_e7796b8fc1762b03851dcf0aa297b9e6)
+        ;
+
+        
+    
+    
+            circle_marker_3e3689b76a6c90d9b6ade0f7c41538ee.bindTooltip(
+                `<div>
+                     Mision Cafe | ⭐ 4.5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a5050b27f465287e539ff083058bb2c3 = L.circleMarker(
+                [40.4218087, -3.6976066],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.366062299143245, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_6ff9d3caf51b1ccb53321f5b95e914bc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_86a893e3780c00d49e77dea07d015818 = $(`<div id="html_86a893e3780c00d49e77dea07d015818" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Mistura Ice Cream</div>       <div><b>Overall:</b> 4.4</div>       <div><b>Food:</b> 10.0 | <b>Service:</b> 4.4</div>       <div><b>Value:</b> 4.5 | <b>Atmosphere:</b> 4.1</div>     </div>     </div>`)[0];
+                popup_6ff9d3caf51b1ccb53321f5b95e914bc.setContent(html_86a893e3780c00d49e77dea07d015818);
+            
+        
+
+        circle_marker_a5050b27f465287e539ff083058bb2c3.bindPopup(popup_6ff9d3caf51b1ccb53321f5b95e914bc)
+        ;
+
+        
+    
+    
+            circle_marker_a5050b27f465287e539ff083058bb2c3.bindTooltip(
+                `<div>
+                     Mistura Ice Cream | ⭐ 4.4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7bc2f9e14e73410da8b982d6ddb27f9c = L.circleMarker(
+                [40.4116896, -3.6946906],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.45813862503175, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_7f4a9988ed9eade41ae91eef904f5023 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ea21c770cb71038da0745f4faec8d4eb = $(`<div id="html_ea21c770cb71038da0745f4faec8d4eb" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Motteau</div>       <div><b>Overall:</b> 4.8</div>       <div><b>Food:</b> 4.9 | <b>Service:</b> 4.8</div>       <div><b>Value:</b> 4.6 | <b>Atmosphere:</b> 4.8</div>     </div>     </div>`)[0];
+                popup_7f4a9988ed9eade41ae91eef904f5023.setContent(html_ea21c770cb71038da0745f4faec8d4eb);
+            
+        
+
+        circle_marker_7bc2f9e14e73410da8b982d6ddb27f9c.bindPopup(popup_7f4a9988ed9eade41ae91eef904f5023)
+        ;
+
+        
+    
+    
+            circle_marker_7bc2f9e14e73410da8b982d6ddb27f9c.bindTooltip(
+                `<div>
+                     Motteau | ⭐ 4.8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5966afb34a573acf84dc8b59d0efad1e = L.circleMarker(
+                [40.4107052, -3.6993496],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.39791576165636, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_23fe26a2e948a303881f839f36efaae2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fe35a9087298ecc7242ad4d9bc090d16 = $(`<div id="html_fe35a9087298ecc7242ad4d9bc090d16" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Nomade cafe</div>       <div><b>Overall:</b> 4.5</div>       <div><b>Food:</b> 4.6 | <b>Service:</b> 4.4</div>       <div><b>Value:</b> 4.3 | <b>Atmosphere:</b> 4.5</div>     </div>     </div>`)[0];
+                popup_23fe26a2e948a303881f839f36efaae2.setContent(html_fe35a9087298ecc7242ad4d9bc090d16);
+            
+        
+
+        circle_marker_5966afb34a573acf84dc8b59d0efad1e.bindPopup(popup_23fe26a2e948a303881f839f36efaae2)
+        ;
+
+        
+    
+    
+            circle_marker_5966afb34a573acf84dc8b59d0efad1e.bindTooltip(
+                `<div>
+                     Nomade cafe | ⭐ 4.5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fa2aaa4b192b2b19840cce476544fada = L.circleMarker(
+                [40.4345364, -3.7045129],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e76f51", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.959705453537527, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_e9afc09f11f2cb2995e92ad00d0e159d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_03e150117a860c36f97d70003a43fd7f = $(`<div id="html_03e150117a860c36f97d70003a43fd7f" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Pastelería Mallorca</div>       <div><b>Overall:</b> 3.6</div>       <div><b>Food:</b> 3.7 | <b>Service:</b> 3.4</div>       <div><b>Value:</b> 3.5 | <b>Atmosphere:</b> 3.5</div>     </div>     </div>`)[0];
+                popup_e9afc09f11f2cb2995e92ad00d0e159d.setContent(html_03e150117a860c36f97d70003a43fd7f);
+            
+        
+
+        circle_marker_fa2aaa4b192b2b19840cce476544fada.bindPopup(popup_e9afc09f11f2cb2995e92ad00d0e159d)
+        ;
+
+        
+    
+    
+            circle_marker_fa2aaa4b192b2b19840cce476544fada.bindTooltip(
+                `<div>
+                     Pastelería Mallorca | ⭐ 3.6
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3de490fab714548b7afe3e68b43fab95 = L.circleMarker(
+                [40.413068, -3.6901971],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.585969936159746, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_4724274826db758f54b5beb98c01a1dd = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5d8351a9f10f8254930cc0ebe2224d7d = $(`<div id="html_5d8351a9f10f8254930cc0ebe2224d7d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Plenti</div>       <div><b>Overall:</b> 4.7</div>       <div><b>Food:</b> 9.0 | <b>Service:</b> 11.0</div>       <div><b>Value:</b> 4.8 | <b>Atmosphere:</b> 4.8</div>     </div>     </div>`)[0];
+                popup_4724274826db758f54b5beb98c01a1dd.setContent(html_5d8351a9f10f8254930cc0ebe2224d7d);
+            
+        
+
+        circle_marker_3de490fab714548b7afe3e68b43fab95.bindPopup(popup_4724274826db758f54b5beb98c01a1dd)
+        ;
+
+        
+    
+    
+            circle_marker_3de490fab714548b7afe3e68b43fab95.bindTooltip(
+                `<div>
+                     Plenti | ⭐ 4.7
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2a4f00ef7ff6097788a8f40b1d79c913 = L.circleMarker(
+                [40.4081399, -3.7019197],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.863019699779286, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_17a1bad534b72563c8b75e37859b6745 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_edcc13d0c640c7fbd8900f722b6a71bc = $(`<div id="html_edcc13d0c640c7fbd8900f722b6a71bc" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Pum Pum Cafe</div>       <div><b>Overall:</b> 4.0</div>       <div><b>Food:</b> 4.1 | <b>Service:</b> 3.9</div>       <div><b>Value:</b> 3.8 | <b>Atmosphere:</b> 4.0</div>     </div>     </div>`)[0];
+                popup_17a1bad534b72563c8b75e37859b6745.setContent(html_edcc13d0c640c7fbd8900f722b6a71bc);
+            
+        
+
+        circle_marker_2a4f00ef7ff6097788a8f40b1d79c913.bindPopup(popup_17a1bad534b72563c8b75e37859b6745)
+        ;
+
+        
+    
+    
+            circle_marker_2a4f00ef7ff6097788a8f40b1d79c913.bindTooltip(
+                `<div>
+                     Pum Pum Cafe | ⭐ 4.0
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_21c128a8de099c0cc1dbc69af33c989d = L.circleMarker(
+                [40.4422498, -3.7124772],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.010398644698074, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_80f0db729f94ca468c2219d19ce7b8ac = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9942c02e8300b15d38b9ce4333859704 = $(`<div id="html_9942c02e8300b15d38b9ce4333859704" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Salon des Fleurs</div>       <div><b>Overall:</b> 4.2</div>       <div><b>Food:</b> 4.0 | <b>Service:</b> 4.0</div>       <div><b>Value:</b> 3.5 | <b>Atmosphere:</b> 3.8</div>     </div>     </div>`)[0];
+                popup_80f0db729f94ca468c2219d19ce7b8ac.setContent(html_9942c02e8300b15d38b9ce4333859704);
+            
+        
+
+        circle_marker_21c128a8de099c0cc1dbc69af33c989d.bindPopup(popup_80f0db729f94ca468c2219d19ce7b8ac)
+        ;
+
+        
+    
+    
+            circle_marker_21c128a8de099c0cc1dbc69af33c989d.bindTooltip(
+                `<div>
+                     Salon des Fleurs | ⭐ 4.2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_aaba2c2ed28c1d3e66ffdcf15caa96f5 = L.circleMarker(
+                [40.4361032, -3.6801423],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.25, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_ec6bddb4014850c697fb0d4c99bc2ade = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_be6969d57996697f4b31700033a430e3 = $(`<div id="html_be6969d57996697f4b31700033a430e3" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Sana Locura</div>       <div><b>Overall:</b> 4.1</div>       <div><b>Food:</b> 4.2 | <b>Service:</b> 4.0</div>       <div><b>Value:</b> 3.9 | <b>Atmosphere:</b> 4.1</div>     </div>     </div>`)[0];
+                popup_ec6bddb4014850c697fb0d4c99bc2ade.setContent(html_be6969d57996697f4b31700033a430e3);
+            
+        
+
+        circle_marker_aaba2c2ed28c1d3e66ffdcf15caa96f5.bindPopup(popup_ec6bddb4014850c697fb0d4c99bc2ade)
+        ;
+
+        
+    
+    
+            circle_marker_aaba2c2ed28c1d3e66ffdcf15caa96f5.bindTooltip(
+                `<div>
+                     Sana Locura | ⭐ 4.1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b14ddd01b1f131efd891722f870d0550 = L.circleMarker(
+                [40.4172021, -3.7096856],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.330127018922195, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_0c27d3e47f7d575f362be8c18abe1983 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c94eb9e7765b7bcfa95776cdeb7619c0 = $(`<div id="html_c94eb9e7765b7bcfa95776cdeb7619c0" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Santa Eulalia Boulangerie</div>       <div><b>Overall:</b> 4.3</div>       <div><b>Food:</b> 4.4 | <b>Service:</b> 4.1</div>       <div><b>Value:</b> 4.0 | <b>Atmosphere:</b> 3.8</div>     </div>     </div>`)[0];
+                popup_0c27d3e47f7d575f362be8c18abe1983.setContent(html_c94eb9e7765b7bcfa95776cdeb7619c0);
+            
+        
+
+        circle_marker_b14ddd01b1f131efd891722f870d0550.bindPopup(popup_0c27d3e47f7d575f362be8c18abe1983)
+        ;
+
+        
+    
+    
+            circle_marker_b14ddd01b1f131efd891722f870d0550.bindTooltip(
+                `<div>
+                     Santa Eulalia Boulangerie | ⭐ 4.3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_767ecb1c171cd63df370e9efc5940e57 = L.circleMarker(
+                [40.4187565, -3.7105063],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.5, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_aeaab03958950b9aaff0434afe16a3a4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3e58de9e957918f8ad51678deb5be9db = $(`<div id="html_3e58de9e957918f8ad51678deb5be9db" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Scarlett</div>       <div><b>Overall:</b> 4.5</div>       <div><b>Food:</b> 4.4 | <b>Service:</b> 4.4</div>       <div><b>Value:</b> 4.3 | <b>Atmosphere:</b> 3.8</div>     </div>     </div>`)[0];
+                popup_aeaab03958950b9aaff0434afe16a3a4.setContent(html_3e58de9e957918f8ad51678deb5be9db);
+            
+        
+
+        circle_marker_767ecb1c171cd63df370e9efc5940e57.bindPopup(popup_aeaab03958950b9aaff0434afe16a3a4)
+        ;
+
+        
+    
+    
+            circle_marker_767ecb1c171cd63df370e9efc5940e57.bindTooltip(
+                `<div>
+                     Scarlett | ⭐ 4.5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9eb56e9cd635d6548b5d5f5c22a92e73 = L.circleMarker(
+                [40.4138618, -3.6894207],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e9c46a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.8062430400804566, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_c2b196f422120fe5631dc235ac9940f4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c03255e75ffecdf85a8fbf9ee42dc5c3 = $(`<div id="html_c03255e75ffecdf85a8fbf9ee42dc5c3" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Sucre Salon De Te</div>       <div><b>Overall:</b> 4.4</div>       <div><b>Food:</b> 4.3 | <b>Service:</b> 4.1</div>       <div><b>Value:</b> 4.1 | <b>Atmosphere:</b> 4.0</div>     </div>     </div>`)[0];
+                popup_c2b196f422120fe5631dc235ac9940f4.setContent(html_c03255e75ffecdf85a8fbf9ee42dc5c3);
+            
+        
+
+        circle_marker_9eb56e9cd635d6548b5d5f5c22a92e73.bindPopup(popup_c2b196f422120fe5631dc235ac9940f4)
+        ;
+
+        
+    
+    
+            circle_marker_9eb56e9cd635d6548b5d5f5c22a92e73.bindTooltip(
+                `<div>
+                     Sucre Salon De Te | ⭐ 4.4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_41e73190b119c56bb343035e76e73fdc = L.circleMarker(
+                [40.4273813, -3.7077139],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#2a9d8f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.920286436967152, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_a730f63d9dc9917f78a029809e43b1bd = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7721e4adfe720656358cae1a10276c6d = $(`<div id="html_7721e4adfe720656358cae1a10276c6d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">The Fix</div>       <div><b>Overall:</b> 4.6</div>       <div><b>Food:</b> 4.7 | <b>Service:</b> 4.5</div>       <div><b>Value:</b> 4.4 | <b>Atmosphere:</b> 4.6</div>     </div>     </div>`)[0];
+                popup_a730f63d9dc9917f78a029809e43b1bd.setContent(html_7721e4adfe720656358cae1a10276c6d);
+            
+        
+
+        circle_marker_41e73190b119c56bb343035e76e73fdc.bindPopup(popup_a730f63d9dc9917f78a029809e43b1bd)
+        ;
+
+        
+    
+    
+            circle_marker_41e73190b119c56bb343035e76e73fdc.bindTooltip(
+                `<div>
+                     The Fix | ⭐ 4.6
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6182985a647d2c0b82f56460ec8e9efe = L.circleMarker(
+                [40.4169865, -3.7074279],
+                {"bubblingMouseEvents": true, "color": "#1f2937", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e76f51", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.25, "stroke": true, "weight": 1}
+            ).addTo(marker_cluster_f95c8565131f3fd1968a9b80d338fdad);
+        
+    
+        var popup_86eaf8ddf0370949fb1b362578ab11a5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_17953b27384cf1d0d06a5764f3ff560b = $(`<div id="html_17953b27384cf1d0d06a5764f3ff560b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial; font-size: 13px; line-height: 1.35;">       <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Viena Capellanes</div>       <div><b>Overall:</b> 3.9</div>       <div><b>Food:</b> 4.0 | <b>Service:</b> 3.8</div>       <div><b>Value:</b> 3.7 | <b>Atmosphere:</b> 3.9</div>     </div>     </div>`)[0];
+                popup_86eaf8ddf0370949fb1b362578ab11a5.setContent(html_17953b27384cf1d0d06a5764f3ff560b);
+            
+        
+
+        circle_marker_6182985a647d2c0b82f56460ec8e9efe.bindPopup(popup_86eaf8ddf0370949fb1b362578ab11a5)
+        ;
+
+        
+    
+    
+            circle_marker_6182985a647d2c0b82f56460ec8e9efe.bindTooltip(
+                `<div>
+                     Viena Capellanes | ⭐ 3.9
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            marker_cluster_f95c8565131f3fd1968a9b80d338fdad.addTo(map_c942246ce29678bda006aca7431d9d03);
+        
+    
+            tile_layer_5923eb9f007530266777ee2c20bcdf43.addTo(map_c942246ce29678bda006aca7431d9d03);
+        
+    
+            marker_cluster_f95c8565131f3fd1968a9b80d338fdad.addTo(map_c942246ce29678bda006aca7431d9d03);
+        
+    
+            tile_layer_5923eb9f007530266777ee2c20bcdf43.addTo(map_c942246ce29678bda006aca7431d9d03);
+        
+    
+            marker_cluster_f95c8565131f3fd1968a9b80d338fdad.addTo(map_c942246ce29678bda006aca7431d9d03);
+        
+</script>
+</html>
