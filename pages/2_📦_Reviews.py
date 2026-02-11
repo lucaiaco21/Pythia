@@ -398,7 +398,7 @@ if page == "🏠 Patio Vertical":
 # ============================================================
 elif page == "🔍 Competitor Analysis":
     
-    st.markdown('<div class="sub-header">Analysis of reviews of main competitors. The maps show most rated cafes in Madrid while the in depth analysis only the ones in a 3km range to to El Patio Vertical</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Analysis of reviews of main competitors. The maps show most rated cafes in Madrid while the in depth analysis only the ones in a 3km range to Cafe Madrid</div>', unsafe_allow_html=True)
 
     st.markdown("## 📊 Market Overview")
 
