@@ -112,7 +112,7 @@ def check_password():
             on_change=password_entered, 
             key="password"
         )
-        st.info(f"Password is {len(PASSWORD} letters ")
+        st.info(f"Password is {len(PASSWORD)} letters ")
         return False
     elif not st.session_state["password_correct"]:
         # Password not correct, show input + error
