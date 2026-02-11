@@ -1,0 +1,121 @@
+restaurant,insight,mentions,category
+Dabov,wonderful baristas,46,service
+Dabov,flat white,25,coffee
+Dabov,friendly staff,20,service
+Dabov,amazing cappuccino,11,coffee
+Dabov,iced latte,11,coffee
+Dabov,cold brew,11,specialty_drink
+Dabov,chocolate croissant,2,food
+Dabov,specialty toaster,2,food
+Dabov,attention priced,2,specialty_drink
+Dabov,croissant baked hot,1,food
+Hola Coffee Fourquet,friendly staff,32,service
+Hola Coffee Fourquet,iced latte,30,coffee
+Hola Coffee Fourquet,chai tea latte,18,coffee
+Hola Coffee Fourquet,flat white,15,coffee
+Hola Coffee Fourquet,wonderful baristas,11,service
+Hola Coffee Fourquet,cold brew,9,specialty_drink
+Hola Coffee Fourquet,matcha,9,specialty_drink
+Hola Coffee Fourquet,breakfast,8,food
+Hola Coffee Fourquet,great breakfast,5,food
+Hola Coffee Fourquet,breakfast toast,5,food
+Kissaten.place Specialty coffee,latte art,30,coffee
+Kissaten.place Specialty coffee,friendly staff,17,service
+Kissaten.place Specialty coffee,breakfast,11,food
+Kissaten.place Specialty coffee,great breakfast,9,food
+Kissaten.place Specialty coffee,latte delicious friendly,9,coffee
+Kissaten.place Specialty coffee,barista luis,8,service
+Kissaten.place Specialty coffee,iced latte,6,coffee
+Kissaten.place Specialty coffee,amazing breakfast joint,2,food
+Kissaten.place Specialty coffee,flavor loving matcha,2,specialty_drink
+Kissaten.place Specialty coffee,loving matcha passion,2,specialty_drink
+Miles Café - Specialty Coffee & Matcha,matcha,25,specialty_drink
+Miles Café - Specialty Coffee & Matcha,friendly staff,15,service
+Miles Café - Specialty Coffee & Matcha,iced latte,12,coffee
+Miles Café - Specialty Coffee & Matcha,iced,10,specialty_drink
+Miles Café - Specialty Coffee & Matcha,delicious matcha latte,8,coffee
+Miles Café - Specialty Coffee & Matcha,breakfast,7,food
+Miles Café - Specialty Coffee & Matcha,jasmine infused latte,7,coffee
+Miles Café - Specialty Coffee & Matcha,friendly and welcoming,6,service
+Miles Café - Specialty Coffee & Matcha,tomato toast,4,food
+Miles Café - Specialty Coffee & Matcha,yummy croissant highly,4,food
+Nubra Coffee Roasters,long espresso,7,coffee
+Nubra Coffee Roasters,spot on espresso,7,coffee
+Nubra Coffee Roasters,wonderful baristas,4,service
+Nubra Coffee Roasters,amazing cappuccino,3,coffee
+Nubra Coffee Roasters,barista is super,3,service
+Nubra Coffee Roasters,good toaster tasting,2,food
+Nubra Coffee Roasters,toast lovely,2,food
+Nubra Coffee Roasters,good mainly toast,1,food
+Nubra Coffee Roasters,coffee and matcha,1,specialty_drink
+Nubra Coffee Roasters,flavor team,1,specialty_drink
+Osom Coffee Cantine,breakfast,42,food
+Osom Coffee Cantine,friendly staff,38,service
+Osom Coffee Cantine,great breakfast,16,food
+Osom Coffee Cantine,cold brew,15,specialty_drink
+Osom Coffee Cantine,flat white,14,coffee
+Osom Coffee Cantine,mascarpone toast,13,food
+Osom Coffee Cantine,chai tea latte,6,coffee
+Osom Coffee Cantine,latte peanut,6,coffee
+Osom Coffee Cantine,matcha,4,specialty_drink
+Osom Coffee Cantine,wonderful baristas,4,service
+Re Cafe,matcha,8,specialty_drink
+Re Cafe,coffee and matcha,4,specialty_drink
+Re Cafe,flat white,3,coffee
+Re Cafe,pastry great coffee,2,food
+Re Cafe,iced latte,2,coffee
+Re Cafe,pistachio latte,2,coffee
+Re Cafe,friendly and welcoming,2,service
+Re Cafe,welcoming place,2,service
+Re Cafe,breakfast,1,food
+Re Cafe,limited pastry selection,1,food
+Scarlett,breakfast,213,food
+Scarlett,great breakfast,111,food
+Scarlett,friendly staff,109,service
+Scarlett,light eggs benedicts,79,food
+Scarlett,chai tea latte,14,coffee
+Scarlett,friendly and welcoming,13,service
+Scarlett,amazing cappuccino,12,coffee
+Scarlett,iced latte,10,coffee
+Scarlett,iced,4,specialty_drink
+Scarlett,matcha,4,specialty_drink
+Syra Coffee Santa Isabe,wonderful baristas,72,service
+Syra Coffee Santa Isabe,friendly staff,33,service
+Syra Coffee Santa Isabe,iced latte,27,coffee
+Syra Coffee Santa Isabe,cold brew,13,specialty_drink
+Syra Coffee Santa Isabe,flat white,12,coffee
+Syra Coffee Santa Isabe,matcha,12,specialty_drink
+Syra Coffee Santa Isabe,amazing cappuccino,8,coffee
+Syra Coffee Santa Isabe,fresh pastry great,4,food
+Syra Coffee Santa Isabe,breakfast,3,food
+Syra Coffee Santa Isabe,limited pastry selection,2,food
+Umami,friendly staff,54,service
+Umami,breakfast,40,food
+Umami,multiple avocado toast,23,food
+Umami,flat white,19,coffee
+Umami,great breakfast,17,food
+Umami,iced latte,14,coffee
+Umami,amazing cappuccino,13,coffee
+Umami,wonderful baristas,11,service
+Umami,matcha,9,specialty_drink
+Umami,cold brew,8,specialty_drink
+Umami Specialty Coffee,iced latte,6,coffee
+Umami Specialty Coffee,multiple avocado toast,5,food
+Umami Specialty Coffee,breakfast halloumi avo,4,food
+Umami Specialty Coffee,delicious breakfasts tucked,3,food
+Umami Specialty Coffee,friendly and welcoming,3,service
+Umami Specialty Coffee,friendly staff,3,service
+Umami Specialty Coffee,delicious matcha latte,2,coffee
+Umami Specialty Coffee,ordered pink latte,2,coffee
+Umami Specialty Coffee,matcha place opened,2,specialty_drink
+Umami Specialty Coffee,poke bowl iced,2,specialty_drink
+Wolføx Madrid Speciality Coffee Roasters,friendly staff,28,service
+Wolføx Madrid Speciality Coffee Roasters,flat white,25,coffee
+Wolføx Madrid Speciality Coffee Roasters,multiple avocado toast,14,food
+Wolføx Madrid Speciality Coffee Roasters,amazing cappuccino,14,coffee
+Wolføx Madrid Speciality Coffee Roasters,wonderful baristas,14,service
+Wolføx Madrid Speciality Coffee Roasters,chai tea latte,10,coffee
+Wolføx Madrid Speciality Coffee Roasters,matcha,10,specialty_drink
+Wolføx Madrid Speciality Coffee Roasters,great breakfast,9,food
+Wolføx Madrid Speciality Coffee Roasters,delicious sourdough toast,8,food
+Wolføx Madrid Speciality Coffee Roasters,iced,7,specialty_drink
