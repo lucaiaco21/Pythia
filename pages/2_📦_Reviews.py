@@ -229,7 +229,7 @@ page = st.sidebar.radio(
 )
 
 # Main header
-st.markdown('<div class="main-header">☕ Cafeteria Review Analytics Dashboard</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">☕ Analysis of Online Reviews (Google Maps & Trip Advisor)</div>', unsafe_allow_html=True)
 
 # ============================================================
 # PAGE 1: YOUR CAFETERIA
@@ -398,7 +398,7 @@ if page == "🏠 Patio Vertical":
 # ============================================================
 elif page == "🔍 Competitor Analysis":
     
-    st.markdown('<div class="sub-header">Analyze what customers love across Madrid\'s top coffee shops</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Analysis of reviews of main competitors. The maps show most rated cafes in Madrid while the in depth analysis only the ones in a 3km range to to El Patio Vertical</div>', unsafe_allow_html=True)
 
     st.markdown("## 📊 Market Overview")
 
@@ -406,7 +406,7 @@ elif page == "🔍 Competitor Analysis":
 
     with col1:
         st.metric(
-            "Total Restaurants", 
+            "Total Cafes", 
             len(per_rest_df['restaurant'].unique()),
             help="Specialty coffee shops analyzed"
         )
@@ -446,7 +446,7 @@ elif page == "🔍 Competitor Analysis":
 
     tab1, tab2, tab3, tab4 = st.tabs([
         "🏆 Top Insights", 
-        "🏪 By Restaurant", 
+        "🏪 By Cafes", 
         "📊 Category Analysis",
         "🔍 Comparison"
     ])
@@ -514,7 +514,7 @@ elif page == "🔍 Competitor Analysis":
         ))
         
         fig_widespread.update_layout(
-            title='Insights Present in Multiple Restaurants',
+            title='Insights Present in Multiple Reviews for Multiple Cafes',
             xaxis_title='',
             yaxis_title='Number of Restaurants',
             height=400,
@@ -525,7 +525,7 @@ elif page == "🔍 Competitor Analysis":
         st.plotly_chart(fig_widespread, use_container_width=True)
 
     with tab2:
-        st.markdown("### 🏪 Restaurant-Specific Insights")
+        st.markdown("### 🏪 Cafe-Specific Insights")
         
         restaurants = sorted(per_rest_df['restaurant'].unique())
         selected_restaurant = st.selectbox(
@@ -579,7 +579,7 @@ elif page == "🔍 Competitor Analysis":
         st.plotly_chart(fig_pie, use_container_width=True)
 
     with tab4:
-        st.markdown("### 🔍 Restaurant Comparison")
+        st.markdown("### 🔍 Cafe Comparison")
         
         restaurants = sorted(per_rest_df['restaurant'].unique())
         
