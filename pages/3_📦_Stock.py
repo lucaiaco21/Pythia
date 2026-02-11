@@ -10,7 +10,7 @@ from datetime import datetime
 
 # Page configuration
 st.set_page_config(
-    page_title="Cafeteria Review Analytics",
+    page_title="Review analysis",
     page_icon="☕",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -107,17 +107,17 @@ def check_password():
     if "password_correct" not in st.session_state:
         # First run, show input for password
         st.text_input(
-            "🔒 Enter Password to Access Dashboard", 
+            "Enter Password to Access Deatiled Analysis", 
             type="password", 
             on_change=password_entered, 
             key="password"
         )
-        st.info("💡 Use password: PATIO")
+        st.info(f"Password is {len(PASSWORD} letters ")
         return False
     elif not st.session_state["password_correct"]:
         # Password not correct, show input + error
         st.text_input(
-            "🔒 Enter Password to Access Dashboard", 
+            "Enter Password to Access Dashboard", 
             type="password", 
             on_change=password_entered, 
             key="password"
@@ -161,7 +161,7 @@ else:
 
 # If no saved data or user wants to re-upload
 if not data_loaded:
-    st.sidebar.info("📁 Upload your insights CSV files")
+    st.sidebar.info("Upload your insights files")
     
     uploaded_per_rest = st.sidebar.file_uploader(
         "Upload: final_top_10_insights.csv",
@@ -221,10 +221,10 @@ if not data_loaded:
 # NAVIGATION
 # ============================================================================
 
-st.sidebar.title("🧭 Navigation")
+st.sidebar.title("Menu")
 page = st.sidebar.radio(
     "Select Page",
-    ["🏠 Your Cafeteria", "🔍 Competitor Analysis"],
+    ["🏠 Patio Vertical", "🔍 Competitor Analysis"],
     label_visibility="collapsed"
 )
 
@@ -288,22 +288,14 @@ if page == "🏠 Your Cafeteria":
             delta=f"{df_stars[df_stars['Stars']==1]['Percentage'].values[0]}%"
         )
 
-    st.info(f"📊 **Total Reviews Analyzed:** {total_reviews:,} reviews | Average Polarity: 0.471")
+    st.info(f"📊 **Total Reviews Analyzed:** {total_reviews:,} reviews | Average Point: 4.7⭐)
 
     st.markdown("---")
-    st.markdown("## 🗺️ Restaurant Location & Review Heatmap")
-
-    map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
-    if map_path.exists():
-        with open(map_path, 'r', encoding='utf-8') as f:
-            map_html = f.read()
-        components.html(map_html, height=380, scrolling=False)
-    else:
-        st.info("📍 Place your map HTML file in images/ directory to display the map.")
+    st.markdown("## Analysis of Google Maps Reviews"
 
     st.markdown("---")
 
-    tab1, tab2 = st.tabs(["📊 Your Cafeteria Analysis", "🔍 Detailed Insights"])
+    tab1, tab2 = st.tabs(["📊General Insights", "🔍 Detailed Insights"])
 
     with tab1:
         st.markdown("## 📋 Executive Summary")
@@ -322,8 +314,8 @@ if page == "🏠 Your Cafeteria":
             
         with col3:
             st.markdown("### 📊 Overall")
-            st.info("**POLARITY**")
-            st.metric("Average", "0.471", "Positive")
+            st.info("**SCORE**")
+            st.metric("Average", "4.7", "Positive")
         
         st.markdown("---")
         st.markdown("### 🎯 Aspect Performance Overview")
@@ -445,7 +437,7 @@ elif page == "🔍 Competitor Analysis":
 
     map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
     if map_path.exists():
-        st.markdown("## 📍 Location Map")
+        st.markdown("## 📍Map with average scores of most rated Madrid Cafeterias")
         with open(map_path, 'r', encoding='utf-8') as f:
             map_html = f.read()
         components.html(map_html, height=400, scrolling=False)
