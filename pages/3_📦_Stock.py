@@ -288,7 +288,8 @@ if page == "🏠 Your Cafeteria":
             delta=f"{df_stars[df_stars['Stars']==1]['Percentage'].values[0]}%"
         )
 
-    st.info(f"📊 **Total Reviews Analyzed:** {total_reviews:2900} reviews | Average Point: 4.7⭐)
+    st.info(f"📊 **Total Reviews Analyzed:** {total_reviews:,} reviews | Average Point: 4.7⭐")
+
 
     st.markdown("---")
     st.markdown("## Analysis of Google Maps Reviews"
