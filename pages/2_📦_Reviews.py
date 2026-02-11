@@ -164,19 +164,19 @@ if not data_loaded:
     st.sidebar.info("Upload your insights files")
     
     uploaded_per_rest = st.sidebar.file_uploader(
-        "Upload: final_top_10_insights.csv",
+        "Upload: data/final_top_10_insights.csv",
         type=['csv'],
         key='per_rest'
     )
     
     uploaded_common = st.sidebar.file_uploader(
-        "Upload: common_insights_all_restaurants.csv",
+        "Upload: data/common_insights_all_restaurants.csv",
         type=['csv'],
         key='common'
     )
     
     uploaded_category = st.sidebar.file_uploader(
-        "Upload: top_insights_by_category.csv",
+        "Upload: data/top_insights_by_category.csv",
         type=['csv'],
         key='category'
     )
