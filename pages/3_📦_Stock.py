@@ -292,7 +292,7 @@ if page == "🏠 Your Cafeteria":
 
 
     st.markdown("---")
-    st.markdown("## Analysis of Google Maps Reviews"
+    st.markdown("## Analysis of Google Maps Reviews")
 
     st.markdown("---")
 
