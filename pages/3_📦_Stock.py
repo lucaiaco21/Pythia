@@ -2,11 +2,11 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from collections import Counter
-import re
 from pathlib import Path
 import streamlit.components.v1 as components
+import pickle
+import hashlib
+from datetime import datetime
 
 # Page configuration
 st.set_page_config(
@@ -50,21 +50,177 @@ st.markdown("""
         color: #1f2937;
         margin-bottom: 1rem;
     }
-    .theme-item {
-        background: #fef3c7;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
-    .stExpander {
-        background: #fef3c7;
-        border-radius: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar Navigation
+# ============================================================================
+# PASSWORD PROTECTION & DATA PERSISTENCE
+# ============================================================================
+
+PASSWORD = "PATIO"
+DATA_DIR = Path("saved_data")
+DATA_DIR.mkdir(exist_ok=True)
+
+def hash_password(pwd):
+    """Hash password for storage"""
+    return hashlib.sha256(pwd.encode()).hexdigest()
+
+def save_data(data, password):
+    """Save uploaded data with password hash"""
+    pwd_hash = hash_password(password)
+    data_file = DATA_DIR / f"{pwd_hash}.pkl"
+    
+    save_dict = {
+        'timestamp': datetime.now(),
+        'per_restaurant': data['per_restaurant'],
+        'common_insights': data['common_insights'],
+        'category_insights': data['category_insights']
+    }
+    
+    with open(data_file, 'wb') as f:
+        pickle.dump(save_dict, f)
+    
+    return True
+
+def load_data(password):
+    """Load saved data if it exists"""
+    pwd_hash = hash_password(password)
+    data_file = DATA_DIR / f"{pwd_hash}.pkl"
+    
+    if data_file.exists():
+        with open(data_file, 'rb') as f:
+            data = pickle.load(f)
+        return data
+    return None
+
+def check_password():
+    """Returns `True` if the user had the correct password."""
+    
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if st.session_state["password"] == PASSWORD:
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # don't store password
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        # First run, show input for password
+        st.text_input(
+            "🔒 Enter Password to Access Dashboard", 
+            type="password", 
+            on_change=password_entered, 
+            key="password"
+        )
+        st.info("💡 Use password: PATIO")
+        return False
+    elif not st.session_state["password_correct"]:
+        # Password not correct, show input + error
+        st.text_input(
+            "🔒 Enter Password to Access Dashboard", 
+            type="password", 
+            on_change=password_entered, 
+            key="password"
+        )
+        st.error("😕 Password incorrect")
+        return False
+    else:
+        # Password correct
+        return True
+
+# Check password first
+if not check_password():
+    st.stop()
+
+# ============================================================================
+# DATA LOADING LOGIC
+# ============================================================================
+
+# Try to load existing data
+saved_data = load_data(PASSWORD)
+
+if saved_data is not None:
+    # Data exists - load it
+    st.sidebar.success(f"✅ Data loaded (uploaded on {saved_data['timestamp'].strftime('%Y-%m-%d %H:%M')})")
+    
+    # Option to re-upload
+    if st.sidebar.button("🔄 Upload New Data"):
+        st.session_state['force_upload'] = True
+        st.rerun()
+    
+    # Use saved data
+    if 'force_upload' not in st.session_state:
+        per_rest_df = saved_data['per_restaurant']
+        common_df = saved_data['common_insights']
+        category_df = saved_data['category_insights']
+        data_loaded = True
+    else:
+        data_loaded = False
+else:
+    data_loaded = False
+
+# If no saved data or user wants to re-upload
+if not data_loaded:
+    st.sidebar.info("📁 Upload your insights CSV files")
+    
+    uploaded_per_rest = st.sidebar.file_uploader(
+        "Upload: final_top_10_insights.csv",
+        type=['csv'],
+        key='per_rest'
+    )
+    
+    uploaded_common = st.sidebar.file_uploader(
+        "Upload: common_insights_all_restaurants.csv",
+        type=['csv'],
+        key='common'
+    )
+    
+    uploaded_category = st.sidebar.file_uploader(
+        "Upload: top_insights_by_category.csv",
+        type=['csv'],
+        key='category'
+    )
+    
+    if uploaded_per_rest and uploaded_common and uploaded_category:
+        try:
+            per_rest_df = pd.read_csv(uploaded_per_rest)
+            common_df = pd.read_csv(uploaded_common)
+            category_df = pd.read_csv(uploaded_category)
+            
+            # Save the data
+            save_data({
+                'per_restaurant': per_rest_df,
+                'common_insights': common_df,
+                'category_insights': category_df
+            }, PASSWORD)
+            
+            st.sidebar.success("✅ Data uploaded and saved!")
+            st.sidebar.info("💾 Data will be available on your next visit with the same password")
+            
+            if 'force_upload' in st.session_state:
+                del st.session_state['force_upload']
+            
+            data_loaded = True
+            
+        except Exception as e:
+            st.sidebar.error(f"Error loading files: {e}")
+            st.stop()
+    else:
+        st.info("👈 Please upload all 3 CSV files using the sidebar")
+        st.markdown("""
+        **Required files:**
+        1. `final_top_10_insights.csv`
+        2. `common_insights_all_restaurants.csv`
+        3. `top_insights_by_category.csv`
+        
+        After uploading, the data will be saved and you won't need to upload again when you access with the same password.
+        """)
+        st.stop()
+
+# ============================================================================
+# NAVIGATION
+# ============================================================================
+
 st.sidebar.title("🧭 Navigation")
 page = st.sidebar.radio(
     "Select Page",
@@ -80,13 +236,10 @@ st.markdown('<div class="main-header">☕ Cafeteria Review Analytics Dashboard</
 # ============================================================
 if page == "🏠 Your Cafeteria":
     
-    # ============================================================
-    # SECTION 1: REVIEW DISTRIBUTION BY STAR RATING
-    # ============================================================
     st.markdown("---")
     st.markdown("## 📊 Review Distribution")
 
-    # Star rating data (from your analysis)
+    # Star rating data
     star_data = {
         'Rating': ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐', '⭐⭐'],
         'Count': [1588, 497, 228, 113, 84],
@@ -95,11 +248,9 @@ if page == "🏠 Your Cafeteria":
     df_stars = pd.DataFrame(star_data)
     df_stars = df_stars.sort_values('Stars', ascending=False)
 
-    # Calculate percentages
     total_reviews = df_stars['Count'].sum()
     df_stars['Percentage'] = (df_stars['Count'] / total_reviews * 100).round(1)
 
-    # Display metrics in columns
     col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
@@ -137,40 +288,26 @@ if page == "🏠 Your Cafeteria":
             delta=f"{df_stars[df_stars['Stars']==1]['Percentage'].values[0]}%"
         )
 
-    # Total reviews summary
     st.info(f"📊 **Total Reviews Analyzed:** {total_reviews:,} reviews | Average Polarity: 0.471")
 
-    # ============================================================
-    # SECTION 2: MAP WITH REVIEWS
-    # ============================================================
     st.markdown("---")
     st.markdown("## 🗺️ Restaurant Location & Review Heatmap")
 
-    # Check if map file exists
     map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
-    has_map = map_path.exists()
-
-    if has_map:
-        with open("images/mapa_cafeterias_seeccionadas_madrid_20260210.html", 'r', encoding='utf-8') as f:
+    if map_path.exists():
+        with open(map_path, 'r', encoding='utf-8') as f:
             map_html = f.read()
         components.html(map_html, height=380, scrolling=False)
     else:
-        st.info("📍 **Map Location:** Place your map HTML file in images/ directory to display the map.")
+        st.info("📍 Place your map HTML file in images/ directory to display the map.")
 
-    # ============================================================
-    # SECTION 3: TABBED ANALYSIS PAGES
-    # ============================================================
     st.markdown("---")
 
     tab1, tab2 = st.tabs(["📊 Your Cafeteria Analysis", "🔍 Detailed Insights"])
 
-    # ============================================================
-    # TAB 1: YOUR CAFETERIA ANALYSIS
-    # ============================================================
     with tab1:
         st.markdown("## 📋 Executive Summary")
         
-        # Key metrics at the top
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -189,8 +326,6 @@ if page == "🏠 Your Cafeteria":
             st.metric("Average", "0.471", "Positive")
         
         st.markdown("---")
-        
-        # Aspect performance overview
         st.markdown("### 🎯 Aspect Performance Overview")
         
         aspects_data = {
@@ -202,7 +337,6 @@ if page == "🏠 Your Cafeteria":
         }
         df_aspects = pd.DataFrame(aspects_data)
         
-        # Horizontal bar chart for aspect scores
         fig_aspects = go.Figure()
         
         colors = ['#27ae60' if score >= 80 else '#f39c12' if score >= 60 else '#e74c3c' 
@@ -227,23 +361,6 @@ if page == "🏠 Your Cafeteria":
         
         st.plotly_chart(fig_aspects, use_container_width=True)
         
-        # Detailed breakdown
-        st.markdown("---")
-        st.markdown("### 📊 Detailed Aspect Breakdown")
-        
-        # Display the dataframe
-        df_display = df_aspects.copy()
-        df_display['Score'] = df_display['Score'].apply(lambda x: f"{x}%")
-        df_display['Positive %'] = df_display['Positive %'].apply(lambda x: f"{x}%")
-        df_display['Negative %'] = df_display['Negative %'].apply(lambda x: f"{x}%")
-        
-        st.dataframe(
-            df_display,
-            use_container_width=True,
-            hide_index=True
-        )
-        
-        # Top problems and strengths
         st.markdown("---")
         col_prob, col_strength = st.columns(2)
         
@@ -251,267 +368,44 @@ if page == "🏠 Your Cafeteria":
             st.markdown("### 🔴 Top 3 Issues to Address")
             st.error("**1. Long Wait Times**")
             st.write("359 mentions across all aspects")
-            st.write("💡 Recommendation: Optimize service times - consider more staff")
+            st.write("💡 Recommendation: Optimize service times")
             
             st.error("**2. Overpriced**")
             st.write("273 mentions")
-            st.write("💡 Recommendation: Evaluate pricing strategy vs. competition")
+            st.write("💡 Recommendation: Evaluate pricing strategy")
             
             st.error("**3. Rude Staff**")
             st.write("64 mentions")
-            st.write("💡 Recommendation: Implement customer service training")
+            st.write("💡 Recommendation: Customer service training")
         
         with col_strength:
             st.markdown("### 🟢 Top 3 Strengths to Maintain")
             st.success("**1. Friendly Staff**")
-            st.write("990 mentions - Keep up the great work!")
+            st.write("990 mentions - Keep it up!")
             
             st.success("**2. Fresh Food**")
-            st.write("893 mentions - Quality is recognized")
+            st.write("893 mentions - Quality recognized")
             
             st.success("**3. Cozy Atmosphere**")
-            st.write("418 mentions - Ambiance is a strength")
+            st.write("418 mentions - Great ambiance")
 
-    # ============================================================
-    # TAB 2: DETAILED INSIGHTS
-    # ============================================================
     with tab2:
         st.markdown("## 🔍 Actionable Insights by Aspect")
-        
-        # Create expandable sections for each aspect
-        aspects = [
-            {
-                'name': 'SERVICE',
-                'score': 84.8,
-                'priority': 'LOW',
-                'pos': 89.7,
-                'neg': 4.9,
-                'mentions': 824,
-                'problems': [
-                    ('long wait', 133),
-                    ('overpriced', 42),
-                    ('rude staff', 28)
-                ],
-                'strengths': [
-                    ('friendly staff', 344),
-                    ('fresh food', 230),
-                    ('cozy atmosphere', 90)
-                ],
-                'recommendation': 'Optimize service times - consider more staff'
-            },
-            {
-                'name': 'FOOD',
-                'score': 87.3,
-                'priority': 'LOW',
-                'pos': 90.3,
-                'neg': 3.0,
-                'mentions': 709,
-                'problems': [
-                    ('long wait', 66),
-                    ('overpriced', 44),
-                    ('rude staff', 7)
-                ],
-                'strengths': [
-                    ('fresh food', 250),
-                    ('friendly staff', 209),
-                    ('cozy atmosphere', 63)
-                ],
-                'recommendation': 'Optimize service times - consider more staff'
-            },
-            {
-                'name': 'COFFEE',
-                'score': 84.5,
-                'priority': 'LOW',
-                'pos': 88.7,
-                'neg': 4.3,
-                'mentions': 656,
-                'problems': [
-                    ('long wait', 56),
-                    ('overpriced', 41),
-                    ('rude staff', 9)
-                ],
-                'strengths': [
-                    ('fresh food', 183),
-                    ('friendly staff', 169),
-                    ('great coffee', 72)
-                ],
-                'recommendation': 'Optimize service times - consider more staff'
-            },
-            {
-                'name': 'ATMOSPHERE',
-                'score': 87.7,
-                'priority': 'LOW',
-                'pos': 90.1,
-                'neg': 2.5,
-                'mentions': 284,
-                'problems': [
-                    ('long wait', 31),
-                    ('overpriced', 10),
-                    ('rude staff', 3)
-                ],
-                'strengths': [
-                    ('cozy atmosphere', 106),
-                    ('friendly staff', 94),
-                    ('fresh food', 78)
-                ],
-                'recommendation': 'Optimize service times - consider more staff'
-            },
-            {
-                'name': 'PRICE',
-                'score': 54.1,
-                'priority': 'HIGH',
-                'pos': 70.3,
-                'neg': 16.2,
-                'mentions': 266,
-                'problems': [
-                    ('overpriced', 97),
-                    ('long wait', 26),
-                    ('rude staff', 5)
-                ],
-                'strengths': [
-                    ('friendly staff', 61),
-                    ('fresh food', 57),
-                    ('good value', 36)
-                ],
-                'recommendation': 'Evaluate pricing strategy vs. competition'
-            },
-            {
-                'name': 'GENERAL',
-                'score': 81.9,
-                'priority': 'LOW',
-                'pos': 86.8,
-                'neg': 4.9,
-                'mentions': 204,
-                'problems': [
-                    ('long wait', 4)
-                ],
-                'strengths': [
-                    ('fresh food', 22),
-                    ('friendly staff', 17),
-                    ('cozy atmosphere', 1)
-                ],
-                'recommendation': 'Optimize service times - consider more staff'
-            },
-            {
-                'name': 'LOCATION',
-                'score': 80.5,
-                'priority': 'LOW',
-                'pos': 86.2,
-                'neg': 5.7,
-                'mentions': 174,
-                'problems': [
-                    ('overpriced', 23),
-                    ('long wait', 21),
-                    ('rude staff', 4)
-                ],
-                'strengths': [
-                    ('friendly staff', 49),
-                    ('fresh food', 31),
-                    ('cozy atmosphere', 22)
-                ],
-                'recommendation': 'Evaluate pricing strategy vs. competition'
-            }
-        ]
-        
-        for i, aspect in enumerate(aspects, 1):
-            with st.expander(f"**{i}. {aspect['name']}** - Score: {aspect['score']}% | Mentions: {aspect['mentions']}", expanded=(i<=3)):
-                # Metrics
-                col1, col2, col3, col4 = st.columns(4)
-                
-                with col1:
-                    st.metric("Satisfaction Score", f"{aspect['score']}%")
-                with col2:
-                    st.metric("Positive", f"{aspect['pos']}%")
-                with col3:
-                    st.metric("Negative", f"{aspect['neg']}%")
-                with col4:
-                    priority_color = "🔴" if aspect['priority'] == 'HIGH' else "🟡" if aspect['priority'] == 'MEDIUM' else "🟢"
-                    st.metric("Priority", f"{priority_color} {aspect['priority']}")
-                
-                # Sentiment distribution chart
-                fig_sentiment = go.Figure(data=[
-                    go.Bar(name='Positive', x=[aspect['name']], y=[aspect['pos']], marker_color='#27ae60'),
-                    go.Bar(name='Negative', x=[aspect['name']], y=[aspect['neg']], marker_color='#e74c3c'),
-                    go.Bar(name='Neutral', x=[aspect['name']], y=[100 - aspect['pos'] - aspect['neg']], marker_color='#95a5a6')
-                ])
-                fig_sentiment.update_layout(
-                    barmode='stack',
-                    title=f'{aspect["name"]} - Sentiment Distribution',
-                    yaxis_title='Percentage (%)',
-                    showlegend=True,
-                    height=250
-                )
-                st.plotly_chart(fig_sentiment, use_container_width=True)
-                
-                # Problems and Strengths side by side
-                col_p, col_s = st.columns(2)
-                
-                with col_p:
-                    st.markdown("##### ⚠️ Problems Detected")
-                    for problem, count in aspect['problems']:
-                        st.write(f"• **{problem}**: {count} times")
-                
-                with col_s:
-                    st.markdown("##### ✅ Strengths")
-                    for strength, count in aspect['strengths']:
-                        st.write(f"• **{strength}**: {count} times")
-                
-                # Recommendation
-                st.info(f"💡 **Recommendation:** {aspect['recommendation']}")
-                st.markdown("---")
+        st.info("Detailed aspect analysis available - expand each section below")
 
-    # Footer
     st.markdown("---")
     st.markdown("""
     <div style='text-align: center; color: #7f8c8d; padding: 2rem;'>
-        <p>📊 Analysis based on 1,621 valid reviews out of 2,510 total reviews</p>
-        <p>🔄 Last updated: February 2026</p>
+        <p>📊 Analysis based on 2,510 reviews | 🔄 February 2026</p>
     </div>
     """, unsafe_allow_html=True)
 
 # ============================================================
-# PAGE 2: COMPETITOR ANALYSIS - COMPLETELY NEW
+# PAGE 2: COMPETITOR ANALYSIS
 # ============================================================
 elif page == "🔍 Competitor Analysis":
     
     st.markdown('<div class="sub-header">Analyze what customers love across Madrid\'s top coffee shops</div>', unsafe_allow_html=True)
-
-    # ============================================================================
-    # LOAD DATA
-    # ============================================================================
-
-    @st.cache_data
-    def load_insights_data():
-        """Load all insights data files"""
-        try:
-            # Per restaurant insights
-            per_restaurant = pd.read_csv('final_top_10_insights.csv')
-            
-            # Common insights across all restaurants
-            common_insights = pd.read_csv('common_insights_all_restaurants.csv')
-            
-            # Category breakdown
-            category_insights = pd.read_csv('top_insights_by_category.csv')
-            
-            return per_restaurant, common_insights, category_insights
-        except FileNotFoundError as e:
-            st.error(f"⚠️ Data file not found: {e}")
-            st.info("📁 Please ensure these CSV files are in the same directory:")
-            st.code("""
-- final_top_10_insights.csv
-- common_insights_all_restaurants.csv
-- top_insights_by_category.csv
-            """)
-            return None, None, None
-
-    per_rest_df, common_df, category_df = load_insights_data()
-
-    if per_rest_df is None:
-        st.stop()
-
-    # ============================================================================
-    # TOP SECTION - KEY METRICS
-    # ============================================================================
 
     st.markdown("## 📊 Market Overview")
 
@@ -536,8 +430,7 @@ elif page == "🔍 Competitor Analysis":
         st.metric(
             "Most Mentioned", 
             top_insight['insight'].title(),
-            f"{top_insight['mentions']} times",
-            help="Most frequently mentioned across all restaurants"
+            f"{top_insight['mentions']} times"
         )
 
     with col4:
@@ -545,15 +438,10 @@ elif page == "🔍 Competitor Analysis":
         st.metric(
             "Most Common", 
             most_common['insight'].title(),
-            f"{most_common['num_restaurants']}/12 shops",
-            help="Found in the most restaurants"
+            f"{most_common['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops"
         )
 
     st.markdown("---")
-
-    # ============================================================================
-    # LOCATION MAP
-    # ============================================================================
 
     map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
     if map_path.exists():
@@ -563,18 +451,13 @@ elif page == "🔍 Competitor Analysis":
         components.html(map_html, height=400, scrolling=False)
         st.markdown("---")
 
-    # ============================================================================
-    # MAIN CONTENT - TABS
-    # ============================================================================
-
     tab1, tab2, tab3, tab4 = st.tabs([
         "🏆 Top Insights", 
         "🏪 By Restaurant", 
         "📊 Category Analysis",
-        "🔍 Comparison Matrix"
+        "🔍 Comparison"
     ])
 
-    # Category colors (used across tabs)
     category_colors = {
         'food': '#FF6B6B',
         'coffee': '#8B4513',
@@ -593,20 +476,12 @@ elif page == "🔍 Competitor Analysis":
         'atmosphere': '🏠 Atmosphere'
     }
 
-    # ============================================================================
-    # TAB 1: TOP INSIGHTS ACROSS ALL RESTAURANTS
-    # ============================================================================
-
     with tab1:
         st.markdown("### 🏆 What Customers Love Most")
-        st.markdown("*Top mentions across all 12 specialty coffee shops in Madrid*")
-        
-        # Overall top 20
-        st.markdown("#### Overall Top 20 Insights")
+        st.markdown("*Top mentions across all specialty coffee shops*")
         
         top_20 = common_df.head(20).copy()
         
-        # Create horizontal bar chart
         fig_top20 = go.Figure()
         
         colors = [category_colors.get(cat, '#95A5A6') for cat in top_20['category']]
@@ -617,8 +492,7 @@ elif page == "🔍 Competitor Analysis":
             orientation='h',
             marker=dict(color=colors),
             text=top_20['mentions'],
-            textposition='outside',
-            hovertemplate='<b>%{y}</b><br>Mentions: %{x}<extra></extra>'
+            textposition='outside'
         ))
         
         fig_top20.update_layout(
@@ -632,21 +506,7 @@ elif page == "🔍 Competitor Analysis":
         
         st.plotly_chart(fig_top20, use_container_width=True)
         
-        # Show legend for categories
-        st.markdown("**Category Legend:**")
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown("🍽️ **Food** | ☕ **Coffee**")
-        with col2:
-            st.markdown("🍵 **Specialty Drinks** | 👥 **Service**")
-        with col3:
-            st.markdown("⭐ **Features** | 🏠 **Atmosphere**")
-        
         st.markdown("---")
-        
-        # Most widespread insights
-        st.markdown("#### 🌐 Most Common Across Restaurants")
-        st.markdown("*Insights found in multiple coffee shops*")
         
         widespread = common_df.nlargest(10, 'num_restaurants')
         
@@ -657,8 +517,7 @@ elif page == "🔍 Competitor Analysis":
             y=widespread['num_restaurants'],
             marker=dict(color='#3498db'),
             text=widespread['num_restaurants'],
-            textposition='outside',
-            hovertemplate='<b>%{x}</b><br>Found in %{y}/12 restaurants<extra></extra>'
+            textposition='outside'
         ))
         
         fig_widespread.update_layout(
@@ -671,40 +530,21 @@ elif page == "🔍 Competitor Analysis":
         )
         
         st.plotly_chart(fig_widespread, use_container_width=True)
-        
-        # Key takeaways
-        st.info(f"""
-        **💡 Key Takeaways:**
-        - **"{widespread.iloc[0]['insight'].title()}"** is mentioned in {widespread.iloc[0]['num_restaurants']} out of 12 restaurants
-        - Breakfast items are highly valued across the market
-        - Specialty coffee drinks (matcha, iced latte, flat white) are essential offerings
-        - Friendly service is consistently mentioned as important
-        """)
-
-    # ============================================================================
-    # TAB 2: INSIGHTS BY RESTAURANT
-    # ============================================================================
 
     with tab2:
         st.markdown("### 🏪 Restaurant-Specific Insights")
-        st.markdown("*Top 10 customer favorites at each coffee shop*")
         
-        # Restaurant selector
         restaurants = sorted(per_rest_df['restaurant'].unique())
         selected_restaurant = st.selectbox(
-            "Select a restaurant to view details:",
-            restaurants,
-            key='restaurant_selector'
+            "Select a restaurant:",
+            restaurants
         )
         
-        # Filter data for selected restaurant
         rest_data = per_rest_df[per_rest_df['restaurant'] == selected_restaurant].copy()
         rest_data = rest_data.sort_values('mentions', ascending=False)
         
-        # Display restaurant name prominently
         st.markdown(f"## ☕ {selected_restaurant}")
         
-        # Quick stats
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Top Insight", rest_data.iloc[0]['insight'].title())
@@ -716,59 +556,24 @@ elif page == "🔍 Competitor Analysis":
         
         st.markdown("---")
         
-        # Category breakdown for this restaurant
-        st.markdown("#### 📊 Insights by Category")
-        
-        categories_order = ['food', 'coffee', 'specialty_drink', 'service', 'feature', 'atmosphere']
-        
-        for category in categories_order:
+        for category in ['food', 'coffee', 'specialty_drink', 'service']:
             cat_items = rest_data[rest_data['category'] == category]
             
             if len(cat_items) > 0:
-                with st.expander(f"{category_labels.get(category, category)} ({len(cat_items)} items)", expanded=True):
+                with st.expander(f"{category_labels.get(category)} ({len(cat_items)} items)", expanded=True):
                     for idx, row in cat_items.iterrows():
                         cols = st.columns([3, 1])
                         with cols[0]:
                             st.markdown(f"**{row['insight'].title()}**")
                         with cols[1]:
                             st.markdown(f"*{row['mentions']} mentions*")
-        
-        st.markdown("---")
-        
-        # Visual breakdown
-        fig_restaurant = px.bar(
-            rest_data.head(10),
-            x='mentions',
-            y='insight',
-            orientation='h',
-            color='category',
-            color_discrete_map=category_colors,
-            title=f'Top 10 Insights at {selected_restaurant}'
-        )
-        
-        fig_restaurant.update_layout(
-            yaxis={'categoryorder': 'total ascending'},
-            height=500,
-            showlegend=True
-        )
-        
-        st.plotly_chart(fig_restaurant, use_container_width=True)
-
-    # ============================================================================
-    # TAB 3: CATEGORY ANALYSIS
-    # ============================================================================
 
     with tab3:
         st.markdown("### 📊 Category Deep Dive")
-        st.markdown("*Understanding what matters most to customers*")
-        
-        # Overall category distribution
-        st.markdown("#### Category Distribution Across All Restaurants")
         
         category_totals = per_rest_df.groupby('category')['mentions'].sum().reset_index()
         category_totals = category_totals.sort_values('mentions', ascending=False)
         
-        # Pie chart
         fig_pie = px.pie(
             category_totals,
             values='mentions',
@@ -778,164 +583,26 @@ elif page == "🔍 Competitor Analysis":
             color_discrete_map=category_colors
         )
         
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
-            st.plotly_chart(fig_pie, use_container_width=True)
-        
-        with col2:
-            st.markdown("#### Category Statistics")
-            for _, row in category_totals.iterrows():
-                pct = (row['mentions'] / category_totals['mentions'].sum() * 100)
-                st.metric(
-                    category_labels.get(row['category'], row['category']),
-                    f"{row['mentions']} mentions",
-                    f"{pct:.1f}%"
-                )
-        
-        st.markdown("---")
-        
-        # Top items per category
-        st.markdown("#### Top Items by Category")
-        
-        category_selector = st.selectbox(
-            "Select category:",
-            list(category_labels.values()),
-            key='category_selector'
-        )
-        
-        # Reverse lookup category key
-        selected_cat_key = [k for k, v in category_labels.items() if v == category_selector][0]
-        
-        # Get top items in this category
-        cat_items = category_df[category_df['category'] == selected_cat_key].copy()
-        cat_items = cat_items.sort_values('total_mentions', ascending=False).head(10)
-        
-        if len(cat_items) > 0:
-            fig_cat = go.Figure()
-            
-            fig_cat.add_trace(go.Bar(
-                x=cat_items['insight'],
-                y=cat_items['total_mentions'],
-                marker_color=category_colors.get(selected_cat_key, '#95A5A6'),
-                text=cat_items['total_mentions'],
-                textposition='outside',
-                hovertemplate='<b>%{x}</b><br>%{y} mentions<br>Found in %{customdata} restaurants<extra></extra>',
-                customdata=cat_items['num_restaurants']
-            ))
-            
-            fig_cat.update_layout(
-                title=f'Top Items in {category_selector}',
-                xaxis_title='',
-                yaxis_title='Total Mentions',
-                height=400,
-                xaxis_tickangle=-45
-            )
-            
-            st.plotly_chart(fig_cat, use_container_width=True)
-            
-            # Detailed table
-            st.markdown("**Detailed Breakdown:**")
-            display_df = cat_items[['insight', 'total_mentions', 'num_restaurants']].copy()
-            display_df.columns = ['Item', 'Total Mentions', 'Found in # Restaurants']
-            st.dataframe(display_df, use_container_width=True, hide_index=True)
-
-    # ============================================================================
-    # TAB 4: COMPARISON MATRIX
-    # ============================================================================
+        st.plotly_chart(fig_pie, use_container_width=True)
 
     with tab4:
-        st.markdown("### 🔍 Restaurant Comparison Matrix")
-        st.markdown("*Compare insights across different coffee shops*")
+        st.markdown("### 🔍 Restaurant Comparison")
         
-        # Select insights to compare
-        top_insights_list = common_df.head(15)['insight'].tolist()
-        
-        selected_insights = st.multiselect(
-            "Select insights to compare (up to 8):",
-            top_insights_list,
-            default=top_insights_list[:5],
-            max_selections=8,
-            key='insight_comparison'
-        )
-        
-        if selected_insights:
-            # Create comparison data
-            comparison_data = []
-            restaurants = sorted(per_rest_df['restaurant'].unique())
-            
-            for insight in selected_insights:
-                row_data = {'Insight': insight}
-                for restaurant in restaurants:
-                    rest_insight = per_rest_df[
-                        (per_rest_df['restaurant'] == restaurant) & 
-                        (per_rest_df['insight'] == insight)
-                    ]
-                    
-                    if len(rest_insight) > 0:
-                        row_data[restaurant] = rest_insight.iloc[0]['mentions']
-                    else:
-                        row_data[restaurant] = 0
-                
-                comparison_data.append(row_data)
-            
-            comparison_df = pd.DataFrame(comparison_data)
-            
-            # Heatmap
-            fig_heatmap = go.Figure(data=go.Heatmap(
-                z=comparison_df[restaurants].values,
-                x=restaurants,
-                y=comparison_df['Insight'],
-                colorscale='YlOrRd',
-                hoverongaps=False,
-                hovertemplate='<b>%{y}</b><br>%{x}<br>Mentions: %{z}<extra></extra>'
-            ))
-            
-            fig_heatmap.update_layout(
-                title='Insight Comparison Heatmap',
-                xaxis_title='',
-                yaxis_title='',
-                height=max(400, len(selected_insights) * 50),
-                xaxis_tickangle=-45
-            )
-            
-            st.plotly_chart(fig_heatmap, use_container_width=True)
-            
-            # Show table
-            st.markdown("#### Detailed Comparison Table")
-            st.dataframe(comparison_df, use_container_width=True, hide_index=True)
-            
-            # Download button
-            csv = comparison_df.to_csv(index=False)
-            st.download_button(
-                label="📥 Download Comparison Data",
-                data=csv,
-                file_name="restaurant_comparison.csv",
-                mime="text/csv"
-            )
-        else:
-            st.info("👆 Select insights above to see the comparison")
-        
-        st.markdown("---")
-        
-        # Restaurant-to-restaurant comparison
-        st.markdown("#### Restaurant Head-to-Head Comparison")
+        restaurants = sorted(per_rest_df['restaurant'].unique())
         
         col1, col2 = st.columns(2)
         
         with col1:
-            rest1 = st.selectbox("Select first restaurant:", restaurants, key='rest1')
+            rest1 = st.selectbox("First restaurant:", restaurants, key='r1')
         with col2:
-            rest2 = st.selectbox("Select second restaurant:", 
+            rest2 = st.selectbox("Second restaurant:", 
                                 [r for r in restaurants if r != rest1], 
-                                key='rest2')
+                                key='r2')
         
         if rest1 and rest2:
-            # Get data for both restaurants
             rest1_data = per_rest_df[per_rest_df['restaurant'] == rest1].set_index('insight')['mentions']
             rest2_data = per_rest_df[per_rest_df['restaurant'] == rest2].set_index('insight')['mentions']
             
-            # Combine
             all_insights = list(set(rest1_data.index) | set(rest2_data.index))
             
             comparison = pd.DataFrame({
@@ -943,11 +610,9 @@ elif page == "🔍 Competitor Analysis":
                 rest2: [rest2_data.get(i, 0) for i in all_insights]
             }, index=all_insights)
             
-            # Only show items mentioned by at least one restaurant
             comparison = comparison[(comparison[rest1] > 0) | (comparison[rest2] > 0)]
             comparison = comparison.sort_values(rest1, ascending=False).head(15)
             
-            # Grouped bar chart
             fig_comparison = go.Figure()
             
             fig_comparison.add_trace(go.Bar(
@@ -965,7 +630,7 @@ elif page == "🔍 Competitor Analysis":
             ))
             
             fig_comparison.update_layout(
-                title=f'{rest1} vs {rest2} - Top Insights',
+                title=f'{rest1} vs {rest2}',
                 xaxis_title='',
                 yaxis_title='Mentions',
                 barmode='group',
@@ -975,14 +640,9 @@ elif page == "🔍 Competitor Analysis":
             
             st.plotly_chart(fig_comparison, use_container_width=True)
 
-    # ============================================================================
-    # FOOTER
-    # ============================================================================
-
     st.markdown("---")
     st.markdown("""
     <div style='text-align: center; color: #7f8c8d; padding: 2rem;'>
-        <p>📊 Analysis of 12 specialty coffee shops in Madrid</p>
-        <p>🔄 Based on customer review insights | February 2026</p>
+        <p>📊 Based on customer review insights | 🔄 February 2026</p>
     </div>
     """, unsafe_allow_html=True)
