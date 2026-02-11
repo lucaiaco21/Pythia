@@ -234,7 +234,7 @@ st.markdown('<div class="main-header">☕ Cafeteria Review Analytics Dashboard</
 # ============================================================
 # PAGE 1: YOUR CAFETERIA
 # ============================================================
-if page == "🏠 Your Cafeteria":
+if page == "🏠 Patio Vertical":
     
     st.markdown("---")
     st.markdown("## 📊 Review Distribution")
