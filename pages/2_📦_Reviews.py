@@ -650,3 +650,4 @@ elif page == "🔍 Competitor Analysis":
         "📊 Based on customer review insights | 🔄 February 2026</div>",
         unsafe_allow_html=True,
     )
+
