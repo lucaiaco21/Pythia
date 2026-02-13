@@ -368,11 +368,10 @@ if page == "🏠 Patio Vertical":
                       f"{row['Pct'].values[0]}%")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
-    c_left, c_right = st.columns(2)
     chart_sentiment_png = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
     if chart_sentiment_png.exists():
-    st.markdown("### 📈 Monthly Sentiment Trend")
-    st.image(str(chart_sentiment_png), use_container_width=True)
+        st.markdown("### 📈 Monthly Sentiment Trend")
+        st.image(str(chart_sentiment_png), use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
