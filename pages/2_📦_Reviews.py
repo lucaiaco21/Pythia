@@ -374,7 +374,7 @@ if page == "🏠 Patio Vertical":
     st.markdown("---")
     c_left, c_right = st.columns(2)
     chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.html")
-    chart_bigram = Path(images/Bi_gram_textacy.html)
+    chart_bigram = Path("images/Bi_gram_textacy.html")
     if chart_sentiment.exists():
         with c_left:
             st.markdown("## Evolution of Reviews Sentiment over the years ")
