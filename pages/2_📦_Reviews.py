@@ -368,17 +368,22 @@ if page == "🏠 Patio Vertical":
                       f"{row['Pct'].values[0]}%")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
-    c_left, c_right = st.columns(2)
-    chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.html")
-    chart_bigram    = Path("images/Bi_gram_textacy.html")
+import streamlit.components.v1 as components
+
     with c_left:
         if chart_sentiment.exists():
             st.markdown("### 📈 Monthly Sentiment Trend")
-            st.image(str(chart_sentiment), use_container_width=True)
+            with open(chart_sentiment, 'r', encoding='utf-8') as f:
+                html_data = f.read()
+            components.html(html_data, height=500, scrolling=True)
+
     with c_right:
         if chart_bigram.exists():
             st.markdown("### 🔤 Most Common Bigrams")
-            st.image(str(chart_bigram), use_container_width=True)
+            with open(chart_bigram, 'r', encoding='utf-8') as f:
+                html_data = f.read()
+            components.html(html_data, height=500, scrolling=True)
+
 
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
