@@ -192,7 +192,7 @@ if saved is not None and "force_upload" not in st.session_state:
     per_rest_df = saved["per_restaurant"]
     common_df   = saved["common_insights"]
     category_df = saved["category_insights"]
-    global_df   = saved.get("global_insights", pd.DataFrame())
+    local_df   = saved.get("local_df", pd.DataFrame())
     data_loaded = True
 else:
     data_loaded = False
@@ -203,7 +203,7 @@ if not data_loaded:
     up_per  = st.sidebar.file_uploader("📄 Top 10 Competitor Insights",            type=["csv"], key="per_rest")
     up_com  = st.sidebar.file_uploader("📄 Competitor Insights by Coffe Shop",   type=["csv"], key="common")
     up_cat  = st.sidebar.file_uploader("📄 Competitor Insights by category",          type=["csv"], key="category")
-    up_glob = st.sidebar.file_uploader("📄Insights on your local)*",  type=["csv"], key="global")
+    up_glob = st.sidebar.file_uploader("📄Insights on your local)*",  type=["csv"], key="local")
     
 
     if up_per and up_com and up_cat:
@@ -211,13 +211,13 @@ if not data_loaded:
             per_rest_df = pd.read_csv(up_per)
             common_df   = pd.read_csv(up_com)
             category_df = pd.read_csv(up_cat)
-            global_df   = pd.read_csv(up_glob)
+            local_df   = pd.read_csv(up_glob)
 
             save_data({
                 "per_restaurant":    per_rest_df,
                 "common_insights":   common_df,
                 "category_insights": category_df,
-                "global_insights":   global_df,
+                "local_df":   local_df,
             }, PASSWORD)
 
             st.sidebar.success("✅ Saved! Won't need to re-upload next visit.")
@@ -231,10 +231,10 @@ if not data_loaded:
         st.info("👈 Please upload the required CSV files using the sidebar")
 
 # Build My Local insights from CSV
-if not global_df.empty:
-    MY_LOCAL_GOOD, MY_LOCAL_BAD, global_df_cat = build_my_local_insights(global_df)
+if not local_df.empty:
+    MY_LOCAL_GOOD, MY_LOCAL_BAD, local_df_cat = build_my_local_insights(local_df)
 else:
-    MY_LOCAL_GOOD, MY_LOCAL_BAD, global_df_cat = [], [], pd.DataFrame()
+    MY_LOCAL_GOOD, MY_LOCAL_BAD, local_df = [], [], pd.DataFrame()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # NAVIGATION
@@ -367,7 +367,7 @@ if page == "🏠 Patio Vertical":
     with tab2:
         st.markdown("## 🔍 Detailed Insights by Category")
 
-        if global_df_cat.empty:
+        if local_df.empty:
             st.warning(
                 "Upload insights about your local via the sidebar to see "
                 "the full category breakdown."
@@ -376,17 +376,17 @@ if page == "🏠 Patio Vertical":
             # Filters row
             fc1, fc2, fc3 = st.columns([2, 2, 1])
             with fc1:
-                all_cats  = sorted(global_df_cat["category"].unique())
+                all_cats  = sorted(local_df_cat["category"].unique())
                 sel_cats  = st.multiselect("Filter by category",  all_cats,  default=all_cats)
             with fc2:
-                all_sents = sorted(global_df_cat["sentiment"].unique())
+                all_sents = sorted(local_df_cat["sentiment"].unique())
                 sel_sents = st.multiselect("Filter by sentiment", all_sents, default=all_sents)
             with fc3:
                 top_n = st.slider("Top N per category", 3, 20, 8)
 
-            filtered = global_df_cat[
-                global_df_cat["category"].isin(sel_cats) &
-                global_df_cat["sentiment"].isin(sel_sents)
+            filtered = local_df_cat[
+                local_df_cat["category"].isin(sel_cats) &
+                local_df_cat["sentiment"].isin(sel_sents)
             ]
 
             for cat in sel_cats:
