@@ -372,33 +372,19 @@ if page == "🏠 Patio Vertical":
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
 
     st.markdown("---")
-    # ── CHARTS: Monthly Sentiment & Most Common Expression ─────────────────────────────────
+    c_left, c_right = st.columns(2)
     chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.html")
-    if chart_sentiment.exists():
-        st.markdown("## Evolution of Reviews Sentiment over the years ")
-        with open(chart_sentiment, "r", encoding="utf-8") as f:
-            components.html(f.read(), height=400, scrolling=False)
-        st.markdown("---")
     chart_bigram = Path(images/Bi_gram_textacy.html)
-        if chart_bigram.exists():
-        st.markdown("## Mosto Common Expression in your Reviews")
-        with open(chart_bigram, "r", encoding="utf-8") as f:
-            components.html(f.read(), height=400, scrolling=False)
-    
-    
-
-
-    if chart_sentiment.exists() or chart_bigram.exists():
-        st.markdown("---")
-        c_left, c_right = st.columns(2)
+    if chart_sentiment.exists():
         with c_left:
-            if chart_sentiment.exists():
-                st.markdown("### 📈 Monthly Sentiment Trend")
-                st.image(str(chart_sentiment), use_container_width=True)
+            st.markdown("## Evolution of Reviews Sentiment over the years ")
+            with open(chart_sentiment, "r", encoding="utf-8") as f:
+                components.html(f.read(), height=400, scrolling=False)
+    if chart_bigram.exists():
         with c_right:
-            if chart_bigram.exists():
-                st.markdown("### 🔤 Most Common Bigrams")
-                st.image(str(chart_bigram), use_container_width=True)
+            st.markdown("## Most Common Expression")
+            with open(chart_bigram, "r", encoding="utf-8") as f:
+                components.html(f.read(), height=400, scrolling=False)
 
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
