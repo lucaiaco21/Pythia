@@ -368,7 +368,7 @@ if page == "🏠 Patio Vertical":
                       f"{row['Pct'].values[0]}%")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
-
+    c_left, c_right = st.columns(2)
     with c_left:
         if chart_sentiment.exists():
             st.markdown("### 📈 Monthly Sentiment Trend")
