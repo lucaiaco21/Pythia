@@ -674,4 +674,5 @@ elif page == "🔍 Competitor Analysis":
         "<div style='text-align:center;color:#7f8c8d;padding:2rem;'>"
         "📊 Based on customer review insights | 🔄 February 2026</div>",
         unsafe_allow_html=True,
-    ))
+    )
+    
