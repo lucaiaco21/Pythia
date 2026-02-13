@@ -367,26 +367,18 @@ if page == "🏠 Patio Vertical":
                       f"{row['Count'].values[0]:,}",
                       f"{row['Pct'].values[0]}%")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
-
-    # ── Charts ──────────────────────────────────────────────────────────────
-    _sent  = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
-    _bigr  = Path("images/Bi_gram_textacy.png")
-
-    # read from disk if available, otherwise fall back to sidebar upload
-    sent_bytes  = _sent.read_bytes() if _sent.exists() else img_sentiment_bytes
-    bigr_bytes  = _bigr.read_bytes() if _bigr.exists() else img_bigram_bytes
-
-    if sent_bytes or bigr_bytes:
-        st.markdown("---")
-        c_left, c_right = st.columns(2)
-        with c_left:
-            if sent_bytes:
-                st.markdown("### 📈 Monthly Sentiment Trend")
-                st.image(sent_bytes, use_container_width=True)
-        with c_right:
-            if bigr_bytes:
-                st.markdown("### 🔤 Most Common Bigrams")
-                st.image(bigr_bytes, use_container_width=True)
+    st.markdown("---")
+    c_left, c_right = st.columns(2)
+    chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.html")
+    chart_bigram    = Path("images/Bi_gram_textacy.html")
+    with c_left:
+        if chart_sentiment.exists():
+            st.markdown("### 📈 Monthly Sentiment Trend")
+            st.image(str(chart_sentiment), use_container_width=True)
+    with c_right:
+        if chart_bigram.exists():
+            st.markdown("### 🔤 Most Common Bigrams")
+            st.image(str(chart_bigram), use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
