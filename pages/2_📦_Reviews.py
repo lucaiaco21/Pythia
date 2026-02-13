@@ -372,6 +372,22 @@ if page == "🏠 Patio Vertical":
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
 
     st.markdown("---")
+    # ── CHARTS: Monthly Sentiment & Bigrams ─────────────────────────────────
+    chart_sentiment = Path("GRAPHIC_monthly_sentiment_analysis.html")
+    chart_bigram    = Path("Bi_gram_textacy.html")
+
+    if chart_sentiment.exists() or chart_bigram.exists():
+        st.markdown("---")
+        c_left, c_right = st.columns(2)
+        with c_left:
+            if chart_sentiment.exists():
+                st.markdown("### 📈 Monthly Sentiment Trend")
+                st.image(str(chart_sentiment), use_container_width=True)
+        with c_right:
+            if chart_bigram.exists():
+                st.markdown("### 🔤 Most Common Bigrams")
+                st.image(str(chart_bigram), use_container_width=True)
+
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
 
