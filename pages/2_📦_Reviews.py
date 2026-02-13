@@ -374,7 +374,7 @@ if page == "🏠 Patio Vertical":
     st.markdown("---")
     # ── CHARTS: Monthly Sentiment & Bigrams ─────────────────────────────────
     chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.html")
-    chart_bigram    = Path("images/Bi_gram_textacy.html")
+    chart_bigram    = Path(images/Bi_gram_textacy.html)
 
     if chart_sentiment.exists() or chart_bigram.exists():
         st.markdown("---")
