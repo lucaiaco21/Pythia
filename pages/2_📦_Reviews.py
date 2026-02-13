@@ -92,31 +92,47 @@ def is_meaningful(text: str) -> bool:
 
 def build_my_local_insights(df: pd.DataFrame):
     """
-    From global_insights CSV → auto-generate good & bad insight lists
+    From global_insights CSV -> auto-generate good & bad insight lists
     plus a categorized dataframe for the detail tab.
-    Everything is driven by the CSV — just re-upload to update.
+
+    Accepts two formats:
+    - New (pre-categorized): columns insight, category, mentions, avg_rating, sentiment
+    - Old (raw):             columns normalized_item, mentions, avg_rating, sentiment
+    Just re-upload the CSV via the sidebar to refresh everything.
     """
     df = df.copy()
 
-    good = (
-        df[df["sentiment"].isin(["Muy Positivo", "Positivo"])]
-        [df["insight"].apply(is_meaningful)]
-        .sort_values("mentions", ascending=False)
-    )
-    bad = (
-        df[df["sentiment"].isin(["Negativo", "Neutro"])]
-        [df["insight"].apply(is_meaningful)]
-        .sort_values("mentions", ascending=False)
+    # Normalise column name
+    if "normalized_item" in df.columns and "insight" not in df.columns:
+        df = df.rename(columns={"normalized_item": "insight"})
+
+    # Use existing category column or auto-assign
+    if "category" not in df.columns:
+        df["category"] = df["insight"].apply(assign_category)
+
+    # Map raw category names to emoji labels for display
+    CAT_LABEL = {
+        "atmosphere": "Atmosphere", "coffee": "Coffee",
+        "food": "Food", "service": "Service",
+        "location": "Location", "price": "Price",
+        "features": "Features", "general": "General",
+    }
+    df["category"] = df["category"].map(
+        lambda c: CAT_LABEL.get(str(c).strip().lower(), str(c).strip())
     )
 
-    # Top 3 per category for good, top 12 overall for bad
-    good_top = (
+    good = df[df["sentiment"].isin(["Muy Positivo", "Positivo"])].sort_values("mentions", ascending=False)
+    bad  = df[df["sentiment"] == "Negativo"].sort_values("mentions", ascending=False)
+
+    # Top 3 per category for good (pandas 3.0 compatible)
+    good_top_idx = (
         good.groupby("category", group_keys=False)
-        .apply(lambda g: g.head(3))
+        .apply(lambda g: g.head(3), include_groups=False)
         .sort_values("mentions", ascending=False)
         .head(15)
     )
-    bad_top = bad.head(12)
+    good_top = good.loc[good_top_idx.index]
+    bad_top  = bad.head(12)
 
     def to_list(frame):
         return [
@@ -125,7 +141,7 @@ def build_my_local_insights(df: pd.DataFrame):
                 "mentions":   int(row["mentions"]),
                 "category":   row["category"],
                 "sentiment":  row["sentiment"],
-                "avg_rating": round(row["avg_rating"], 2),
+                "avg_rating": round(float(row["avg_rating"]), 2),
             }
             for _, row in frame.iterrows()
         ]
@@ -192,7 +208,7 @@ if saved is not None and "force_upload" not in st.session_state:
     per_rest_df = saved["per_restaurant"]
     common_df   = saved["common_insights"]
     category_df = saved["category_insights"]
-    local_df   = saved.get("local_df", pd.DataFrame())
+    global_df   = saved.get("global_insights", pd.DataFrame())
     data_loaded = True
 else:
     data_loaded = False
@@ -200,24 +216,23 @@ else:
 if not data_loaded:
     st.sidebar.info("Upload your insights files")
 
-    up_per  = st.sidebar.file_uploader("📄 Top 10 Competitor Insights",            type=["csv"], key="per_rest")
-    up_com  = st.sidebar.file_uploader("📄 Competitor Insights by Coffe Shop",   type=["csv"], key="common")
-    up_cat  = st.sidebar.file_uploader("📄 Competitor Insights by category",          type=["csv"], key="category")
-    up_glob = st.sidebar.file_uploader("📄Insights on your local)*",  type=["csv"], key="local")
-    
+    up_per  = st.sidebar.file_uploader("📄 final_top_10_insights.csv",            type=["csv"], key="per_rest")
+    up_com  = st.sidebar.file_uploader("📄 common_insights_all_restaurants.csv",   type=["csv"], key="common")
+    up_cat  = st.sidebar.file_uploader("📄 top_insights_by_category.csv",          type=["csv"], key="category")
+    up_glob = st.sidebar.file_uploader("📄 global_insights_v2.csv  *(My Local)*",  type=["csv"], key="global")
 
     if up_per and up_com and up_cat:
         try:
             per_rest_df = pd.read_csv(up_per)
             common_df   = pd.read_csv(up_com)
             category_df = pd.read_csv(up_cat)
-            local_df   = pd.read_csv(up_glob)
+            global_df   = pd.read_csv(up_glob) if up_glob else pd.DataFrame()
 
             save_data({
                 "per_restaurant":    per_rest_df,
                 "common_insights":   common_df,
                 "category_insights": category_df,
-                "local_df":   local_df,
+                "global_insights":   global_df,
             }, PASSWORD)
 
             st.sidebar.success("✅ Saved! Won't need to re-upload next visit.")
@@ -228,13 +243,24 @@ if not data_loaded:
             st.sidebar.error(f"Error: {e}")
             st.stop()
     else:
-        st.info("👈 Please upload the required CSV files using the sidebar")
+        st.info("👈 Please upload the 3 required CSV files using the sidebar")
+        st.markdown("""
+        **Required (Competitor Analysis):**
+        1. `final_top_10_insights.csv`
+        2. `common_insights_all_restaurants.csv`
+        3. `top_insights_by_category.csv`
+
+        **Optional — enables My Local insight boxes & category detail:**
+        4. `global_insights_v2.csv`
+        *(columns: normalized_item, mentions, avg_rating, sentiment)*
+        """)
+        st.stop()
 
 # Build My Local insights from CSV
-if not local_df.empty:
-    MY_LOCAL_GOOD, MY_LOCAL_BAD, local_df_cat = build_my_local_insights(local_df)
+if not global_df.empty:
+    MY_LOCAL_GOOD, MY_LOCAL_BAD, global_df_cat = build_my_local_insights(global_df)
 else:
-    MY_LOCAL_GOOD, MY_LOCAL_BAD, local_df = [], [], pd.DataFrame()
+    MY_LOCAL_GOOD, MY_LOCAL_BAD, global_df_cat = [], [], pd.DataFrame()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # NAVIGATION
@@ -365,28 +391,28 @@ if page == "🏠 Patio Vertical":
 
     # ── TAB 2: DETAILED BY CATEGORY ──────────────────────────────────────────
     with tab2:
-        st.markdown("## 🔍 Detailed Insights by Category")
+        st.markdown("## 🔍 Insights by Category")
 
-        if local_df.empty:
+        if global_df_cat.empty:
             st.warning(
-                "Upload insights about your local via the sidebar to see "
+                "Upload `global_insights_v2.csv` via the sidebar to see "
                 "the full category breakdown."
             )
         else:
             # Filters row
             fc1, fc2, fc3 = st.columns([2, 2, 1])
             with fc1:
-                all_cats  = sorted(local_df_cat["category"].unique())
+                all_cats  = sorted(global_df_cat["category"].unique())
                 sel_cats  = st.multiselect("Filter by category",  all_cats,  default=all_cats)
             with fc2:
-                all_sents = sorted(local_df_cat["sentiment"].unique())
+                all_sents = sorted(global_df_cat["sentiment"].unique())
                 sel_sents = st.multiselect("Filter by sentiment", all_sents, default=all_sents)
             with fc3:
                 top_n = st.slider("Top N per category", 3, 20, 8)
 
-            filtered = local_df_cat[
-                local_df_cat["category"].isin(sel_cats) &
-                local_df_cat["sentiment"].isin(sel_sents)
+            filtered = global_df_cat[
+                global_df_cat["category"].isin(sel_cats) &
+                global_df_cat["sentiment"].isin(sel_sents)
             ]
 
             for cat in sel_cats:
@@ -407,7 +433,7 @@ if page == "🏠 Patio Vertical":
                         "Negativo":     "#dc3545",
                     }
                     fig_cat = go.Figure(go.Bar(
-                        y=cat_data["normalized_item"].str.title(),
+                        y=cat_data["insight"].str.title(),
                         x=cat_data["mentions"],
                         orientation="h",
                         marker=dict(color=[
@@ -428,7 +454,7 @@ if page == "🏠 Patio Vertical":
 
                     # Searchable table
                     display = cat_data[
-                        ["normalized_item","mentions","avg_rating","sentiment"]
+                        ["insight","mentions","avg_rating","sentiment"]
                     ].copy()
                     display.columns = ["Insight","Mentions","Avg Rating","Sentiment"]
                     display["Insight"] = display["Insight"].str.title()
@@ -563,13 +589,21 @@ elif page == "🔍 Competitor Analysis":
 
         restaurants    = sorted(per_rest_df["restaurant"].unique())
         MY_LOCAL_LABEL = "⭐ My Local (Patio Vertical)"
-        all_options    = [MY_LOCAL_LABEL] + restaurants
+
+        # Only add My Local option if we actually have insight data for it
+        has_my_local = bool(MY_LOCAL_GOOD)
+        all_options  = ([MY_LOCAL_LABEL] if has_my_local else []) + restaurants
 
         # My Local series — positive mentions only (fair comparison with competitors)
-        my_local_comp = pd.DataFrame([
-            {"insight": i["insight"].lower(), "mentions": i["mentions"]}
-            for i in MY_LOCAL_GOOD
-        ])
+        if has_my_local:
+            my_local_comp = pd.DataFrame([
+                {"insight": i["insight"].lower(), "mentions": i["mentions"]}
+                for i in MY_LOCAL_GOOD
+            ])
+        else:
+            my_local_comp = pd.DataFrame(columns=["insight", "mentions"])
+            st.info("Upload `global_insights_v2.csv` via the sidebar to enable "
+                    "My Local in the comparison.")
 
         col1, col2 = st.columns(2)
         with col1:
@@ -580,6 +614,8 @@ elif page == "🔍 Competitor Analysis":
 
         def get_series(name):
             if name == MY_LOCAL_LABEL:
+                if my_local_comp.empty:
+                    return pd.Series(dtype=float)
                 return my_local_comp.set_index("insight")["mentions"]
             return per_rest_df[per_rest_df["restaurant"] == name].set_index("insight")["mentions"]
 
@@ -638,4 +674,4 @@ elif page == "🔍 Competitor Analysis":
         "<div style='text-align:center;color:#7f8c8d;padding:2rem;'>"
         "📊 Based on customer review insights | 🔄 February 2026</div>",
         unsafe_allow_html=True,
-    )
+    ))
