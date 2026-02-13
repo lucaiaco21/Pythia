@@ -106,9 +106,9 @@ def load_csv(file_obj) -> pd.DataFrame:
         df["avg_rating"] = fixed.fillna(median_val).round(4)
 
     # Strip whitespace from string columns
-    str_cols = df.select_dtypes(include=["object", "str"]).columns
-    for col in str_cols:
-        df[col] = df[col].astype(str).str.strip()
+    for col in df.columns:
+        if df[col].dtype == object:
+            df[col] = df[col].astype(str).str.strip()
 
     return df
 
