@@ -43,6 +43,76 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
+# ROBUST CSV LOADER
+# Handles: comma / semicolon / tab separators, decimal-comma avg_rating values
+# Just upload any CSV and the app will parse it correctly.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _fix_avg_rating(val):
+    """
+    Repair avg_rating values mangled by decimal-comma/dot confusion.
+    e.g. 46.142 → 4.6142  |  4.296 → 4.296 (already fine)
+    Also handles string formats like '4,296' → 4.296
+    """
+    try:
+        s = str(val).strip().replace(',', '.')
+        v = float(s)
+    except (ValueError, TypeError):
+        return None
+    if 1.0 <= v <= 5.0:
+        return round(v, 4)
+    # Value > 5: decimal point was dropped after first digit
+    # e.g. 46.142 → digits "46142" → "4.6142"
+    digits = s.replace('.', '')
+    try:
+        fixed = float(digits[0] + '.' + digits[1:])
+        return round(fixed, 4) if 1.0 <= fixed <= 5.0 else None
+    except (ValueError, IndexError):
+        return None
+
+def load_csv(file_obj) -> pd.DataFrame:
+    """
+    Load a CSV from a file path or Streamlit UploadedFile.
+    Auto-detects separator (, ; tab |) and repairs avg_rating if present.
+    """
+    import io
+    # Read raw bytes so we can retry with different separators
+    if hasattr(file_obj, "read"):
+        raw = file_obj.read()
+        if isinstance(raw, str):
+            raw = raw.encode("utf-8")
+        file_obj.seek(0) if hasattr(file_obj, "seek") else None
+    else:
+        with open(file_obj, "rb") as f:
+            raw = f.read()
+
+    df = None
+    for sep in [",", ";", "\t", "|"]:
+        try:
+            candidate = pd.read_csv(io.BytesIO(raw), sep=sep)
+            if len(candidate.columns) > 1:
+                df = candidate
+                break
+        except Exception:
+            continue
+
+    if df is None:
+        df = pd.read_csv(io.BytesIO(raw))  # fallback
+
+    # Repair avg_rating column if present
+    if "avg_rating" in df.columns:
+        fixed = df["avg_rating"].apply(_fix_avg_rating)
+        median_val = fixed.dropna().median()
+        df["avg_rating"] = fixed.fillna(median_val).round(4)
+
+    # Strip whitespace from string columns
+    str_cols = df.select_dtypes(include=["object", "str"]).columns
+    for col in str_cols:
+        df[col] = df[col].astype(str).str.strip()
+
+    return df
+
+# ─────────────────────────────────────────────────────────────────────────────
 # KEYWORD → CATEGORY LOGIC
 # To update categories: edit CATEGORY_KEYWORDS below and re-upload the CSV.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -223,10 +293,10 @@ if not data_loaded:
 
     if up_per and up_com and up_cat:
         try:
-            per_rest_df = pd.read_csv(up_per)
-            common_df   = pd.read_csv(up_com)
-            category_df = pd.read_csv(up_cat)
-            global_df   = pd.read_csv(up_glob) if up_glob else pd.DataFrame()
+            per_rest_df = load_csv(up_per)
+            common_df   = load_csv(up_com)
+            category_df = load_csv(up_cat)
+            global_df   = load_csv(up_glob) if up_glob else pd.DataFrame()
 
             save_data({
                 "per_restaurant":    per_rest_df,
@@ -675,4 +745,3 @@ elif page == "🔍 Competitor Analysis":
         "📊 Based on customer review insights | 🔄 February 2026</div>",
         unsafe_allow_html=True,
     )
-    
