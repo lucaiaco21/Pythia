@@ -97,7 +97,6 @@ def build_my_local_insights(df: pd.DataFrame):
     Everything is driven by the CSV — just re-upload to update.
     """
     df = df.copy()
-    df["category"] = df["insight"].apply(assign_category)
 
     good = (
         df[df["sentiment"].isin(["Muy Positivo", "Positivo"])]
