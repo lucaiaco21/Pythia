@@ -369,6 +369,8 @@ if page == "🏠 Patio Vertical":
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
     c_left, c_right = st.columns(2)
+    chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.html") 
+    chart_bigram = Path("images/Bi_gram_textacy.html")
     with c_left:
         if chart_sentiment.exists():
             st.markdown("### 📈 Monthly Sentiment Trend")
