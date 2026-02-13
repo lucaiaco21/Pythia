@@ -205,13 +205,14 @@ if not data_loaded:
     up_com  = st.sidebar.file_uploader("📄 Competitor Insights by Coffe Shop",   type=["csv"], key="common")
     up_cat  = st.sidebar.file_uploader("📄 Competitor Insights by category",          type=["csv"], key="category")
     up_glob = st.sidebar.file_uploader("📄Insights on your local)*",  type=["csv"], key="global")
+    
 
     if up_per and up_com and up_cat:
         try:
             per_rest_df = pd.read_csv(up_per)
             common_df   = pd.read_csv(up_com)
             category_df = pd.read_csv(up_cat)
-            global_df   = pd.read_csv(up_glob) if up_glob else pd.DataFrame()
+            global_df   = pd.read_csv(up_glob)
 
             save_data({
                 "per_restaurant":    per_rest_df,
@@ -365,7 +366,7 @@ if page == "🏠 Patio Vertical":
 
     # ── TAB 2: DETAILED BY CATEGORY ──────────────────────────────────────────
     with tab2:
-        st.markdown("## 🔍 Insights by Category")
+        st.markdown("## 🔍 Detailed Insights by Category")
 
         if global_df_cat.empty:
             st.warning(
