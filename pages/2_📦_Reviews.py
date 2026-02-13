@@ -368,7 +368,6 @@ if page == "🏠 Patio Vertical":
                       f"{row['Pct'].values[0]}%")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
-import streamlit.components.v1 as components
 
     with c_left:
         if chart_sentiment.exists():
