@@ -349,10 +349,8 @@ st.markdown(
 # PAGE 1 — PATIO VERTICAL
 # ═════════════════════════════════════════════════════════════════════════════
 if page == "🏠 Patio Vertical":
-
     st.markdown("---")
     st.markdown("## 📊 Review Distribution")
-
     star_data = {
         "Rating": ["⭐⭐⭐⭐⭐","⭐⭐⭐⭐","⭐⭐⭐","⭐⭐","⭐"],
         "Count":  [1588, 497, 228, 84, 113],
@@ -361,7 +359,6 @@ if page == "🏠 Patio Vertical":
     df_stars = pd.DataFrame(star_data).sort_values("Stars", ascending=False)
     total    = df_stars["Count"].sum()
     df_stars["Pct"] = (df_stars["Count"] / total * 100).round(1)
-
     cols = st.columns(5)
     for col, star in zip(cols, [5, 4, 3, 2, 1]):
         row = df_stars[df_stars["Stars"] == star]
@@ -371,21 +368,25 @@ if page == "🏠 Patio Vertical":
                       f"{row['Pct'].values[0]}%")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
 
-    st.markdown("---")
-    c_left, c_right = st.columns(2)
+    # ── Charts ──────────────────────────────────────────────────────────────
+    _sent  = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
+    _bigr  = Path("images/Bi_gram_textacy.png")
 
-    chart_sentiment = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
-    chart_bigram    = Path("images/Bi_gram_textacy.png")
+    # read from disk if available, otherwise fall back to sidebar upload
+    sent_bytes  = _sent.read_bytes() if _sent.exists() else img_sentiment_bytes
+    bigr_bytes  = _bigr.read_bytes() if _bigr.exists() else img_bigram_bytes
 
-    with c_left:
-        if chart_sentiment.exists():
-            st.markdown("### 📈 Monthly Sentiment Trend")
-            st.image(str(chart_sentiment), use_container_width=True)
-
-    with c_right:
-        if chart_bigram.exists():
-            st.markdown("### 🔤 Most Common Bigrams")
-            st.image(str(chart_bigram), use_container_width=True)
+    if sent_bytes or bigr_bytes:
+        st.markdown("---")
+        c_left, c_right = st.columns(2)
+        with c_left:
+            if sent_bytes:
+                st.markdown("### 📈 Monthly Sentiment Trend")
+                st.image(sent_bytes, use_container_width=True)
+        with c_right:
+            if bigr_bytes:
+                st.markdown("### 🔤 Most Common Bigrams")
+                st.image(bigr_bytes, use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
