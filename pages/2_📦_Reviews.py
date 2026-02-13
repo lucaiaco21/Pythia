@@ -8,7 +8,9 @@ import pickle
 import hashlib
 from datetime import datetime
 
-# Page configuration
+# ─────────────────────────────────────────────────────────────────────────────
+# PAGE CONFIG
+# ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Reviews analysis",
     page_icon="☕",
@@ -16,107 +18,124 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
 st.markdown("""
 <style>
     .main-header {
-        font-size: 3rem;
-        font-weight: bold;
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 2rem;
+        font-size: 3rem; font-weight: bold; text-align: center;
+        color: #2c3e50; margin-bottom: 2rem;
     }
-    .metric-card {
-        background-color: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 4px solid #3498db;
-    }
-    .section-header {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: #34495e;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-    }
-    .sub-header {
-        font-size: 0.9rem;
-        color: #6b7280;
-        margin-bottom: 2rem;
-    }
-    .section-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 1rem;
-    }
+    .sub-header { font-size: 0.9rem; color: #6b7280; margin-bottom: 2rem; }
     .good-box {
-        background-color: #d4edda;
-        border-left: 5px solid #28a745;
-        border-radius: 8px;
-        padding: 1.2rem 1.5rem;
-        margin-bottom: 0.5rem;
+        background-color: #d4edda; border-left: 5px solid #28a745;
+        border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.4rem;
+        display: flex; justify-content: space-between; align-items: center;
     }
     .bad-box {
-        background-color: #f8d7da;
-        border-left: 5px solid #dc3545;
-        border-radius: 8px;
-        padding: 1.2rem 1.5rem;
-        margin-bottom: 0.5rem;
+        background-color: #f8d7da; border-left: 5px solid #dc3545;
+        border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.4rem;
+        display: flex; justify-content: space-between; align-items: center;
     }
-    .insight-tag {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin: 0.2rem;
-    }
-    .tag-good {
-        background-color: #c3e6cb;
-        color: #155724;
-    }
-    .tag-bad {
-        background-color: #f5c6cb;
-        color: #721c24;
-    }
+    .box-label { font-weight: 600; font-size: 0.95rem; }
+    .box-count { font-weight: 700; font-size: 0.9rem; white-space: nowrap; margin-left: 1rem; }
+    .good-count { color: #155724; }
+    .bad-count  { color: #721c24; }
 </style>
 """, unsafe_allow_html=True)
 
-# ============================================================================
-# MY LOCAL INSIGHTS — curated from global_insights_v2.csv
-# ============================================================================
+# ─────────────────────────────────────────────────────────────────────────────
+# KEYWORD → CATEGORY LOGIC
+# To update categories: edit CATEGORY_KEYWORDS below and re-upload the CSV.
+# ─────────────────────────────────────────────────────────────────────────────
+CATEGORY_KEYWORDS = {
+    "☕ Coffee":     ["coffee","cafe","cappuccino","espresso","latte","cortado",
+                      "flat white","cold brew","americano","macchiato"],
+    "🍽️ Food":       ["food","eat","meal","breakfast","lunch","dinner","toast",
+                      "sandwich","cake","pastry","bread","croissant","avocado",
+                      "egg","juice","menu","dish","plate","tapa","tortilla",
+                      "salad","yogurt","delicious","fresh","cakes","foods"],
+    "👥 Service":    ["staff","service","waiter","waitress","friendly","rude",
+                      "attentive","helpful","slow","fast","quick","polite",
+                      "customer","attend"],
+    "🏠 Atmosphere": ["atmosphere","decor","cozy","ambiance","terrace","space",
+                      "quiet","noise","music","interior","design","garden",
+                      "place","location","seat","table","view"],
+    "💶 Price":      ["price","expensive","cheap","value","worth","euro","cost",
+                      "overpriced","pricey"],
+    "⭐ Features":   ["wifi","parking","dog","pet","outdoor","indoor",
+                      "accessible","toilet","bathroom","gluten free","vegan"],
+}
 
-MY_LOCAL_GOOD = [
-    {"insight": "Friendly & attentive staff",      "mentions": 990,  "emoji": "😊"},
-    {"insight": "Fresh, quality food",              "mentions": 893,  "emoji": "🥗"},
-    {"insight": "Cozy atmosphere",                  "mentions": 418,  "emoji": "🏠"},
-    {"insight": "Excellent service",                "mentions": 219,  "emoji": "⭐"},
-    {"insight": "Delicious coffee",                 "mentions": 170,  "emoji": "☕"},
-    {"insight": "Highly recommended",               "mentions": 207,  "emoji": "👍"},
-    {"insight": "Beautiful cozy decor",             "mentions": 82,   "emoji": "✨"},
-    {"insight": "Great breakfast options",          "mentions": 86,   "emoji": "🍳"},
-    {"insight": "Fast service",                     "mentions": 63,   "emoji": "⚡"},
-    {"insight": "Lovely pastries & cakes",          "mentions": 68,   "emoji": "🍰"},
-]
+# Single-word noise to filter out
+NOISE_WORDS = {
+    "good","nice","back","bit","tiny","super","highly","amazing","perfect",
+    "lovely","loved","love","beautiful","wonderful","don","won","told","water",
+    "table","serve","served","bar","people","girl","thing","tasted","seated",
+    "leave","big","didn","time","menus","product","recommend","return",
+    "excellent","delicious","terrible","pretty","poor","slice","understand",
+    "minutes","rude","piece",
+}
 
-MY_LOCAL_BAD = [
-    {"insight": "Long wait times",                  "mentions": 359,  "emoji": "⏳"},
-    {"insight": "Overpriced / expensive",           "mentions": 273,  "emoji": "💸"},
-    {"insight": "Rude staff (occasional)",          "mentions": 64,   "emoji": "😤"},
-    {"insight": "Pretty bad experience",            "mentions": 35,   "emoji": "👎"},
-    {"insight": "Terrible service (some cases)",    "mentions": 25,   "emoji": "❌"},
-    {"insight": "Small & cramped space",            "mentions": 8,    "emoji": "📦"},
-    {"insight": "Targeting tourists / overcharge",  "mentions": 8,    "emoji": "🎯"},
-    {"insight": "Poor quality (isolated cases)",    "mentions": 7,    "emoji": "⚠️"},
-    {"insight": "Plastic bottles used",             "mentions": 7,    "emoji": "🧴"},
-    {"insight": "Weak coffee (some reviews)",       "mentions": 6,    "emoji": "☕"},
-]
+def assign_category(text: str) -> str:
+    t = str(text).lower()
+    for cat, keywords in CATEGORY_KEYWORDS.items():
+        if any(k in t for k in keywords):
+            return cat
+    return "🔹 General"
 
-# ============================================================================
-# PASSWORD PROTECTION & DATA PERSISTENCE
-# ============================================================================
+def is_meaningful(text: str) -> bool:
+    words = str(text).strip().split()
+    if len(words) == 1 and str(text).lower() in NOISE_WORDS:
+        return False
+    if len(str(text).strip()) < 4:
+        return False
+    return True
 
+def build_my_local_insights(df: pd.DataFrame):
+    """
+    From global_insights CSV → auto-generate good & bad insight lists
+    plus a categorized dataframe for the detail tab.
+    Everything is driven by the CSV — just re-upload to update.
+    """
+    df = df.copy()
+    df["category"] = df["normalized_item"].apply(assign_category)
+
+    good = (
+        df[df["sentiment"].isin(["Muy Positivo", "Positivo"])]
+        [df["normalized_item"].apply(is_meaningful)]
+        .sort_values("mentions", ascending=False)
+    )
+    bad = (
+        df[df["sentiment"] == "Negativo"]
+        [df["normalized_item"].apply(is_meaningful)]
+        .sort_values("mentions", ascending=False)
+    )
+
+    # Top 3 per category for good, top 12 overall for bad
+    good_top = (
+        good.groupby("category", group_keys=False)
+        .apply(lambda g: g.head(3))
+        .sort_values("mentions", ascending=False)
+        .head(15)
+    )
+    bad_top = bad.head(12)
+
+    def to_list(frame):
+        return [
+            {
+                "insight":    row["normalized_item"].title(),
+                "mentions":   int(row["mentions"]),
+                "category":   row["category"],
+                "sentiment":  row["sentiment"],
+                "avg_rating": round(row["avg_rating"], 2),
+            }
+            for _, row in frame.iterrows()
+        ]
+
+    return to_list(good_top), to_list(bad_top), df
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PASSWORD & PERSISTENCE
+# ─────────────────────────────────────────────────────────────────────────────
 PASSWORD = "PATIO"
 DATA_DIR = Path("saved_data")
 DATA_DIR.mkdir(exist_ok=True)
@@ -126,29 +145,18 @@ def hash_password(pwd):
 
 def save_data(data, password):
     pwd_hash = hash_password(password)
-    data_file = DATA_DIR / f"{pwd_hash}.pkl"
-    save_dict = {
-        'timestamp': datetime.now(),
-        'per_restaurant': data['per_restaurant'],
-        'common_insights': data['common_insights'],
-        'category_insights': data['category_insights'],
-        'global_insights': data.get('global_insights', pd.DataFrame())
-    }
-    with open(data_file, 'wb') as f:
-        pickle.dump(save_dict, f)
-    return True
+    with open(DATA_DIR / f"{pwd_hash}.pkl", "wb") as f:
+        pickle.dump({**data, "timestamp": datetime.now()}, f)
 
 def load_data(password):
-    pwd_hash = hash_password(password)
-    data_file = DATA_DIR / f"{pwd_hash}.pkl"
-    if data_file.exists():
-        with open(data_file, 'rb') as f:
-            data = pickle.load(f)
-        return data
+    path = DATA_DIR / f"{hash_password(password)}.pkl"
+    if path.exists():
+        with open(path, "rb") as f:
+            return pickle.load(f)
     return None
 
 def check_password():
-    def password_entered():
+    def _entered():
         if st.session_state["password"] == PASSWORD:
             st.session_state["password_correct"] = True
             del st.session_state["password"]
@@ -156,161 +164,147 @@ def check_password():
             st.session_state["password_correct"] = False
 
     if "password_correct" not in st.session_state:
-        st.text_input(
-            "Enter Password to Access Detailed Analysis",
-            type="password",
-            on_change=password_entered,
-            key="password"
-        )
+        st.text_input("Enter Password to Access Detailed Analysis",
+                      type="password", on_change=_entered, key="password")
         st.info(f"Password is {len(PASSWORD)} letters")
         return False
-    elif not st.session_state["password_correct"]:
-        st.text_input(
-            "Enter Password to Access Dashboard",
-            type="password",
-            on_change=password_entered,
-            key="password"
-        )
+    if not st.session_state["password_correct"]:
+        st.text_input("Enter Password to Access Dashboard",
+                      type="password", on_change=_entered, key="password")
         st.error("😕 Password incorrect")
         return False
-    else:
-        return True
+    return True
 
 if not check_password():
     st.stop()
 
-# ============================================================================
+# ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING
-# ============================================================================
+# ─────────────────────────────────────────────────────────────────────────────
+saved = load_data(PASSWORD)
 
-saved_data = load_data(PASSWORD)
-
-if saved_data is not None:
-    st.sidebar.success(f"✅ Data loaded (uploaded on {saved_data['timestamp'].strftime('%Y-%m-%d %H:%M')})")
+if saved is not None:
+    st.sidebar.success(f"✅ Data loaded (uploaded {saved['timestamp'].strftime('%Y-%m-%d %H:%M')})")
     if st.sidebar.button("🔄 Upload New Data"):
-        st.session_state['force_upload'] = True
+        st.session_state["force_upload"] = True
         st.rerun()
-    if 'force_upload' not in st.session_state:
-        per_rest_df     = saved_data['per_restaurant']
-        common_df       = saved_data['common_insights']
-        category_df     = saved_data['category_insights']
-        global_df       = saved_data.get('global_insights', pd.DataFrame())
-        data_loaded     = True
-    else:
-        data_loaded = False
+
+if saved is not None and "force_upload" not in st.session_state:
+    per_rest_df = saved["per_restaurant"]
+    common_df   = saved["common_insights"]
+    category_df = saved["category_insights"]
+    global_df   = saved.get("global_insights", pd.DataFrame())
+    data_loaded = True
 else:
     data_loaded = False
 
 if not data_loaded:
     st.sidebar.info("Upload your insights files")
 
-    uploaded_per_rest = st.sidebar.file_uploader(
-        "Upload: final_top_10_insights.csv", type=['csv'], key='per_rest')
-    uploaded_common = st.sidebar.file_uploader(
-        "Upload: common_insights_all_restaurants.csv", type=['csv'], key='common')
-    uploaded_category = st.sidebar.file_uploader(
-        "Upload: top_insights_by_category.csv", type=['csv'], key='category')
-    uploaded_global = st.sidebar.file_uploader(
-        "Upload: global_insights_v2.csv  *(My Local insights)*", type=['csv'], key='global')
+    up_per  = st.sidebar.file_uploader("📄 final_top_10_insights.csv",            type=["csv"], key="per_rest")
+    up_com  = st.sidebar.file_uploader("📄 common_insights_all_restaurants.csv",   type=["csv"], key="common")
+    up_cat  = st.sidebar.file_uploader("📄 top_insights_by_category.csv",          type=["csv"], key="category")
+    up_glob = st.sidebar.file_uploader("📄 global_insights_v2.csv  *(My Local)*",  type=["csv"], key="global")
 
-    if uploaded_per_rest and uploaded_common and uploaded_category:
+    if up_per and up_com and up_cat:
         try:
-            per_rest_df  = pd.read_csv(uploaded_per_rest)
-            common_df    = pd.read_csv(uploaded_common)
-            category_df  = pd.read_csv(uploaded_category)
-            global_df    = pd.read_csv(uploaded_global) if uploaded_global else pd.DataFrame()
+            per_rest_df = pd.read_csv(up_per)
+            common_df   = pd.read_csv(up_com)
+            category_df = pd.read_csv(up_cat)
+            global_df   = pd.read_csv(up_glob) if up_glob else pd.DataFrame()
 
             save_data({
-                'per_restaurant': per_rest_df,
-                'common_insights': common_df,
-                'category_insights': category_df,
-                'global_insights': global_df
+                "per_restaurant":    per_rest_df,
+                "common_insights":   common_df,
+                "category_insights": category_df,
+                "global_insights":   global_df,
             }, PASSWORD)
 
-            st.sidebar.success("✅ Data uploaded and saved!")
-            st.sidebar.info("💾 Data will be available on your next visit")
-            if 'force_upload' in st.session_state:
-                del st.session_state['force_upload']
+            st.sidebar.success("✅ Saved! Won't need to re-upload next visit.")
+            if "force_upload" in st.session_state:
+                del st.session_state["force_upload"]
             data_loaded = True
-
         except Exception as e:
-            st.sidebar.error(f"Error loading files: {e}")
+            st.sidebar.error(f"Error: {e}")
             st.stop()
     else:
         st.info("👈 Please upload the 3 required CSV files using the sidebar")
         st.markdown("""
-        **Required files:**
+        **Required (Competitor Analysis):**
         1. `final_top_10_insights.csv`
         2. `common_insights_all_restaurants.csv`
         3. `top_insights_by_category.csv`
 
-        **Optional (for My Local deep insights):**
+        **Optional — enables My Local insight boxes & category detail:**
         4. `global_insights_v2.csv`
+        *(columns: normalized_item, mentions, avg_rating, sentiment)*
         """)
         st.stop()
 
-# ============================================================================
-# NAVIGATION
-# ============================================================================
+# Build My Local insights from CSV
+if not global_df.empty:
+    MY_LOCAL_GOOD, MY_LOCAL_BAD, global_df_cat = build_my_local_insights(global_df)
+else:
+    MY_LOCAL_GOOD, MY_LOCAL_BAD, global_df_cat = [], [], pd.DataFrame()
 
+# ─────────────────────────────────────────────────────────────────────────────
+# NAVIGATION
+# ─────────────────────────────────────────────────────────────────────────────
 st.sidebar.title("Menu")
-page = st.sidebar.radio(
-    "Select Page",
+page = st.sidebar.radio("Select Page",
     ["🏠 Patio Vertical", "🔍 Competitor Analysis"],
-    label_visibility="collapsed"
+    label_visibility="collapsed")
+
+st.markdown(
+    '<div class="main-header">☕ Analysis of Online Reviews (Google Maps & Trip Advisor)</div>',
+    unsafe_allow_html=True
 )
 
-st.markdown('<div class="main-header">☕ Analysis of Online Reviews (Google Maps & Trip Advisor)</div>', unsafe_allow_html=True)
-
-# ============================================================
-# PAGE 1: PATIO VERTICAL (MY LOCAL)
-# ============================================================
+# ═════════════════════════════════════════════════════════════════════════════
+# PAGE 1 — PATIO VERTICAL
+# ═════════════════════════════════════════════════════════════════════════════
 if page == "🏠 Patio Vertical":
 
     st.markdown("---")
     st.markdown("## 📊 Review Distribution")
 
     star_data = {
-        'Rating': ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐', '⭐⭐'],
-        'Count': [1588, 497, 228, 113, 84],
-        'Stars': [5, 4, 3, 1, 2]
+        "Rating": ["⭐⭐⭐⭐⭐","⭐⭐⭐⭐","⭐⭐⭐","⭐⭐","⭐"],
+        "Count":  [1588, 497, 228, 84, 113],
+        "Stars":  [5, 4, 3, 2, 1],
     }
-    df_stars = pd.DataFrame(star_data).sort_values('Stars', ascending=False)
-    total_reviews = df_stars['Count'].sum()
-    df_stars['Percentage'] = (df_stars['Count'] / total_reviews * 100).round(1)
+    df_stars = pd.DataFrame(star_data).sort_values("Stars", ascending=False)
+    total    = df_stars["Count"].sum()
+    df_stars["Pct"] = (df_stars["Count"] / total * 100).round(1)
 
-    col1, col2, col3, col4, col5 = st.columns(5)
-    for col, star in zip([col1, col2, col3, col4, col5], [5, 4, 3, 2, 1]):
-        row = df_stars[df_stars['Stars'] == star]
+    cols = st.columns(5)
+    for col, star in zip(cols, [5, 4, 3, 2, 1]):
+        row = df_stars[df_stars["Stars"] == star]
         with col:
-            st.metric(
-                label="⭐" * star,
-                value=f"{row['Count'].values[0]:,}",
-                delta=f"{row['Percentage'].values[0]}%"
-            )
-
-    st.info(f"📊 **Total Reviews Analyzed:** {total_reviews:,} reviews | Average Score: 4.7⭐")
+            st.metric("⭐" * star,
+                      f"{row['Count'].values[0]:,}",
+                      f"{row['Pct'].values[0]}%")
+    st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
 
     st.markdown("---")
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
 
-    tab1, tab2 = st.tabs(["📊 General Insights", "🔍 Detailed Insights"])
+    tab1, tab2 = st.tabs(["📊 General Insights", "🔍 Detailed Insights by Category"])
 
-    # ── TAB 1: GENERAL ──────────────────────────────────────────────────────
+    # ── TAB 1: GENERAL ───────────────────────────────────────────────────────
     with tab1:
         st.markdown("## 📋 Executive Summary")
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
+        c1, c2, c3 = st.columns(3)
+        with c1:
             st.markdown("### ✅ Best Aspect")
             st.success("**ATMOSPHERE**")
             st.metric("Score", "87.7%", "↑ Top rated")
-        with col2:
+        with c2:
             st.markdown("### ⚠️ Needs Attention")
             st.warning("**PRICE**")
             st.metric("Score", "54.1%", "↓ Lowest rated")
-        with col3:
+        with c3:
             st.markdown("### 📊 Overall")
             st.info("**SCORE**")
             st.metric("Average", "4.7", "Positive")
@@ -318,331 +312,341 @@ if page == "🏠 Patio Vertical":
         st.markdown("---")
         st.markdown("### 🎯 Aspect Performance Overview")
 
-        aspects_data = {
-            'Aspect': ['ATMOSPHERE', 'FOOD', 'SERVICE', 'COFFEE', 'GENERAL', 'LOCATION', 'PRICE'],
-            'Score': [87.7, 87.3, 84.8, 84.5, 81.9, 80.5, 54.1],
-            'Positive %': [90.1, 90.3, 89.7, 88.7, 86.8, 86.2, 70.3],
-            'Negative %': [2.5, 3.0, 4.9, 4.3, 4.9, 5.7, 16.2],
-            'Total Mentions': [284, 709, 824, 656, 204, 174, 266]
-        }
-        df_aspects = pd.DataFrame(aspects_data)
-
-        fig_aspects = go.Figure()
-        colors = ['#27ae60' if s >= 80 else '#f39c12' if s >= 60 else '#e74c3c'
-                  for s in df_aspects['Score']]
-        fig_aspects.add_trace(go.Bar(
-            y=df_aspects['Aspect'], x=df_aspects['Score'],
-            orientation='h', marker=dict(color=colors),
-            text=df_aspects['Score'].apply(lambda x: f'{x}%'),
-            textposition='outside'
+        df_asp = pd.DataFrame({
+            "Aspect": ["ATMOSPHERE","FOOD","SERVICE","COFFEE","GENERAL","LOCATION","PRICE"],
+            "Score":  [87.7, 87.3, 84.8, 84.5, 81.9, 80.5, 54.1],
+        })
+        bar_colors = [
+            "#27ae60" if s >= 80 else "#f39c12" if s >= 60 else "#e74c3c"
+            for s in df_asp["Score"]
+        ]
+        fig = go.Figure(go.Bar(
+            y=df_asp["Aspect"], x=df_asp["Score"], orientation="h",
+            marker=dict(color=bar_colors),
+            text=df_asp["Score"].apply(lambda x: f"{x}%"),
+            textposition="outside",
         ))
-        fig_aspects.update_layout(
-            title='Aspect Satisfaction Scores',
-            xaxis_title='Score (%)', yaxis_title='',
-            height=400, showlegend=False
-        )
-        st.plotly_chart(fig_aspects, use_container_width=True)
+        fig.update_layout(title="Aspect Satisfaction Scores",
+                          xaxis_title="Score (%)", yaxis_title="",
+                          height=400, showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("---")
-        col_prob, col_strength = st.columns(2)
-        with col_prob:
+        cp, cs = st.columns(2)
+        with cp:
             st.markdown("### 🔴 Top 3 Issues to Address")
-            st.error("**1. Long Wait Times**")
-            st.write("359 mentions across all aspects")
-            st.write("💡 Recommendation: Optimize service times")
-            st.error("**2. Overpriced**")
-            st.write("273 mentions")
-            st.write("💡 Recommendation: Evaluate pricing strategy")
-            st.error("**3. Rude Staff**")
-            st.write("64 mentions")
-            st.write("💡 Recommendation: Customer service training")
-        with col_strength:
+            st.error("**1. Long Wait Times** — 359 mentions\n\n💡 Optimize service times")
+            st.error("**2. Overpriced** — 273 mentions\n\n💡 Evaluate pricing strategy")
+            st.error("**3. Rude Staff** — 64 mentions\n\n💡 Customer service training")
+        with cs:
             st.markdown("### 🟢 Top 3 Strengths to Maintain")
-            st.success("**1. Friendly Staff**")
-            st.write("990 mentions - Keep it up!")
-            st.success("**2. Fresh Food**")
-            st.write("893 mentions - Quality recognized")
-            st.success("**3. Cozy Atmosphere**")
-            st.write("418 mentions - Great ambiance")
+            st.success("**1. Friendly Staff** — 990 mentions\n\nKeep it up!")
+            st.success("**2. Fresh Food** — 893 mentions\n\nQuality recognized")
+            st.success("**3. Cozy Atmosphere** — 418 mentions\n\nGreat ambiance")
 
-        # ── INSIGHT BOXES ───────────────────────────────────────────────────
-        st.markdown("---")
-        st.markdown("## 💬 What Customers Say About Us")
-        st.caption("Extracted from all Google Maps & TripAdvisor reviews")
+        # ── GOOD / BAD BOXES ─────────────────────────────────────────────────
+        if MY_LOCAL_GOOD or MY_LOCAL_BAD:
+            st.markdown("---")
+            st.markdown("## 💬 What Customers Say About Us")
+            st.caption(
+                "Auto-generated from `global_insights_v2.csv` · "
+                "re-upload via sidebar to refresh anytime"
+            )
+            cg, cb = st.columns(2)
+            with cg:
+                st.markdown("### ✅ What We Do Well")
+                for item in MY_LOCAL_GOOD:
+                    st.markdown(
+                        f'<div class="good-box">'
+                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
+                        f'<span class="box-count good-count">{item["mentions"]:,} mentions</span>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
+            with cb:
+                st.markdown("### ⚠️ What We Need to Improve")
+                for item in MY_LOCAL_BAD:
+                    st.markdown(
+                        f'<div class="bad-box">'
+                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
+                        f'<span class="box-count bad-count">{item["mentions"]:,} mentions</span>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
 
-        col_good, col_bad = st.columns(2)
-
-        with col_good:
-            st.markdown("### ✅ What We Do Well")
-            for item in MY_LOCAL_GOOD:
-                st.markdown(
-                    f"""<div class="good-box">
-                        <span style="font-size:1.3rem">{item['emoji']}</span>
-                        <strong> {item['insight']}</strong>
-                        <span style="float:right; color:#155724; font-weight:600;">{item['mentions']:,} mentions</span>
-                    </div>""",
-                    unsafe_allow_html=True
-                )
-
-        with col_bad:
-            st.markdown("### ⚠️ What We Need to Improve")
-            for item in MY_LOCAL_BAD:
-                st.markdown(
-                    f"""<div class="bad-box">
-                        <span style="font-size:1.3rem">{item['emoji']}</span>
-                        <strong> {item['insight']}</strong>
-                        <span style="float:right; color:#721c24; font-weight:600;">{item['mentions']:,} mentions</span>
-                    </div>""",
-                    unsafe_allow_html=True
-                )
-
-    # ── TAB 2: DETAILED ─────────────────────────────────────────────────────
+    # ── TAB 2: DETAILED BY CATEGORY ──────────────────────────────────────────
     with tab2:
-        st.markdown("## 🔍 Actionable Insights by Aspect")
-        st.info("Detailed aspect analysis available - expand each section below")
+        st.markdown("## 🔍 Insights by Category")
+
+        if global_df_cat.empty:
+            st.warning(
+                "Upload `global_insights_v2.csv` via the sidebar to see "
+                "the full category breakdown."
+            )
+        else:
+            # Filters row
+            fc1, fc2, fc3 = st.columns([2, 2, 1])
+            with fc1:
+                all_cats  = sorted(global_df_cat["category"].unique())
+                sel_cats  = st.multiselect("Filter by category",  all_cats,  default=all_cats)
+            with fc2:
+                all_sents = sorted(global_df_cat["sentiment"].unique())
+                sel_sents = st.multiselect("Filter by sentiment", all_sents, default=all_sents)
+            with fc3:
+                top_n = st.slider("Top N per category", 3, 20, 8)
+
+            filtered = global_df_cat[
+                global_df_cat["category"].isin(sel_cats) &
+                global_df_cat["sentiment"].isin(sel_sents)
+            ]
+
+            for cat in sel_cats:
+                cat_data = (
+                    filtered[filtered["category"] == cat]
+                    .sort_values("mentions", ascending=False)
+                    .head(top_n)
+                )
+                if cat_data.empty:
+                    continue
+
+                with st.expander(f"{cat}  —  {len(cat_data)} items shown", expanded=True):
+                    # Bar chart coloured by sentiment
+                    sent_color = {
+                        "Muy Positivo": "#28a745",
+                        "Positivo":     "#85c985",
+                        "Neutro":       "#ffc107",
+                        "Negativo":     "#dc3545",
+                    }
+                    fig_cat = go.Figure(go.Bar(
+                        y=cat_data["normalized_item"].str.title(),
+                        x=cat_data["mentions"],
+                        orientation="h",
+                        marker=dict(color=[
+                            sent_color.get(s, "#aaa") for s in cat_data["sentiment"]
+                        ]),
+                        text=cat_data["mentions"],
+                        textposition="outside",
+                    ))
+                    fig_cat.update_layout(
+                        height=max(250, len(cat_data) * 38),
+                        margin=dict(l=10, r=40, t=10, b=10),
+                        showlegend=False,
+                        yaxis={"categoryorder": "total ascending"},
+                        xaxis_title="Mentions",
+                        yaxis_title="",
+                    )
+                    st.plotly_chart(fig_cat, use_container_width=True)
+
+                    # Searchable table
+                    display = cat_data[
+                        ["normalized_item","mentions","avg_rating","sentiment"]
+                    ].copy()
+                    display.columns = ["Insight","Mentions","Avg Rating","Sentiment"]
+                    display["Insight"] = display["Insight"].str.title()
+                    st.dataframe(
+                        display.reset_index(drop=True),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
 
     st.markdown("---")
-    st.markdown("""
-    <div style='text-align: center; color: #7f8c8d; padding: 2rem;'>
-        <p>📊 Analysis based on 2,510 reviews | 🔄 February 2026</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        "<div style='text-align:center;color:#7f8c8d;padding:2rem;'>"
+        "📊 Analysis based on 2,510 reviews | 🔄 February 2026</div>",
+        unsafe_allow_html=True,
+    )
 
-# ============================================================
-# PAGE 2: COMPETITOR ANALYSIS
-# ============================================================
+# ═════════════════════════════════════════════════════════════════════════════
+# PAGE 2 — COMPETITOR ANALYSIS
+# ═════════════════════════════════════════════════════════════════════════════
 elif page == "🔍 Competitor Analysis":
 
     st.markdown(
         '<div class="sub-header">Analysis of reviews of main competitors. '
-        'The maps show most rated cafes in Madrid while the in-depth analysis '
-        'only covers those within a 3km range of Cafe Madrid.</div>',
-        unsafe_allow_html=True
+        "Maps show most-rated cafes in Madrid; in-depth analysis covers "
+        "those within 3 km of Cafe Madrid.</div>",
+        unsafe_allow_html=True,
     )
 
     st.markdown("## 📊 Market Overview")
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Total Cafes", len(per_rest_df['restaurant'].unique()),
-                  help="Specialty coffee shops analyzed")
-    with col2:
-        st.metric("Unique Insights", len(common_df),
-                  help="Different products/features mentioned")
-    with col3:
-        top_insight = common_df.iloc[0]
-        st.metric("Most Mentioned", top_insight['insight'].title(),
-                  f"{top_insight['mentions']} times")
-    with col4:
-        most_common = common_df.nlargest(1, 'num_restaurants').iloc[0]
-        st.metric("Most Common", most_common['insight'].title(),
-                  f"{most_common['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops")
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        st.metric("Total Cafes", len(per_rest_df["restaurant"].unique()))
+    with c2:
+        st.metric("Unique Insights", len(common_df))
+    with c3:
+        top = common_df.iloc[0]
+        st.metric("Most Mentioned", top["insight"].title(), f"{top['mentions']} times")
+    with c4:
+        mc = common_df.nlargest(1, "num_restaurants").iloc[0]
+        st.metric("Most Common", mc["insight"].title(),
+                  f"{mc['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops")
 
     st.markdown("---")
-
     map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
     if map_path.exists():
-        st.markdown("## 📍 Map with average scores of most rated Madrid Cafeterias")
-        with open(map_path, 'r', encoding='utf-8') as f:
-            map_html = f.read()
-        components.html(map_html, height=400, scrolling=False)
+        st.markdown("## 📍 Map — Average Scores of Most-Rated Madrid Cafeterias")
+        with open(map_path, "r", encoding="utf-8") as f:
+            components.html(f.read(), height=400, scrolling=False)
         st.markdown("---")
-
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "🏆 Top Insights",
-        "🏪 By Cafes",
-        "📊 Category Analysis",
-        "🔍 Comparison"
-    ])
 
     category_colors = {
-        'food': '#FF6B6B',
-        'coffee': '#8B4513',
-        'specialty_drink': '#4ECDC4',
-        'service': '#FFE66D',
-        'feature': '#A8E6CF',
-        'atmosphere': '#C7CEEA'
+        "food": "#FF6B6B", "coffee": "#8B4513", "specialty_drink": "#4ECDC4",
+        "service": "#FFE66D", "feature": "#A8E6CF", "atmosphere": "#C7CEEA",
     }
     category_labels = {
-        'food': '🍽️ Food',
-        'coffee': '☕ Coffee',
-        'specialty_drink': '🍵 Specialty Drinks',
-        'service': '👥 Service',
-        'feature': '⭐ Features',
-        'atmosphere': '🏠 Atmosphere'
+        "food": "🍽️ Food", "coffee": "☕ Coffee",
+        "specialty_drink": "🍵 Specialty Drinks", "service": "👥 Service",
+        "feature": "⭐ Features", "atmosphere": "🏠 Atmosphere",
     }
 
-    # ── TAB 1: TOP INSIGHTS ─────────────────────────────────────────────────
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "🏆 Top Insights", "🏪 By Cafes", "📊 Category Analysis", "🔍 Comparison"
+    ])
+
+    # ── TAB 1 ────────────────────────────────────────────────────────────────
     with tab1:
         st.markdown("### 🏆 What Customers Love Most")
-        st.markdown("*Top mentions across all specialty coffee shops*")
-
         top_20 = common_df.head(20).copy()
-        fig_top20 = go.Figure()
-        colors = [category_colors.get(cat, '#95A5A6') for cat in top_20['category']]
-        fig_top20.add_trace(go.Bar(
-            y=top_20['insight'], x=top_20['mentions'],
-            orientation='h', marker=dict(color=colors),
-            text=top_20['mentions'], textposition='outside'
+        fig = go.Figure(go.Bar(
+            y=top_20["insight"], x=top_20["mentions"], orientation="h",
+            marker=dict(color=[category_colors.get(c, "#95A5A6") for c in top_20["category"]]),
+            text=top_20["mentions"], textposition="outside",
         ))
-        fig_top20.update_layout(
-            title='Top 20 Most Mentioned Items',
-            xaxis_title='Total Mentions', yaxis_title='',
-            height=700, showlegend=False,
-            yaxis={'categoryorder': 'total ascending'}
-        )
-        st.plotly_chart(fig_top20, use_container_width=True)
+        fig.update_layout(title="Top 20 Most Mentioned Items",
+                          xaxis_title="Total Mentions", height=700,
+                          showlegend=False, yaxis={"categoryorder": "total ascending"})
+        st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("---")
-        widespread = common_df.nlargest(10, 'num_restaurants')
-        fig_widespread = go.Figure()
-        fig_widespread.add_trace(go.Bar(
-            x=widespread['insight'], y=widespread['num_restaurants'],
-            marker=dict(color='#3498db'),
-            text=widespread['num_restaurants'], textposition='outside'
+        wide = common_df.nlargest(10, "num_restaurants")
+        fig2 = go.Figure(go.Bar(
+            x=wide["insight"], y=wide["num_restaurants"],
+            marker=dict(color="#3498db"),
+            text=wide["num_restaurants"], textposition="outside",
         ))
-        fig_widespread.update_layout(
-            title='Insights Present in Multiple Reviews for Multiple Cafes',
-            xaxis_title='', yaxis_title='Number of Restaurants',
-            height=400, showlegend=False, xaxis_tickangle=-45
-        )
-        st.plotly_chart(fig_widespread, use_container_width=True)
+        fig2.update_layout(title="Insights Present Across Multiple Cafes",
+                           yaxis_title="Number of Restaurants",
+                           height=400, showlegend=False, xaxis_tickangle=-45)
+        st.plotly_chart(fig2, use_container_width=True)
 
-    # ── TAB 2: BY CAFES ─────────────────────────────────────────────────────
+    # ── TAB 2 ────────────────────────────────────────────────────────────────
     with tab2:
         st.markdown("### 🏪 Cafe-Specific Insights")
-        restaurants = sorted(per_rest_df['restaurant'].unique())
-        selected_restaurant = st.selectbox("Select a restaurant:", restaurants)
-        rest_data = per_rest_df[per_rest_df['restaurant'] == selected_restaurant].copy()
-        rest_data = rest_data.sort_values('mentions', ascending=False)
+        restaurants = sorted(per_rest_df["restaurant"].unique())
+        sel = st.selectbox("Select a restaurant:", restaurants)
+        rd  = per_rest_df[per_rest_df["restaurant"] == sel].sort_values("mentions", ascending=False)
 
-        st.markdown(f"## ☕ {selected_restaurant}")
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Top Insight", rest_data.iloc[0]['insight'].title())
-        with col2:
-            st.metric("Most Mentions", rest_data.iloc[0]['mentions'])
-        with col3:
-            category_dist = rest_data['category'].value_counts()
-            st.metric("Main Category", category_dist.index[0].replace('_', ' ').title())
+        st.markdown(f"## ☕ {sel}")
+        rc1, rc2, rc3 = st.columns(3)
+        with rc1: st.metric("Top Insight",   rd.iloc[0]["insight"].title())
+        with rc2: st.metric("Most Mentions", rd.iloc[0]["mentions"])
+        with rc3:
+            top_cat = rd["category"].value_counts().index[0]
+            st.metric("Main Category", top_cat.replace("_", " ").title())
 
         st.markdown("---")
-        for category in ['food', 'coffee', 'specialty_drink', 'service']:
-            cat_items = rest_data[rest_data['category'] == category]
-            if len(cat_items) > 0:
-                with st.expander(f"{category_labels.get(category)} ({len(cat_items)} items)", expanded=True):
-                    for idx, row in cat_items.iterrows():
-                        cols = st.columns([3, 1])
-                        with cols[0]:
-                            st.markdown(f"**{row['insight'].title()}**")
-                        with cols[1]:
-                            st.markdown(f"*{row['mentions']} mentions*")
+        for cat in ["food","coffee","specialty_drink","service"]:
+            items = rd[rd["category"] == cat]
+            if not items.empty:
+                with st.expander(f"{category_labels.get(cat)} ({len(items)} items)", expanded=True):
+                    for _, row in items.iterrows():
+                        cc1, cc2 = st.columns([3, 1])
+                        with cc1: st.markdown(f"**{row['insight'].title()}**")
+                        with cc2: st.markdown(f"*{row['mentions']} mentions*")
 
-    # ── TAB 3: CATEGORY ─────────────────────────────────────────────────────
+    # ── TAB 3 ────────────────────────────────────────────────────────────────
     with tab3:
         st.markdown("### 📊 Category Deep Dive")
-        category_totals = per_rest_df.groupby('category')['mentions'].sum().reset_index()
-        category_totals = category_totals.sort_values('mentions', ascending=False)
-        fig_pie = px.pie(
-            category_totals, values='mentions', names='category',
-            title='Total Mentions by Category',
-            color='category', color_discrete_map=category_colors
-        )
+        cat_totals = per_rest_df.groupby("category")["mentions"].sum().reset_index()
+        fig_pie = px.pie(cat_totals, values="mentions", names="category",
+                         title="Total Mentions by Category",
+                         color="category", color_discrete_map=category_colors)
         st.plotly_chart(fig_pie, use_container_width=True)
 
-    # ── TAB 4: COMPARISON ───────────────────────────────────────────────────
+    # ── TAB 4: COMPARISON ────────────────────────────────────────────────────
     with tab4:
         st.markdown("### 🔍 Cafe Comparison")
-        st.caption("ℹ️ Note: competitor data contains only **positive reviews**. "
-                   "My Local data includes both positive and negative feedback.")
+        st.caption(
+            "ℹ️ Competitor data contains **positive reviews only**. "
+            "My Local shows both positive and negative feedback."
+        )
 
-        restaurants = sorted(per_rest_df['restaurant'].unique())
+        restaurants    = sorted(per_rest_df["restaurant"].unique())
+        MY_LOCAL_LABEL = "⭐ My Local (Patio Vertical)"
+        all_options    = [MY_LOCAL_LABEL] + restaurants
 
-        # Build My Local as a DataFrame in the same format
-        my_local_df = pd.DataFrame([
-            {"insight": item["insight"].lower(), "mentions": item["mentions"]}
-            for item in MY_LOCAL_GOOD          # competitors only have positive → use good only
+        # My Local series — positive mentions only (fair comparison with competitors)
+        my_local_comp = pd.DataFrame([
+            {"insight": i["insight"].lower(), "mentions": i["mentions"]}
+            for i in MY_LOCAL_GOOD
         ])
-
-        ALL_OPTIONS = ["⭐ My Local (Patio Vertical)"] + restaurants
 
         col1, col2 = st.columns(2)
         with col1:
-            rest1 = st.selectbox("First cafe:", ALL_OPTIONS, key='r1')
+            rest1 = st.selectbox("First cafe:", all_options, key="r1")
         with col2:
-            remaining = [r for r in ALL_OPTIONS if r != rest1]
-            rest2 = st.selectbox("Second cafe:", remaining, key='r2')
+            rest2 = st.selectbox("Second cafe:",
+                                 [r for r in all_options if r != rest1], key="r2")
 
-        def get_mentions_series(name):
-            if name == "⭐ My Local (Patio Vertical)":
-                return my_local_df.set_index('insight')['mentions']
-            else:
-                return per_rest_df[per_rest_df['restaurant'] == name].set_index('insight')['mentions']
+        def get_series(name):
+            if name == MY_LOCAL_LABEL:
+                return my_local_comp.set_index("insight")["mentions"]
+            return per_rest_df[per_rest_df["restaurant"] == name].set_index("insight")["mentions"]
 
-        if rest1 and rest2:
-            s1 = get_mentions_series(rest1)
-            s2 = get_mentions_series(rest2)
+        s1, s2   = get_series(rest1), get_series(rest2)
+        all_ins  = list(set(s1.index) | set(s2.index))
+        comp     = pd.DataFrame(
+            {rest1: [s1.get(i, 0) for i in all_ins],
+             rest2: [s2.get(i, 0) for i in all_ins]},
+            index=all_ins,
+        )
+        comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
+        comp = comp.sort_values(rest1, ascending=False).head(15)
 
-            all_insights = list(set(s1.index) | set(s2.index))
-            comparison = pd.DataFrame({
-                rest1: [s1.get(i, 0) for i in all_insights],
-                rest2: [s2.get(i, 0) for i in all_insights]
-            }, index=all_insights)
-            comparison = comparison[(comparison[rest1] > 0) | (comparison[rest2] > 0)]
-            comparison = comparison.sort_values(rest1, ascending=False).head(15)
+        fig_comp = go.Figure()
+        fig_comp.add_trace(go.Bar(name=rest1, x=comp.index, y=comp[rest1],
+                                  marker_color="#3498db"))
+        fig_comp.add_trace(go.Bar(name=rest2, x=comp.index, y=comp[rest2],
+                                  marker_color="#e74c3c"))
+        fig_comp.update_layout(title=f"{rest1} vs {rest2}",
+                               yaxis_title="Mentions", barmode="group",
+                               height=500, xaxis_tickangle=-45)
+        st.plotly_chart(fig_comp, use_container_width=True)
 
-            fig_comparison = go.Figure()
-            fig_comparison.add_trace(go.Bar(
-                name=rest1, x=comparison.index, y=comparison[rest1],
-                marker_color='#3498db'
-            ))
-            fig_comparison.add_trace(go.Bar(
-                name=rest2, x=comparison.index, y=comparison[rest2],
-                marker_color='#e74c3c'
-            ))
-            fig_comparison.update_layout(
-                title=f'{rest1} vs {rest2}',
-                xaxis_title='', yaxis_title='Mentions',
-                barmode='group', height=500, xaxis_tickangle=-45
+        # Full good/bad breakdown when My Local is in the comparison
+        if MY_LOCAL_LABEL in (rest1, rest2) and (MY_LOCAL_GOOD or MY_LOCAL_BAD):
+            st.markdown("---")
+            st.markdown("#### 💬 My Local — Full Review Breakdown")
+            st.caption(
+                "The chart above uses positive mentions only for a fair comparison. "
+                "Here's the complete picture for Patio Vertical:"
             )
-            st.plotly_chart(fig_comparison, use_container_width=True)
-
-            # ── If My Local is selected, show full insight boxes too ────────
-            if "My Local" in rest1 or "My Local" in rest2:
-                st.markdown("---")
-                st.markdown("#### 💬 My Local — Full Insight Breakdown")
-                st.caption("Competitors only show positive reviews. "
-                           "Here's the complete picture for Patio Vertical:")
-
-                col_g, col_b = st.columns(2)
-                with col_g:
-                    st.markdown("**✅ What We Do Well**")
-                    for item in MY_LOCAL_GOOD:
-                        st.markdown(
-                            f"""<div class="good-box">
-                                {item['emoji']} <strong>{item['insight']}</strong>
-                                <span style="float:right;color:#155724;font-weight:600;">
-                                    {item['mentions']:,}
-                                </span>
-                            </div>""",
-                            unsafe_allow_html=True
-                        )
-                with col_b:
-                    st.markdown("**⚠️ What We Need to Improve**")
-                    for item in MY_LOCAL_BAD:
-                        st.markdown(
-                            f"""<div class="bad-box">
-                                {item['emoji']} <strong>{item['insight']}</strong>
-                                <span style="float:right;color:#721c24;font-weight:600;">
-                                    {item['mentions']:,}
-                                </span>
-                            </div>""",
-                            unsafe_allow_html=True
-                        )
+            bg, bb = st.columns(2)
+            with bg:
+                st.markdown("**✅ What We Do Well**")
+                for item in MY_LOCAL_GOOD:
+                    st.markdown(
+                        f'<div class="good-box">'
+                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
+                        f'<span class="box-count good-count">{item["mentions"]:,}</span>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
+            with bb:
+                st.markdown("**⚠️ What We Need to Improve**")
+                for item in MY_LOCAL_BAD:
+                    st.markdown(
+                        f'<div class="bad-box">'
+                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
+                        f'<span class="box-count bad-count">{item["mentions"]:,}</span>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
 
     st.markdown("---")
-    st.markdown("""
-    <div style='text-align: center; color: #7f8c8d; padding: 2rem;'>
-        <p>📊 Based on customer review insights | 🔄 February 2026</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        "<div style='text-align:center;color:#7f8c8d;padding:2rem;'>"
+        "📊 Based on customer review insights | 🔄 February 2026</div>",
+        unsafe_allow_html=True,
+    )
