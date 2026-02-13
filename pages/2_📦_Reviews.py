@@ -97,16 +97,16 @@ def build_my_local_insights(df: pd.DataFrame):
     Everything is driven by the CSV — just re-upload to update.
     """
     df = df.copy()
-    df["category"] = df["normalized_item"].apply(assign_category)
+    df["category"] = df["insight"].apply(assign_category)
 
     good = (
         df[df["sentiment"].isin(["Muy Positivo", "Positivo"])]
-        [df["normalized_item"].apply(is_meaningful)]
+        [df["insight"].apply(is_meaningful)]
         .sort_values("mentions", ascending=False)
     )
     bad = (
-        df[df["sentiment"] == "Negativo"]
-        [df["normalized_item"].apply(is_meaningful)]
+        df[df["sentiment"].isin(["Negativo", "Neutro"])]
+        [df["insight"].apply(is_meaningful)]
         .sort_values("mentions", ascending=False)
     )
 
@@ -122,7 +122,7 @@ def build_my_local_insights(df: pd.DataFrame):
     def to_list(frame):
         return [
             {
-                "insight":    row["normalized_item"].title(),
+                "insight":    row["insight"].title(),
                 "mentions":   int(row["mentions"]),
                 "category":   row["category"],
                 "sentiment":  row["sentiment"],
@@ -201,10 +201,10 @@ else:
 if not data_loaded:
     st.sidebar.info("Upload your insights files")
 
-    up_per  = st.sidebar.file_uploader("📄 final_top_10_insights.csv",            type=["csv"], key="per_rest")
-    up_com  = st.sidebar.file_uploader("📄 common_insights_all_restaurants.csv",   type=["csv"], key="common")
-    up_cat  = st.sidebar.file_uploader("📄 top_insights_by_category.csv",          type=["csv"], key="category")
-    up_glob = st.sidebar.file_uploader("📄 global_insights_v2.csv  *(My Local)*",  type=["csv"], key="global")
+    up_per  = st.sidebar.file_uploader("📄 Top 10 Competitor Insights",            type=["csv"], key="per_rest")
+    up_com  = st.sidebar.file_uploader("📄 Competitor Insights by Coffe Shop",   type=["csv"], key="common")
+    up_cat  = st.sidebar.file_uploader("📄 Competitor Insights by category",          type=["csv"], key="category")
+    up_glob = st.sidebar.file_uploader("📄Insights on your local)*",  type=["csv"], key="global")
 
     if up_per and up_com and up_cat:
         try:
@@ -228,18 +228,7 @@ if not data_loaded:
             st.sidebar.error(f"Error: {e}")
             st.stop()
     else:
-        st.info("👈 Please upload the 3 required CSV files using the sidebar")
-        st.markdown("""
-        **Required (Competitor Analysis):**
-        1. `final_top_10_insights.csv`
-        2. `common_insights_all_restaurants.csv`
-        3. `top_insights_by_category.csv`
-
-        **Optional — enables My Local insight boxes & category detail:**
-        4. `global_insights_v2.csv`
-        *(columns: normalized_item, mentions, avg_rating, sentiment)*
-        """)
-        st.stop()
+        st.info("👈 Please upload the required CSV files using the sidebar")
 
 # Build My Local insights from CSV
 if not global_df.empty:
@@ -380,7 +369,7 @@ if page == "🏠 Patio Vertical":
 
         if global_df_cat.empty:
             st.warning(
-                "Upload `global_insights_v2.csv` via the sidebar to see "
+                "Upload insights about your local via the sidebar to see "
                 "the full category breakdown."
             )
         else:
