@@ -370,17 +370,9 @@ if page == "🏠 Patio Vertical":
     st.markdown("---")
     c_left, c_right = st.columns(2)
     chart_sentiment_png = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
-    chart_bigram_png    = Path("images/Bi_gram_textacy.png")
-    with c_left:
-        if chart_sentiment_png.exists():
-            st.markdown("### 📈 Monthly Sentiment Trend")
-            st.image(str(chart_sentiment_png), use_container_width=True)
-    with c_right:
-        if chart_bigram_png.exists():
-            st.markdown("### 🔤 Most Common Bigrams")
-            st.image(str(chart_bigram_png), use_container_width=True)
-
-
+    if chart_sentiment_png.exists():
+    st.markdown("### 📈 Monthly Sentiment Trend")
+    st.image(str(chart_sentiment_png), use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
     st.markdown("---")
