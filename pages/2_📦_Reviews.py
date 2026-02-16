@@ -693,15 +693,19 @@ This page lets you explore **what customers mention most**, broken down by topic
 # PAGE 2 — COMPETITOR ANALYSIS
 # ═════════════════════════════════════════════════════════════════════════════
 elif page == "🔍 Competitor Analysis":
-
-    st.markdown(
-        '<div class="sub-header">Analysis of reviews of main competitors. '
-        "Maps show most-rated cafes in Madrid; in-depth analysis covers "
-        "those within 3 km of Cafe Madrid.</div>",
-        unsafe_allow_html=True,
-    )
-
+    
+    
+    map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
+    if map_path.exists():
+        st.markdown("## 📍 Map — Average Scores of Most-Rated Madrid Cafeterias")
+        st.caption(
+        "📌 Showing the most-rated coffee shops in Madrid plotted by real location. "
+        "Each marker represents one coffee shop — browse the map to compare scores across the city and different neighboors.")
+        with open(map_path, "r", encoding="utf-8") as f:
+            components.html(f.read(), height=400, scrolling=False)
+    st.markdown("---")
     st.markdown("## 📊 Market Overview")
+    st.info("The analysis here is performed only on 12 Coffee Shop that are closer to your location, in order to focus only on the neatby competitors")
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.metric("Total Cafes", len(per_rest_df["restaurant"].unique()))
@@ -716,12 +720,6 @@ elif page == "🔍 Competitor Analysis":
                   f"{mc['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops")
 
     st.markdown("---")
-    map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
-    if map_path.exists():
-        st.markdown("## 📍 Map — Average Scores of Most-Rated Madrid Cafeterias")
-        with open(map_path, "r", encoding="utf-8") as f:
-            components.html(f.read(), height=400, scrolling=False)
-        st.markdown("---")
 
     category_colors = {
         "food": "#FF6B6B", "coffee": "#8B4513", "specialty_drink": "#4ECDC4",
