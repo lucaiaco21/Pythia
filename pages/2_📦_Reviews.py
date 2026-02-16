@@ -360,6 +360,12 @@ if page == "🏠 Patio Vertical":
     total    = df_stars["Count"].sum()
     df_stars["Pct"] = (df_stars["Count"] / total * 100).round(1)
     cols = st.columns(5)
+    st.markdown("""
+    <style>
+    [data-testid="stMetricValue"] { color: inherit !important; }
+    [data-testid="stMetricDelta"] { display: none !important; }
+    </style>
+""", unsafe_allow_html=True)
     for col, star in zip(cols, [5, 4, 3, 2, 1]):
         row = df_stars[df_stars["Stars"] == star]
         with col:
