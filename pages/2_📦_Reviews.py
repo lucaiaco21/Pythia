@@ -706,7 +706,7 @@ elif page == "🔍 Competitor Analysis":
     st.markdown("---")
     st.markdown("## 📊 Market Overview")
     st.info(
-    "📊 This market analysis focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
+    "The analysis focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
     "selected to give you a view of your **direct competitors**. The reviews selected are only the ones with 4 stars or above"
     "Note that the map above display additional cafes — this section only considers "
     "the nearest ones to ensure the insights are meaningful for your area."
@@ -769,7 +769,6 @@ elif page == "🔍 Competitor Analysis":
     # ── TAB 2 ────────────────────────────────────────────────────────────────
     with tab2:
         st.markdown("### 🏪 Insights for coffee shop")
-        st.info("Select a specific coffee shop to see a detail analysis abuot that coffee shop.")
         restaurants = sorted(per_rest_df["restaurant"].unique())
         sel = st.selectbox("Select a coffee shop:", options = restaurants, help="Choose a coffee shop to see its detailed review analysis.")
         rd  = per_rest_df[per_rest_df["restaurant"] == sel].sort_values("mentions", ascending=False)
@@ -805,18 +804,17 @@ elif page == "🔍 Competitor Analysis":
     with tab4:
         st.markdown("### 🔍 Cafe Comparison")
         st.caption(
-            "ℹ️ Competitor data contains **positive reviews only**. "
-            "My Local shows both positive and negative feedback."
+        "ℹ️ All mentions are shown as **% of each cafe's total mentions** to allow a fair comparison. "
+        "Competitor data contains **positive reviews only**. "
+        "My Local shows **positive reviews only** for consistency."
         )
 
         restaurants    = sorted(per_rest_df["restaurant"].unique())
         MY_LOCAL_LABEL = "⭐ My Local (Patio Vertical)"
+        has_my_local   = bool(MY_LOCAL_GOOD)
+        all_options    = ([MY_LOCAL_LABEL] if has_my_local else []) + restaurants
 
-        # Only add My Local option if we actually have insight data for it
-        has_my_local = bool(MY_LOCAL_GOOD)
-        all_options  = ([MY_LOCAL_LABEL] if has_my_local else []) + restaurants
-
-        # My Local series — positive mentions only (fair comparison with competitors)
+    # ── My Local series (positive only for fair comparison) ──────────────
         if has_my_local:
             my_local_comp = pd.DataFrame([
                 {"insight": i["insight"].lower(), "mentions": i["mentions"]}
@@ -824,42 +822,122 @@ elif page == "🔍 Competitor Analysis":
             ])
         else:
             my_local_comp = pd.DataFrame(columns=["insight", "mentions"])
-            st.info("Upload `global_insights_v2.csv` via the sidebar to enable "
-                    "My Local in the comparison.")
+            st.info(
+            "📂 Upload `global_insights_v2.csv` via the sidebar to enable "
+            "My Local in the comparison."
+            )
 
+        # ── Cafe selectors ────────────────────────────────────────────────────
         col1, col2 = st.columns(2)
         with col1:
-            rest1 = st.selectbox("First cafe:", all_options, key="r1")
+            rest1 = st.selectbox(
+                "First cafe:", 
+                all_options, 
+                key="r1",
+                help="Select the first coffee shop to compare."
+            )
         with col2:
-            rest2 = st.selectbox("Second cafe:",
-                                 [r for r in all_options if r != rest1], key="r2")
+            rest2 = st.selectbox(
+                "Second cafe:",
+                [r for r in all_options if r != rest1],
+                key="r2",
+                help="Select the second coffee shop to compare."
+            )
 
-        def get_series(name):
-            if name == MY_LOCAL_LABEL:
-                if my_local_comp.empty:
-                    return pd.Series(dtype=float)
-                return my_local_comp.set_index("insight")["mentions"]
-            return per_rest_df[per_rest_df["restaurant"] == name].set_index("insight")["mentions"]
-
-        s1, s2   = get_series(rest1), get_series(rest2)
-        all_ins  = list(set(s1.index) | set(s2.index))
-        comp     = pd.DataFrame(
-            {rest1: [s1.get(i, 0) for i in all_ins],
-             rest2: [s2.get(i, 0) for i in all_ins]},
-            index=all_ins,
+    # ── Get raw series per cafe ───────────────────────────────────────────
+    def get_series(name):
+        if name == MY_LOCAL_LABEL:
+            if my_local_comp.empty:
+                return pd.Series(dtype=float)
+            return my_local_comp.set_index("insight")["mentions"]
+        return (
+            per_rest_df[per_rest_df["restaurant"] == name]
+            .set_index("insight")["mentions"]
         )
-        comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
-        comp = comp.sort_values(rest1, ascending=False).head(15)
 
+        s1, s2 = get_series(rest1), get_series(rest2)
+
+    # ── Normalize to % of total mentions ─────────────────────────────────
+        s1_total = s1.sum() if s1.sum() > 0 else 1
+        s2_total = s2.sum() if s2.sum() > 0 else 1
+
+        all_ins = list(set(s1.index) | set(s2.index))
+
+    # Store raw counts for tooltip
+        raw1 = [int(s1.get(i, 0)) for i in all_ins]
+        raw2 = [int(s2.get(i, 0)) for i in all_ins]
+
+    # Normalized %
+        pct1 = [round((s1.get(i, 0) / s1_total) * 100, 1) for i in all_ins]
+        pct2 = [round((s2.get(i, 0) / s2_total) * 100, 1) for i in all_ins]
+
+        comp = pd.DataFrame(
+            {
+                rest1:          pct1,
+                rest2:          pct2,
+                f"{rest1}_raw": raw1,
+                f"{rest2}_raw": raw2,
+            },
+            index=all_ins,
+    )
+
+    # Keep only insights mentioned by at least one cafe
+        comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
+
+    # Sort by combined % and take top 15
+        comp["_total"] = comp[rest1] + comp[rest2]
+        comp = comp.sort_values("_total", ascending=False).head(15)
+        comp = comp.drop(columns=["_total"])
+
+    # ── Chart ─────────────────────────────────────────────────────────────
         fig_comp = go.Figure()
-        fig_comp.add_trace(go.Bar(name=rest1, x=comp.index, y=comp[rest1],
-                                  marker_color="#3498db"))
-        fig_comp.add_trace(go.Bar(name=rest2, x=comp.index, y=comp[rest2],
-                                  marker_color="#e74c3c"))
-        fig_comp.update_layout(title=f"{rest1} vs {rest2}",
-                               yaxis_title="Mentions", barmode="group",
-                               height=500, xaxis_tickangle=-45)
+
+        fig_comp.add_trace(go.Bar(
+            name=rest1,
+            x=comp.index,
+            y=comp[rest1],
+            marker_color="#3498db",
+            customdata=comp[f"{rest1}_raw"],
+            hovertemplate=(
+                "<b>%{x}</b><br>"
+                f"<b>{rest1}</b><br>"
+                "Mentions: %{customdata}<br>"
+                "Share: %{y}%<extra></extra>"
+            ),
+        ))
+
+        fig_comp.add_trace(go.Bar(
+            name=rest2,
+            x=comp.index,
+            y=comp[rest2],
+            marker_color="#e74c3c",
+            customdata=comp[f"{rest2}_raw"],
+            hovertemplate=(
+                "<b>%{x}</b><br>"
+                f"<b>{rest2}</b><br>"
+                "Mentions: %{customdata}<br>"
+                "Share: %{y}%<extra></extra>"
+            ),
+        ))
+    
+        fig_comp.update_layout(
+            title=f"{rest1}  vs  {rest2}",
+            yaxis_title="% of Total Mentions",
+            yaxis=dict(ticksuffix="%"),
+            barmode="group",
+            height=500,
+            xaxis_tickangle=-45,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        )
+
         st.plotly_chart(fig_comp, use_container_width=True)
+
+    # ── Summary note ──────────────────────────────────────────────────────
+        st.caption(
+            f"📊 Showing top 15 insights by combined mention share. "
+            f"**{rest1}** based on {int(s1_total)} total mentions · "
+            f"**{rest2}** based on {int(s2_total)} total mentions."
+        )
 
         # Full good/bad breakdown when My Local is in the comparison
         if MY_LOCAL_LABEL in (rest1, rest2) and (MY_LOCAL_GOOD or MY_LOCAL_BAD):
