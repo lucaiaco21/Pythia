@@ -798,13 +798,6 @@ elif page == "🔍 Competitor Analysis":
                            height=400, showlegend=False, xaxis_tickangle=-45)
         st.plotly_chart(fig2, use_container_width=True)
 
-        st.markdown("### 📊 Category Deep Dive - % of reviews in each category")
-            cat_totals = per_rest_df.groupby("category")["mentions"].sum().reset_index()
-            fig_pie = px.pie(cat_totals, values="mentions", names="category",
-                         title="Total Mentions by Category",
-                         color="category", color_discrete_map=category_colors)
-            st.plotly_chart(fig_pie, use_container_width=True)
-
     # ── TAB 2 ────────────────────────────────────────────────────────────────
     with tab2:
         st.markdown("### 🏪 Insights for coffee shop")
