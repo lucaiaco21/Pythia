@@ -421,6 +421,30 @@ if page == "🏠 Patio Vertical":
         st.markdown("### 🎯 Aspect Performance Overview")
         
         # ── CATEGORY SCORES ──────────────────────────────────────────────────────────
+        .cat-card {
+        border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.6rem;
+        display: flex; align-items: center; gap: 1rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .cat-card-green  { background: linear-gradient(135deg,#d4edda,#c3e6cb); border-left: 5px solid #28a745; }
+        .cat-card-yellow { background: linear-gradient(135deg,#fff3cd,#ffeeba); border-left: 5px solid #ffc107; }
+        .cat-card-red    { background: linear-gradient(135deg,#f8d7da,#f5c6cb); border-left: 5px solid #dc3545; }
+        .cat-emoji  { font-size: 1.8rem; min-width: 2.2rem; text-align: center; }
+        .cat-info   { flex: 1; }
+        .cat-name   { font-weight: 700; font-size: 1rem; color: #2c3e50; }
+        .cat-meta   { font-size: 0.8rem; color: #555; margin-top: 0.1rem; }
+        .cat-score-wrap { text-align: right; min-width: 60px; }
+        .cat-score  { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+        .cat-score-label { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+        .score-green  { color: #1a7c3e; }
+        .score-yellow { color: #856404; }
+        .score-red    { color: #842029; }
+        .progress-bar-bg {
+         background: rgba(0,0,0,0.08); border-radius: 99px;
+        height: 6px; margin-top: 0.4rem; overflow: hidden;
+        }
+        .progress-bar-fill { height: 6px; border-radius: 99px; }
+        
         st.markdown("---")
         st.markdown("### 🏆 Category Performance Scores")
         st.caption(
