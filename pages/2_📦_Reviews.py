@@ -706,7 +706,7 @@ elif page == "🔍 Competitor Analysis":
     st.markdown("---")
     st.markdown("## 📊 Market Overview")
     st.info(
-    "The analysis focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
+    "The analysis below focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
     "selected to give you a view of your **direct competitors**. The reviews selected are only the ones with 4 stars or above"
     "Note that the map above display additional cafes — this section only considers "
     "the nearest ones to ensure the insights are meaningful for your area."
@@ -719,10 +719,22 @@ elif page == "🔍 Competitor Analysis":
     with c3:
         top = common_df.iloc[0]
         st.metric("Most Mentioned", top["insight"].title(), f"{top['mentions']} times", delta_color='off')
+        st.markdown("""
+    <style>
+    [data-testid="stMetricValue"] { color: inherit !important; }
+    [data-testid="stMetricDelta"] { display: none !important; }
+    </style>
+""", unsafe_allow_html=True)
     with c4:
         mc = common_df.nlargest(1, "num_restaurants").iloc[0]
         st.metric("Most Common", mc["insight"].title(),
                   f"{mc['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops", delta_color='off')
+        st.markdown("""
+    <style>
+    [data-testid="stMetricValue"] { color: inherit !important; }
+    [data-testid="stMetricDelta"] { display: none !important; }
+    </style>
+""", unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -932,12 +944,6 @@ elif page == "🔍 Competitor Analysis":
 
     st.plotly_chart(fig_comp, use_container_width=True)
 
-    # ── Summary note ──────────────────────────────────────────────────────
-    st.caption(
-        f"📊 Showing top 15 insights by combined mention share. "
-        f"**{rest1}** based on {int(s1_total)} total mentions · "
-        f"**{rest2}** based on {int(s2_total)} total mentions."
-    )
 
 
     st.markdown("---")
