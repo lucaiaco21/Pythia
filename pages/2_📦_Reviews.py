@@ -400,7 +400,21 @@ if page == "🏠 Patio Vertical":
     st.markdown("---")
     chart_sentiment_png = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
     if chart_sentiment_png.exists():
-        st.markdown("### 📈 Monthly Sentiment Trend")
+        st.markdown("### 📈 Monthly Sentiment Trend") 
+        with st.expander("ℹ️ How to read this chart"):
+            st.markdown("""
+            **Sentiment vs. Total Reviews** shows two things at once:
+    
+            - 🟢 **Green (Positive)**, 🟡 **Yellow (Neutral)**, 🔴 **Red (Negative)**  
+            → The stacked bars show the **% breakdown** of review sentiment each month *(left axis)*
+    
+            - ⚫ **Black dashed line** → The **total number of reviews** received that month *(right axis)*
+    
+            **How to interpret it:**
+            - A tall green bar = most reviews were positive that month
+            - A spike in the line = unusually high review volume
+            - Large red sections = months with more negative feedback to investigate
+            """)
         st.image(str(chart_sentiment_png), use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
@@ -418,7 +432,7 @@ if page == "🏠 Patio Vertical":
 
     # ── TAB 1: GENERAL ───────────────────────────────────────────────────────
     with tab1:
-        st.markdown("## 📋 Executive Summary", help="For this summary the Features categoty wasn't take into consideration")
+        st.markdown("## 📋 Executive Summary", help="For this summary the category "FEATURES" wasn't take into consideration")
         c1, c2 = st.columns(2)
         with c1:
             st.markdown("### ✅ Best Aspect")
