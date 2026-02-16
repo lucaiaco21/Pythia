@@ -391,7 +391,7 @@ if page == "🏠 Patio Vertical":
 """)
     st.markdown("---")
 
-    tab1, tab2 = st.tabs(["📊 General Insights", "🔍 Detailed Insights by Category"])
+    tab1, tab2 = st.tabs(["📊 General Insights", "🔍 View Insights by Category"])
 
     # ── TAB 1: GENERAL ───────────────────────────────────────────────────────
     with tab1:
@@ -415,32 +415,79 @@ if page == "🏠 Patio Vertical":
                 [data-testid="stMetricValue"] { color: red; }
                 </style>
                 """, unsafe_allow_html=True)
-        with c3:
-            st.markdown("### 📊 Overall")
-            st.info("**SCORE**")
-            st.metric("Average", "4.7", "Positive")
+        
 
         st.markdown("---")
         st.markdown("### 🎯 Aspect Performance Overview")
         
-        df_asp = pd.DataFrame({
-            "Aspect": ["ATMOSPHERE","FOOD","SERVICE","COFFEE","GENERAL","LOCATION","PRICE"],
-            "Score":  [87.7, 87.3, 84.8, 84.5, 81.9, 80.5, 54.1],
-        })
-        bar_colors = [
-            "#27ae60" if s >= 80 else "#f39c12" if s >= 60 else "#e74c3c"
-            for s in df_asp["Score"]
-        ]
-        fig = go.Figure(go.Bar(
-            y=df_asp["Aspect"], x=df_asp["Score"], orientation="h",
-            marker=dict(color=bar_colors),
-            text=df_asp["Score"].apply(lambda x: f"{x}%"),
-            textposition="outside",
-        ))
-        fig.update_layout(title="Aspect Satisfaction Scores",
-                          xaxis_title="Score (%)", yaxis_title="",
-                          height=400, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        # ── CATEGORY SCORES ──────────────────────────────────────────────────────────
+        st.markdown("---")
+        st.markdown("### 🏆 Category Performance Scores")
+        st.caption(
+        "Score 0–100 combining **volume of mentions** (50%) and "
+        "**average customer rating** (50%) per category. "
+        "Higher = more talked about AND better rated."
+        )
+
+        CAT_EMOJI = {
+        "food": "🍽️", "coffee": "☕", "service": "👥",
+        "atmosphere": "🏠", "location": "📍", "price": "💶",
+        "features": "⭐", "general": "🔹",
+        }
+
+        cat_summary = (
+        global_df.groupby("category")
+        .agg(
+        total_mentions=("mentions", "sum"),
+        avg_rating=("avg_rating", "mean"),
+        score=("category_score", "first"),
+        )
+        .reset_index()
+        .sort_values("score", ascending=False)
+        )
+
+        col_a, col_b = st.columns(2)
+        for i, row in enumerate(cat_summary.itertuples()):
+            score = int(row.score)
+            if score >= 75:
+                card_cls, score_cls, bar_color = "cat-card-green",  "score-green",  "#28a745"
+            elif score >= 50:
+                card_cls, score_cls, bar_color = "cat-card-yellow", "score-yellow", "#ffc107"
+            else:
+                card_cls, score_cls, bar_color = "cat-card-red",    "score-red",    "#dc3545"
+
+            emoji    = CAT_EMOJI.get(str(row.category).lower(), "🔹")
+            cat_name = str(row.category).title()
+            mentions = int(row.total_mentions)
+            rating   = round(float(row.avg_rating), 1)
+
+            card_html = f"""
+    <div class="cat-card {card_cls}">
+        <div class="cat-emoji">{emoji}</div>
+        <div class="cat-info">
+            <div class="cat-name">{cat_name}</div>
+            <div class="cat-meta">
+                {mentions:,} mentions &nbsp;·&nbsp; {rating}⭐ avg rating
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill"
+                     style="width:{score}%; background:{bar_color};"></div>
+            </div>
+        </div>
+        <div class="cat-score-wrap">
+            <div class="cat-score {score_cls}">{score}</div>
+            <div class="cat-score-label">/ 100</div>
+        </div>
+    </div>"""
+
+            with (col_a if i % 2 == 0 else col_b):
+            st.markdown(card_html, unsafe_allow_html=True)
+
+            st.caption(
+            "🟢 Score ≥ 75 · Strong &nbsp;&nbsp; "
+            "🟡 50–74 · Moderate &nbsp;&nbsp; "
+            "🔴 < 50 · Needs attention"
+        )
 
         st.markdown("---")
         cp, cs = st.columns(2)
