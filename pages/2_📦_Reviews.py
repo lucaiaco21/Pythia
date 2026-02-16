@@ -836,7 +836,7 @@ elif page == "🔍 Competitor Analysis":
     with tab4:
         st.markdown("### 🔍 Cafe Comparison")
         with st.expander("ℹ️ How to read this comparison"):
-        st.markdown("""
+            st.markdown("""
         This chart compares **what customers mention most** between two coffee shops.
     
         - 📊 Values are shown as **% of each cafe's total mentions** — so a cafe with 1000 reviews 
