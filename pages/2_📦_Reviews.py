@@ -768,8 +768,8 @@ elif page == "🔍 Competitor Analysis":
         "feature": "⭐ Features", "atmosphere": "🏠 Atmosphere",
     }
 
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "🏆 Top Insights", "🏪 By Coffee Shop", "📊 Category Analysis", "🔍 Comparison"
+    tab1, tab2, tab4 = st.tabs([
+        "🏆 Top Insights", "🏪 By Coffee Shop", "🔍 Comparison"
     ])
 
     # ── TAB 1 ────────────────────────────────────────────────────────────────
@@ -794,9 +794,16 @@ elif page == "🔍 Competitor Analysis":
             text=wide["num_restaurants"], textposition="outside",
         ))
         fig2.update_layout(title="Insights Present Across Multiple Coffee Shops",
-                           yaxis_title="Number of Restaurants",
+                           yaxis_title="Number of  Coffee Shops",
                            height=400, showlegend=False, xaxis_tickangle=-45)
         st.plotly_chart(fig2, use_container_width=True)
+
+        st.markdown("### 📊 Category Deep Dive - % of reviews in each category")
+            cat_totals = per_rest_df.groupby("category")["mentions"].sum().reset_index()
+            fig_pie = px.pie(cat_totals, values="mentions", names="category",
+                         title="Total Mentions by Category",
+                         color="category", color_discrete_map=category_colors)
+            st.plotly_chart(fig_pie, use_container_width=True)
 
     # ── TAB 2 ────────────────────────────────────────────────────────────────
     with tab2:
@@ -822,15 +829,7 @@ elif page == "🔍 Competitor Analysis":
                         cc1, cc2 = st.columns([3, 1])
                         with cc1: st.markdown(f"**{row['insight'].title()}**")
                         with cc2: st.markdown(f"*{row['mentions']} mentions*")
-
-    # ── TAB 3 ────────────────────────────────────────────────────────────────
-    with tab3:
-        st.markdown("### 📊 Category Deep Dive")
-        cat_totals = per_rest_df.groupby("category")["mentions"].sum().reset_index()
-        fig_pie = px.pie(cat_totals, values="mentions", names="category",
-                         title="Total Mentions by Category",
-                         color="category", color_discrete_map=category_colors)
-        st.plotly_chart(fig_pie, use_container_width=True)
+                            
 
     # ── TAB 4: COMPARISON ────────────────────────────────────────────────────
     with tab4:
