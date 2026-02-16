@@ -418,12 +418,12 @@ if page == "🏠 Patio Vertical":
 
     # ── TAB 1: GENERAL ───────────────────────────────────────────────────────
     with tab1:
-        st.markdown("## 📋 Executive Summary")
-        c1, c2, c3 = st.columns(3)
+        st.markdown("## 📋 Executive Summary", help="For this summary the Features categoty wasn't take into consideration)
+        c1, c2 = st.columns(2)
         with c1:
             st.markdown("### ✅ Best Aspect")
-            st.success("**ATMOSPHERE**")
-            st.metric("Score", "87.7%", "Top rated", delta_color="off")
+            st.success("**Food**")
+            st.metric("Score", "92/100", "Top rated", delta_color="off")
             st.markdown("""
                 <style>
                 [data-testid="stMetricValue"] { color: green; }
@@ -432,7 +432,7 @@ if page == "🏠 Patio Vertical":
         with c2:
             st.markdown("### ⚠️ Needs Attention")
             st.warning("**PRICE**")
-            st.metric("Score", "54.1%", "⚠️ Lowest rated", delta_color="off")
+            st.metric("Score", "47/100", "⚠️ Lowest rated", delta_color="off")
             st.markdown("""
                 <style>
                 [data-testid="stMetricValue"] { color: red; }
