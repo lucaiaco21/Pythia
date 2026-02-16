@@ -462,32 +462,32 @@ if page == "🏠 Patio Vertical":
             rating   = round(float(row.avg_rating), 1)
 
             card_html = f"""
-    <div class="cat-card {card_cls}">
-        <div class="cat-emoji">{emoji}</div>
-        <div class="cat-info">
+            <div class="cat-card {card_cls}">
+            <div class="cat-emoji">{emoji}</div>
+            <div class="cat-info">
             <div class="cat-name">{cat_name}</div>
             <div class="cat-meta">
-                {mentions:,} mentions &nbsp;·&nbsp; {rating}⭐ avg rating
+            {mentions:,} mentions &nbsp;·&nbsp; {rating}⭐ avg rating
             </div>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill"
                      style="width:{score}%; background:{bar_color};"></div>
             </div>
-        </div>
-        <div class="cat-score-wrap">
+            </div>
+            <div class="cat-score-wrap">
             <div class="cat-score {score_cls}">{score}</div>
             <div class="cat-score-label">/ 100</div>
-        </div>
-    </div>"""
+            </div>
+        </div>"""
 
             with (col_a if i % 2 == 0 else col_b):
-            st.markdown(card_html, unsafe_allow_html=True)
+                st.markdown(card_html, unsafe_allow_html=True)
 
-            st.caption(
-            "🟢 Score ≥ 75 · Strong &nbsp;&nbsp; "
-            "🟡 50–74 · Moderate &nbsp;&nbsp; "
-            "🔴 < 50 · Needs attention"
-        )
+                st.caption(
+                "🟢 Score ≥ 75 · Strong &nbsp;&nbsp; "
+                "🟡 50–74 · Moderate &nbsp;&nbsp; "
+                "🔴 < 50 · Needs attention"
+                )
 
         st.markdown("---")
         cp, cs = st.columns(2)
