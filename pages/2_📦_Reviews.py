@@ -365,7 +365,8 @@ if page == "🏠 Patio Vertical":
         with col:
             st.metric("⭐" * star,
                       f"{row['Count'].values[0]:,}",
-                      f"{row['Pct'].values[0]}%")
+                      f"{row['Pct'].values[0]}%",
+                      delta_color = off)
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
     chart_sentiment_png = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
@@ -374,6 +375,14 @@ if page == "🏠 Patio Vertical":
         st.image(str(chart_sentiment_png), use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
+    st.markdown("### Text Analysis of your coffee shop review on Google Maps to extract insights about what customers think and say about you")
+    st.caption("Each score is calculated as a weighted average of star ratings, based on how often customers mention each aspect in their reviews.")
+    st.info("""
+**How it works — example:**
+- 'Great price!' → mentioned in ⭐⭐⭐⭐⭐ review → pushes score **up** 
+- 'Too expensive' → mentioned in ⭐ review → pushes score **down**
+- Final score = weighted average of all those signals
+""")
     st.markdown("---")
 
     tab1, tab2 = st.tabs(["📊 General Insights", "🔍 Detailed Insights by Category"])
@@ -385,11 +394,21 @@ if page == "🏠 Patio Vertical":
         with c1:
             st.markdown("### ✅ Best Aspect")
             st.success("**ATMOSPHERE**")
-            st.metric("Score", "87.7%", "↑ Top rated")
+            st.metric("Score", "87.7%", "Top rated", delta_color="off")
+            st.markdown("""
+                <style>
+                [data-testid="stMetricValue"] { color: green; }
+                </style>
+                """, unsafe_allow_html=True)
         with c2:
             st.markdown("### ⚠️ Needs Attention")
             st.warning("**PRICE**")
-            st.metric("Score", "54.1%", "↓ Lowest rated")
+            st.metric("Score", "54.1%", "⚠️ Lowest rated", delta_color="off")
+            st.markdown("""
+                <style>
+                [data-testid="stMetricValue"] { color: red; }
+                </style>
+                """, unsafe_allow_html=True)
         with c3:
             st.markdown("### 📊 Overall")
             st.info("**SCORE**")
@@ -397,6 +416,7 @@ if page == "🏠 Patio Vertical":
 
         st.markdown("---")
         st.markdown("### 🎯 Aspect Performance Overview")
+        st.markdown("#### 
 
         df_asp = pd.DataFrame({
             "Aspect": ["ATMOSPHERE","FOOD","SERVICE","COFFEE","GENERAL","LOCATION","PRICE"],
