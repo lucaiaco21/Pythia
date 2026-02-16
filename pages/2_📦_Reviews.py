@@ -845,15 +845,15 @@ elif page == "🔍 Competitor Analysis":
             )
 
     # ── Get raw series per cafe ───────────────────────────────────────────
-    def get_series(name):
-        if name == MY_LOCAL_LABEL:
-            if my_local_comp.empty:
-                return pd.Series(dtype=float)
-            return my_local_comp.set_index("insight")["mentions"]
-        return (
-            per_rest_df[per_rest_df["restaurant"] == name]
-            .set_index("insight")["mentions"]
-        )
+        def get_series(name):
+            if name == MY_LOCAL_LABEL:
+                if my_local_comp.empty:
+                    return pd.Series(dtype=float)
+                return my_local_comp.set_index("insight")["mentions"]
+            return (
+                per_rest_df[per_rest_df["restaurant"] == name]
+                .set_index("insight")["mentions"]
+            )
 
         s1, s2 = get_series(rest1), get_series(rest2)
 
@@ -882,62 +882,62 @@ elif page == "🔍 Competitor Analysis":
     )
 
     # Keep only insights mentioned by at least one cafe
-        comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
+    comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
 
     # Sort by combined % and take top 15
-        comp["_total"] = comp[rest1] + comp[rest2]
-        comp = comp.sort_values("_total", ascending=False).head(15)
-        comp = comp.drop(columns=["_total"])
+    comp["_total"] = comp[rest1] + comp[rest2]
+    comp = comp.sort_values("_total", ascending=False).head(15)
+    comp = comp.drop(columns=["_total"])
 
     # ── Chart ─────────────────────────────────────────────────────────────
-        fig_comp = go.Figure()
+    fig_comp = go.Figure()
 
-        fig_comp.add_trace(go.Bar(
-            name=rest1,
-            x=comp.index,
-            y=comp[rest1],
-            marker_color="#3498db",
-            customdata=comp[f"{rest1}_raw"],
-            hovertemplate=(
+    fig_comp.add_trace(go.Bar(
+        name=rest1,
+        x=comp.index,
+        y=comp[rest1],
+        marker_color="#3498db",
+        customdata=comp[f"{rest1}_raw"],
+        hovertemplate=(
                 "<b>%{x}</b><br>"
                 f"<b>{rest1}</b><br>"
                 "Mentions: %{customdata}<br>"
                 "Share: %{y}%<extra></extra>"
-            ),
-        ))
+        ),
+    ))
 
-        fig_comp.add_trace(go.Bar(
-            name=rest2,
-            x=comp.index,
-            y=comp[rest2],
-            marker_color="#e74c3c",
-            customdata=comp[f"{rest2}_raw"],
-            hovertemplate=(
+    fig_comp.add_trace(go.Bar(
+        name=rest2,
+        x=comp.index,
+        y=comp[rest2],
+        marker_color="#e74c3c",
+        customdata=comp[f"{rest2}_raw"],
+        hovertemplate=(
                 "<b>%{x}</b><br>"
                 f"<b>{rest2}</b><br>"
                 "Mentions: %{customdata}<br>"
                 "Share: %{y}%<extra></extra>"
-            ),
-        ))
+        ),
+    ))
     
-        fig_comp.update_layout(
-            title=f"{rest1}  vs  {rest2}",
-            yaxis_title="% of Total Mentions",
-            yaxis=dict(ticksuffix="%"),
-            barmode="group",
-            height=500,
-            xaxis_tickangle=-45,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        )
+    fig_comp.update_layout(
+        title=f"{rest1}  vs  {rest2}",
+        yaxis_title="% of Total Mentions",
+        yaxis=dict(ticksuffix="%"),
+        barmode="group",
+        height=500,
+        xaxis_tickangle=-45,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
 
-        st.plotly_chart(fig_comp, use_container_width=True)
+    st.plotly_chart(fig_comp, use_container_width=True)
 
     # ── Summary note ──────────────────────────────────────────────────────
-        st.caption(
-            f"📊 Showing top 15 insights by combined mention share. "
-            f"**{rest1}** based on {int(s1_total)} total mentions · "
-            f"**{rest2}** based on {int(s2_total)} total mentions."
-        )
+    st.caption(
+        f"📊 Showing top 15 insights by combined mention share. "
+        f"**{rest1}** based on {int(s1_total)} total mentions · "
+        f"**{rest2}** based on {int(s2_total)} total mentions."
+    )
 
         # Full good/bad breakdown when My Local is in the comparison
         if MY_LOCAL_LABEL in (rest1, rest2) and (MY_LOCAL_GOOD or MY_LOCAL_BAD):
