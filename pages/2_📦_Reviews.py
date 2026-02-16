@@ -366,7 +366,7 @@ if page == "🏠 Patio Vertical":
             st.metric("⭐" * star,
                       f"{row['Count'].values[0]:,}",
                       f"{row['Pct'].values[0]}%",
-                      delta_color = off)
+                      delta_color = "off")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
     chart_sentiment_png = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
