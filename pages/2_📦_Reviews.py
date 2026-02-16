@@ -432,6 +432,7 @@ if page == "🏠 Patio Vertical":
     # ── TAB 1: GENERAL ───────────────────────────────────────────────────────
     with tab1:
         st.markdown("## 📋 Executive Summary")
+        st.info("ℹ️ The category **FEATURES** is not taken into consideration in this summary.")
         c1, c2 = st.columns(2)
         with c1:
             st.markdown("### ✅ Best Aspect")
