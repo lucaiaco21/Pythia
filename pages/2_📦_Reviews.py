@@ -705,19 +705,24 @@ elif page == "🔍 Competitor Analysis":
             components.html(f.read(), height=400, scrolling=False)
     st.markdown("---")
     st.markdown("## 📊 Market Overview")
-    st.info("The analysis here is performed only on 12 Coffee Shop that are closer to your location, in order to focus only on the neatby competitors")
+    st.info(
+    "📊 This market analysis focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
+    "selected to give you a view of your **direct competitors**. The reviews selected are only the ones with 4 stars or above"
+    "Note that the map above display additional cafes — this section only considers "
+    "the nearest ones to ensure the insights are meaningful for your area."
+    )    
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.metric("Total Cafes", len(per_rest_df["restaurant"].unique()))
+        st.metric("Total Coffee Shop", len(per_rest_df["restaurant"].unique()))
     with c2:
         st.metric("Unique Insights", len(common_df))
     with c3:
         top = common_df.iloc[0]
-        st.metric("Most Mentioned", top["insight"].title(), f"{top['mentions']} times")
+        st.metric("Most Mentioned", top["insight"].title(), f"{top['mentions']} times", delta_color='off')
     with c4:
         mc = common_df.nlargest(1, "num_restaurants").iloc[0]
         st.metric("Most Common", mc["insight"].title(),
-                  f"{mc['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops")
+                  f"{mc['num_restaurants']}/{len(per_rest_df['restaurant'].unique())} shops", delta_color='off')
 
     st.markdown("---")
 
@@ -732,7 +737,7 @@ elif page == "🔍 Competitor Analysis":
     }
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "🏆 Top Insights", "🏪 By Cafes", "📊 Category Analysis", "🔍 Comparison"
+        "🏆 Top Insights", "🏪 By Coffee Shop", "📊 Category Analysis", "🔍 Comparison"
     ])
 
     # ── TAB 1 ────────────────────────────────────────────────────────────────
@@ -756,16 +761,17 @@ elif page == "🔍 Competitor Analysis":
             marker=dict(color="#3498db"),
             text=wide["num_restaurants"], textposition="outside",
         ))
-        fig2.update_layout(title="Insights Present Across Multiple Cafes",
+        fig2.update_layout(title="Insights Present Across Multiple Coffee Shops",
                            yaxis_title="Number of Restaurants",
                            height=400, showlegend=False, xaxis_tickangle=-45)
         st.plotly_chart(fig2, use_container_width=True)
 
     # ── TAB 2 ────────────────────────────────────────────────────────────────
     with tab2:
-        st.markdown("### 🏪 Cafe-Specific Insights")
+        st.markdown("### 🏪 Insights for coffee shop")
+        st.info("Select a specific coffee shop to see a detail analysis abuot that coffee shop.")
         restaurants = sorted(per_rest_df["restaurant"].unique())
-        sel = st.selectbox("Select a restaurant:", restaurants)
+        sel = st.selectbox("Select a coffee shop:", options = restaurants, help="Choose a coffee shop to see its detailed review analysis.")
         rd  = per_rest_df[per_rest_df["restaurant"] == sel].sort_values("mentions", ascending=False)
 
         st.markdown(f"## ☕ {sel}")
