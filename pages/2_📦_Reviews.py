@@ -289,13 +289,24 @@ if not check_password():
 # ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING
 # ─────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# DATA LOADING
+# ─────────────────────────────────────────────────────────────────────────────
 saved = load_data(PASSWORD)
-
 if saved is not None:
     st.sidebar.success(f"✅ Data loaded (uploaded {saved['timestamp'].strftime('%Y-%m-%d %H:%M')})")
-    if st.sidebar.button("🔄 Upload New Data"):
-        st.session_state["force_upload"] = True
-        st.rerun()
+    
+    col_a, col_b = st.sidebar.columns(2)
+    with col_a:
+        if st.button("🔄 Upload New Data"):
+            st.session_state["force_upload"] = True
+            st.rerun()
+    # ✅ Cancel button — only shows when in upload mode
+    with col_b:
+        if "force_upload" in st.session_state:
+            if st.button("↩️ Go Back"):
+                del st.session_state["force_upload"]
+                st.rerun()
 
 if saved is not None and "force_upload" not in st.session_state:
     per_rest_df = saved["per_restaurant"]
@@ -307,7 +318,14 @@ else:
     data_loaded = False
 
 if not data_loaded:
-    st.sidebar.info("Upload your insights files")
+    # ✅ Also show cancel at the top of the upload section
+    if saved is not None and "force_upload" in st.session_state:
+        st.sidebar.info("Upload new files or go back to previous data.")
+        if st.sidebar.button("↩️ Cancel — Keep Previous Data"):
+            del st.session_state["force_upload"]
+            st.rerun()
+    else:
+        st.sidebar.info("Upload your insights files")
 
     up_per  = st.sidebar.file_uploader("📄 final_top_10_insights.csv",            type=["csv"], key="per_rest")
     up_com  = st.sidebar.file_uploader("📄 common_insights_all_restaurants.csv",   type=["csv"], key="common")
@@ -320,14 +338,12 @@ if not data_loaded:
             common_df   = load_csv(up_com)
             category_df = load_csv(up_cat)
             global_df   = load_csv(up_glob) if up_glob else pd.DataFrame()
-
             save_data({
                 "per_restaurant":    per_rest_df,
                 "common_insights":   common_df,
                 "category_insights": category_df,
                 "global_insights":   global_df,
             }, PASSWORD)
-
             st.sidebar.success("✅ Saved! Won't need to re-upload next visit.")
             if "force_upload" in st.session_state:
                 del st.session_state["force_upload"]
@@ -336,18 +352,22 @@ if not data_loaded:
             st.sidebar.error(f"Error: {e}")
             st.stop()
     else:
-        st.info("👈 Please upload the 3 required CSV files using the sidebar")
-        st.markdown("""
-        **Required (Competitor Analysis):**
-        1. `final_top_10_insights.csv`
-        2. `common_insights_all_restaurants.csv`
-        3. `top_insights_by_category.csv`
-
-        **Optional — enables My Local insight boxes & category detail:**
-        4. `global_insights_v2.csv`
-        *(columns: normalized_item, mentions, avg_rating, sentiment)*
-        """)
-        st.stop()
+        # ✅ Only stop if there's no saved data to fall back to
+        if saved is None:
+            st.info("👈 Please upload the 3 required CSV files using the sidebar")
+            st.markdown("""
+            **Required (Competitor Analysis):**
+            1. `final_top_10_insights.csv`
+            2. `common_insights_all_restaurants.csv`
+            3. `top_insights_by_category.csv`
+            **Optional — enables My Local insight boxes & category detail:**
+            4. `global_insights_v2.csv`
+            *(columns: normalized_item, mentions, avg_rating, sentiment)*
+            """)
+            st.stop()
+        else:
+            # Has saved data but chose to upload new — waiting for files
+            st.stop()
 
 # Build My Local insights from CSV
 if not global_df.empty:
