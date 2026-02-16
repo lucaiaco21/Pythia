@@ -939,35 +939,6 @@ elif page == "🔍 Competitor Analysis":
         f"**{rest2}** based on {int(s2_total)} total mentions."
     )
 
-        # Full good/bad breakdown when My Local is in the comparison
-        if MY_LOCAL_LABEL in (rest1, rest2) and (MY_LOCAL_GOOD or MY_LOCAL_BAD):
-            st.markdown("---")
-            st.markdown("#### 💬 My Local — Full Review Breakdown")
-            st.caption(
-                "The chart above uses positive mentions only for a fair comparison. "
-                "Here's the complete picture for Patio Vertical:"
-            )
-            bg, bb = st.columns(2)
-            with bg:
-                st.markdown("**✅ What We Do Well**")
-                for item in MY_LOCAL_GOOD:
-                    st.markdown(
-                        f'<div class="good-box">'
-                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
-                        f'<span class="box-count good-count">{item["mentions"]:,}</span>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
-            with bb:
-                st.markdown("**⚠️ What We Need to Improve**")
-                for item in MY_LOCAL_BAD:
-                    st.markdown(
-                        f'<div class="bad-box">'
-                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
-                        f'<span class="box-count bad-count">{item["mentions"]:,}</span>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
 
     st.markdown("---")
     st.markdown(
