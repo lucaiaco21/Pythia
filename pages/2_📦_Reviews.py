@@ -923,53 +923,53 @@ elif page == "🔍 Competitor Analysis":
     )
 
     # Keep only insights mentioned by at least one cafe
-    comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
+        comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
 
     # Sort by combined % and take top 15
-    comp["_total"] = comp[rest1] + comp[rest2]
-    comp = comp.sort_values("_total", ascending=False).head(15)
-    comp = comp.drop(columns=["_total"])
+        comp["_total"] = comp[rest1] + comp[rest2]
+        comp = comp.sort_values("_total", ascending=False).head(15)
+        comp = comp.drop(columns=["_total"])
 
     # ── Chart ─────────────────────────────────────────────────────────────
-    fig_comp = go.Figure()
+        fig_comp = go.Figure()
 
-    fig_comp.add_trace(go.Bar(
-        name=rest1,
-        x=comp.index,
-        y=comp[rest1],
-        marker_color="#3498db",
-        customdata=comp[f"{rest1}_raw"],
-        hovertemplate=(
-                "<b>%{x}</b><br>"
-                f"<b>{rest1}</b><br>"
-                "Mentions: %{customdata}<br>"
-                "Share: %{y}%<extra></extra>"
-        ),
-    ))
+        fig_comp.add_trace(go.Bar(
+            name=rest1,
+            x=comp.index,
+            y=comp[rest1],
+            marker_color="#3498db",
+            customdata=comp[f"{rest1}_raw"],
+            hovertemplate=(
+                    "<b>%{x}</b><br>"
+                    f"<b>{rest1}</b><br>"
+                    "Mentions: %{customdata}<br>"
+                    "Share: %{y}%<extra></extra>"
+            ),
+        ))
 
-    fig_comp.add_trace(go.Bar(
-        name=rest2,
-        x=comp.index,
-        y=comp[rest2],
-        marker_color="#e74c3c",
-        customdata=comp[f"{rest2}_raw"],
-        hovertemplate=(
-                "<b>%{x}</b><br>"
-                f"<b>{rest2}</b><br>"
-                "Mentions: %{customdata}<br>"
-                "Share: %{y}%<extra></extra>"
-        ),
-    ))
+        fig_comp.add_trace(go.Bar(
+            name=rest2,
+            x=comp.index,
+            y=comp[rest2],
+            marker_color="#e74c3c",
+            customdata=comp[f"{rest2}_raw"],
+            hovertemplate=(
+                    "<b>%{x}</b><br>"
+                    f"<b>{rest2}</b><br>"
+                    "Mentions: %{customdata}<br>"
+                    "Share: %{y}%<extra></extra>"
+            ),
+        ))
     
-    fig_comp.update_layout(
-        title=f"{rest1}  vs  {rest2}",
-        yaxis_title="% of Total Mentions",
-        yaxis=dict(ticksuffix="%"),
-        barmode="group",
-        height=500,
-        xaxis_tickangle=-45,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    )
+        fig_comp.update_layout(
+            title=f"{rest1}  vs  {rest2}",
+            yaxis_title="% of Total Mentions",
+            yaxis=dict(ticksuffix="%"),
+            barmode="group",
+            height=500,
+            xaxis_tickangle=-45,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        )
 
         st.plotly_chart(fig_comp, use_container_width=True)
 
