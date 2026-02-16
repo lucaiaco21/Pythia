@@ -418,8 +418,7 @@ if page == "🏠 Patio Vertical":
         st.image(str(chart_sentiment_png), use_container_width=True)
 
     st.markdown("## Analysis of Google Maps Reviews")
-    st.caption("Text Analysis of your coffee shop review on Google Maps to extract insights about what customers think and say about you./
-                Each score is calculated as a weighted average of star ratings, based on how often customers mention each aspect in their reviews.")
+    st.caption("Text Analysis of your coffee shop review on Google Maps to extract insights about what customers think and say about you.\n\nEach score is calculated as a weighted average of star ratings, based on how often customers mention each aspect in their reviews.")
     st.info("""
 **How it works — example:**
 - 'Great price!' → mentioned in ⭐⭐⭐⭐⭐ review → pushes score **up** 
