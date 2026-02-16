@@ -579,8 +579,8 @@ if page == "🏠 Patio Vertical":
     # ── TAB 2: DETAILED BY CATEGORY ──────────────────────────────────────────
     with tab2:
         st.markdown("## 🔍 Insights by Category")
-            with st.expander("ℹ️ How to use this page"):
-                st.markdown("""
+        with st.expander("ℹ️ How to use this page"):
+            st.markdown("""
                 ### 🔍 Insights by Category — Guide
     
                 This page lets you explore **what customers mention most**, broken down by topic and sentiment.
