@@ -416,8 +416,7 @@ if page == "🏠 Patio Vertical":
 
         st.markdown("---")
         st.markdown("### 🎯 Aspect Performance Overview")
-        st.markdown("#### 
-
+        
         df_asp = pd.DataFrame({
             "Aspect": ["ATMOSPHERE","FOOD","SERVICE","COFFEE","GENERAL","LOCATION","PRICE"],
             "Score":  [87.7, 87.3, 84.8, 84.5, 81.9, 80.5, 54.1],
