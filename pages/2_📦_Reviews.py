@@ -835,11 +835,20 @@ elif page == "🔍 Competitor Analysis":
     # ── TAB 4: COMPARISON ────────────────────────────────────────────────────
     with tab4:
         st.markdown("### 🔍 Cafe Comparison")
-        st.caption(
-        "ℹ️ All mentions are shown as **% of each cafe's total mentions** to allow a fair comparison. "
-        "Competitor data contains **positive reviews only**. "
-        "My Local shows **positive reviews only** for consistency."
-        )
+        with st.expander("ℹ️ How to read this comparison"):
+        st.markdown("""
+    This chart compares **what customers mention most** between two coffee shops.
+    
+    - 📊 Values are shown as **% of each cafe's total mentions** — so a cafe with 1000 reviews 
+    and one with 50 reviews are on **equal footing**
+    - 🔵 **Blue bars** = First cafe selected
+    - 🔴 **Red bars** = Second cafe selected
+    - A bar present for only one cafe means that topic is **unique** to that cafe
+    - The chart shows the **top 15 insights** ranked by combined mention share
+    
+    > ⚠️ Competitor data contains **positive reviews only**. 
+    My Local includes **positive reviews only** for a fair comparison.
+    """)
 
         restaurants    = sorted(per_rest_df["restaurant"].unique())
         MY_LOCAL_LABEL = "⭐ My Local (Patio Vertical)"
