@@ -553,17 +553,14 @@ if page == "🏠 Patio Vertical":
         if MY_LOCAL_GOOD or MY_LOCAL_BAD:
             st.markdown("---")
             st.markdown("## 💬 What Customers Say About Us")
-            st.caption(
-                "Auto-generated from `global_insights_v2.csv` · "
-                "re-upload via sidebar to refresh anytime"
-            )
+            
             cg, cb = st.columns(2)
             with cg:
                 st.markdown("### ✅ What We Do Well")
                 for item in MY_LOCAL_GOOD:
                     st.markdown(
                         f'<div class="good-box">'
-                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
+                        f'<span class="box-label">{item["category"]} - {item["insight"]}</span>'
                         f'<span class="box-count good-count">{item["mentions"]:,} mentions</span>'
                         f'</div>',
                         unsafe_allow_html=True,
@@ -573,7 +570,7 @@ if page == "🏠 Patio Vertical":
                 for item in MY_LOCAL_BAD:
                     st.markdown(
                         f'<div class="bad-box">'
-                        f'<span class="box-label">{item["category"]} &nbsp; {item["insight"]}</span>'
+                        f'<span class="box-label">{item["category"]} - {item["insight"]}</span>'
                         f'<span class="box-count bad-count">{item["mentions"]:,} mentions</span>'
                         f'</div>',
                         unsafe_allow_html=True,
