@@ -579,57 +579,40 @@ if page == "🏠 Patio Vertical":
     # ── TAB 2: DETAILED BY CATEGORY ──────────────────────────────────────────
     with tab2:
         st.markdown("## 🔍 Insights by Category")
-        with st.expander("ℹ️ How to use this page"):
-            st.markdown("""
-                ### 🔍 Insights by Category — Guide
-    
-                This page lets you explore **what customers mention most**, broken down by topic and sentiment.
-    
-                ---
-    
-                #### 🎛️ Filters
-    
-                | Filter | What it does |
-                |--------|-------------|
-                | **Filter by Category** | Select one or more topics to analyze (e.g. Atmosphere, Coffee, Food, Service...) |
-                | **Filter by Sentiment** | Show only insights tagged as Muy Positivo, Positivo, Neutro or Negativo |
-                | **Top N per category** | Controls how many insights are shown per category (slider, default = 8) |
-    
-                > 💡 You can remove any tag by clicking the **×** next to it, or clear all with the **⊗** button.
-    
-                ---
-    
-                #### 📊 Chart — Horizontal Bar
-            - Each bar = one **insight phrase** (e.g. "Atmosphere Cool", "Cozy Decor")
-            - Bar **length** = number of **mentions** across all reviews
-            - Bar **color** reflects sentiment:
-                - 🟢 Dark green → Very Positive
-                - 🟢 Light green → Positive  
-                - 🟡 Yellow → Neutral
-                - 🔴 Red → Negative
-             - Bars are ranked **top to bottom** by mention count
-    
-                ---
-    
-                #### 📋 Table — Detail View
-            Each row in the table below the chart shows:
-    
-            | Column | Meaning |
-            |--------|---------|
-            | **Insight** | The key phrase extracted from reviews |
-            | **Mentions** | How many times it appeared across all reviews |
-            | **Avg Rating** | Average star rating of reviews containing this insight |
-            | **Sentiment** | Overall sentiment label for this insight |
-    
-                ---
-    
-            #### 💡 How to read it together
-            - A **high mentions + high avg rating** insight = a consistent strength to highlight ✅
-            - A **high mentions + low avg rating** insight = a recurring problem to fix ⚠️
-            - A **low mentions** insight = niche feedback, less urgent
-    
-    > 📌 **Total insights shown** updates automatically based on your active filters.
-    """)
+        with tab2:
+    st.markdown("## 🔍 Insights by Category")
+    with st.expander("ℹ️ How to use this page"):
+        st.markdown(
+            """
+### 🔍 Insights by Category — Guide
+
+This page lets you explore **what customers mention most**, broken down by topic and sentiment.
+
+---
+
+#### 🎛️ Filters
+
+| Filter | What it does |
+|--------|-------------|
+| **Filter by Category** | Select one or more topics to analyze (e.g. Atmosphere, Coffee, Food, Service...) |
+| **Filter by Sentiment** | Show only insights tagged as Muy Positivo, Positivo, Neutro or Negativo |
+| **Top N per category** | Controls how many insights are shown per category (slider, default = 8) |
+
+> 💡 You can remove any tag by clicking the **×** next to it, or clear all with the **⊗** button.
+
+---
+
+#### 📊 Chart — Horizontal Bar
+- Each bar = one **insight phrase** (e.g. "Atmosphere Cool", "Cozy Decor")
+- Bar **length** = number of **mentions** across all reviews
+- Bar **color** reflects sentiment:
+    - 🟢 Dark green → Very Positive
+    - 🟢 Light green → Positive
+    - 🟡 Yellow → Neutral
+    - 🔴 Red → Negative
+- Bars are ranked **top to bottom** by mention count
+            """
+        )
         if global_df_cat.empty:
             st.warning(
                 "Upload `global_insights_v2.csv` via the sidebar to see "
