@@ -439,12 +439,22 @@ if page == "🏠 Patio Vertical":
                 </style>
                 """, unsafe_allow_html=True)
         
-
-        st.markdown("---")
-        st.markdown("### 🎯 Aspect Performance Overview")
-        
         # ── CATEGORY SCORES ──────────────────────────────────────────────────────────
         st.markdown("---")
+        with st.popover("ℹ️ About categories"):
+            st.markdown("""
+            **🔹 General**  
+            Mentions that don't fit a specific category — overall impressions, 
+            vague compliments/complaints, or multi-topic comments.  
+            *Examples: "great experience", "wouldn't recommend", "came back again"*
+    
+             ---
+    
+            **⭐ Features**  
+            Specific amenities and special attributes of the café.  
+            *Examples: gluten-free options, WiFi, dog-friendly, outdoor terrace, 
+            takeaway, vegan menu*
+            """)
         st.markdown("### 🏆 Category Performance Scores")
         st.caption(
         "Score 0–100 combining **volume of mentions** (50%) and "
