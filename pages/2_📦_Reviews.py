@@ -380,7 +380,7 @@ else:
 # ─────────────────────────────────────────────────────────────────────────────
 st.sidebar.title("Menu")
 page = st.sidebar.radio("Select Page",
-    ["🏠 Patio Vertical", "🔍 Competitor Analysis"],
+    ["🏠 Cafe_Madrid_UCM", "🔍 Competitor Analysis"],
     label_visibility="collapsed")
 
 st.markdown(
@@ -389,9 +389,9 @@ st.markdown(
 )
 
 # ═════════════════════════════════════════════════════════════════════════════
-# PAGE 1 — PATIO VERTICAL
+# PAGE 1 — Cafe_Madrid_UCM
 # ═════════════════════════════════════════════════════════════════════════════
-if page == "🏠 Patio Vertical":
+if page == "🏠 Cafe_Madrid_UCM":
     st.markdown("---")
     st.markdown("## 📊 Review Distribution")
     star_data = {
@@ -843,7 +843,7 @@ elif page == "🔍 Competitor Analysis":
         """)
 
         restaurants    = sorted(per_rest_df["restaurant"].unique())
-        MY_LOCAL_LABEL = "⭐ My Local (Patio Vertical)"
+        MY_LOCAL_LABEL = "⭐ My Local (Cafe_Madrid_UCM)"
         has_my_local   = bool(MY_LOCAL_GOOD)
         all_options    = ([MY_LOCAL_LABEL] if has_my_local else []) + restaurants
 
