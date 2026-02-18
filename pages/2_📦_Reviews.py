@@ -418,7 +418,7 @@ if page == "🏠 Cafe_Madrid_UCM":
                       delta_color = "off")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
     st.markdown("---")
-    chart_sentiment_png = Path("images/GRAPHIC_monthly_sentiment_analysis.png")
+    chart_sentiment_png = Path("images/graph_star_based_sentiment_vs_total_reviews_monthly.png")
     if chart_sentiment_png.exists():
         st.markdown("### 📈 Monthly Sentiment Trend") 
         with st.expander("ℹ️ How to read this chart"):
