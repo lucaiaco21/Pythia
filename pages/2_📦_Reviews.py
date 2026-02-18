@@ -425,7 +425,7 @@ if page == "🏠 Cafe_Madrid_UCM":
             st.markdown("""
             **Sentiment vs. Total Reviews** shows two things at once:
     
-            - 🟢 **Green (Positive)**, 🟡 **Yellow (Neutral)**, 🔴 **Red (Negative)**  
+            - 🟢 **Green (Positive, 5/4)**, 🟡 **Yellow (Neutral, 3)**, 🔴 **Red (Negative, 2/1)**  
             → The stacked bars show the **% breakdown** of review sentiment each month *(left axis)*
     
             - ⚫ **Black dashed line** → The **total number of reviews** received that month *(right axis)*
