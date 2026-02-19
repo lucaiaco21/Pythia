@@ -416,7 +416,7 @@ if page == "🏠 Cafe_Madrid_UCM":
                       f"{row['Count'].values[0]:,}",
                       f"{row['Pct'].values[0]}%",
                       delta_color = "off")
-    st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.7⭐")
+    st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.3⭐")
     st.markdown("---")
     chart_sentiment_png = Path("images/graph_star_based_sentiment_vs_total_reviews_monthly.png")
     if chart_sentiment_png.exists():
