@@ -1,2 +1,2 @@
 # Pythia
-Codigo por streamlit app
+Code for the Streamlit App
