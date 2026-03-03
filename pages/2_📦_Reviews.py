@@ -67,16 +67,9 @@ st.markdown("""
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ROBUST CSV LOADER
-# Handles: comma / semicolon / tab separators, decimal-comma avg_rating values
-# Just upload any CSV and the app will parse it correctly.
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _fix_avg_rating(val):
-    """
-    Repair avg_rating values mangled by decimal-comma/dot confusion.
-    e.g. 46.142 → 4.6142  |  4.296 → 4.296 (already fine)
-    Also handles string formats like '4,296' → 4.296
-    """
     try:
         s = str(val).strip().replace(',', '.')
         v = float(s)
@@ -84,8 +77,6 @@ def _fix_avg_rating(val):
         return None
     if 1.0 <= v <= 5.0:
         return round(v, 4)
-    # Value > 5: decimal point was dropped after first digit
-    # e.g. 46.142 → digits "46142" → "4.6142"
     digits = s.replace('.', '')
     try:
         fixed = float(digits[0] + '.' + digits[1:])
@@ -94,12 +85,7 @@ def _fix_avg_rating(val):
         return None
 
 def load_csv(file_obj) -> pd.DataFrame:
-    """
-    Load a CSV from a file path or Streamlit UploadedFile.
-    Auto-detects separator (, ; tab |) and repairs avg_rating if present.
-    """
     import io
-    # Read raw bytes so we can retry with different separators
     if hasattr(file_obj, "read"):
         raw = file_obj.read()
         if isinstance(raw, str):
@@ -120,15 +106,13 @@ def load_csv(file_obj) -> pd.DataFrame:
             continue
 
     if df is None:
-        df = pd.read_csv(io.BytesIO(raw))  # fallback
+        df = pd.read_csv(io.BytesIO(raw))
 
-    # Repair avg_rating column if present
     if "avg_rating" in df.columns:
         fixed = df["avg_rating"].apply(_fix_avg_rating)
         median_val = fixed.dropna().median()
         df["avg_rating"] = fixed.fillna(median_val).round(4)
 
-    # Strip whitespace from string columns
     for col in df.columns:
         if df[col].dtype == object:
             df[col] = df[col].astype(str).str.strip()
@@ -137,7 +121,6 @@ def load_csv(file_obj) -> pd.DataFrame:
 
 # ─────────────────────────────────────────────────────────────────────────────
 # KEYWORD → CATEGORY LOGIC
-# To update categories: edit CATEGORY_KEYWORDS below and re-upload the CSV.
 # ─────────────────────────────────────────────────────────────────────────────
 CATEGORY_KEYWORDS = {
     "☕ Coffee":     ["coffee","cafe","cappuccino","espresso","latte","cortado",
@@ -158,7 +141,6 @@ CATEGORY_KEYWORDS = {
                       "accessible","toilet","bathroom","gluten free","vegan"],
 }
 
-# Single-word noise to filter out
 NOISE_WORDS = {
     "good","nice","back","bit","tiny","super","highly","amazing","perfect",
     "lovely","loved","love","beautiful","wonderful","don","won","told","water",
@@ -184,26 +166,14 @@ def is_meaningful(text: str) -> bool:
     return True
 
 def build_my_local_insights(df: pd.DataFrame):
-    """
-    From global_insights CSV -> auto-generate good & bad insight lists
-    plus a categorized dataframe for the detail tab.
-
-    Accepts two formats:
-    - New (pre-categorized): columns insight, category, mentions, avg_rating, sentiment
-    - Old (raw):             columns normalized_item, mentions, avg_rating, sentiment
-    Just re-upload the CSV via the sidebar to refresh everything.
-    """
     df = df.copy()
 
-    # Normalise column name
     if "normalized_item" in df.columns and "insight" not in df.columns:
         df = df.rename(columns={"normalized_item": "insight"})
 
-    # Use existing category column or auto-assign
     if "category" not in df.columns:
         df["category"] = df["insight"].apply(assign_category)
 
-    # Map raw category names to emoji labels for display
     CAT_LABEL = {
         "atmosphere": "Atmosphere", "coffee": "Coffee",
         "food": "Food", "service": "Service",
@@ -217,7 +187,6 @@ def build_my_local_insights(df: pd.DataFrame):
     good = df[df["sentiment"].isin(["Muy Positivo", "Positivo"])].sort_values("mentions", ascending=False)
     bad  = df[df["sentiment"] == "Negativo"].sort_values("mentions", ascending=False)
 
-    # Top 3 per category for good (pandas 3.0 compatible)
     good_top_idx = (
         good.groupby("category", group_keys=False)
         .apply(lambda g: g.head(3), include_groups=False)
@@ -289,9 +258,6 @@ if not check_password():
 # ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING
 # ─────────────────────────────────────────────────────────────────────────────
-# ─────────────────────────────────────────────────────────────────────────────
-# DATA LOADING
-# ─────────────────────────────────────────────────────────────────────────────
 saved = load_data(PASSWORD)
 if saved is not None:
     st.sidebar.success(f"✅ Data loaded (uploaded {saved['timestamp'].strftime('%Y-%m-%d %H:%M')})")
@@ -301,7 +267,6 @@ if saved is not None:
         if st.button("🔄 Upload New Data"):
             st.session_state["force_upload"] = True
             st.rerun()
-    # ✅ Cancel button — only shows when in upload mode
     with col_b:
         if "force_upload" in st.session_state:
             if st.button("↩️ Go Back"):
@@ -318,7 +283,6 @@ else:
     data_loaded = False
 
 if not data_loaded:
-    # ✅ Also show cancel at the top of the upload section
     if saved is not None and "force_upload" in st.session_state:
         st.sidebar.info("Upload new files or go back to previous data.")
         if st.sidebar.button("↩️ Cancel — Keep Previous Data"):
@@ -352,7 +316,6 @@ if not data_loaded:
             st.sidebar.error(f"Error: {e}")
             st.stop()
     else:
-        # ✅ Only stop if there's no saved data to fall back to
         if saved is None:
             st.info("👈 Please upload the 3 required CSV files using the sidebar")
             st.markdown("""
@@ -366,7 +329,6 @@ if not data_loaded:
             """)
             st.stop()
         else:
-            # Has saved data but chose to upload new — waiting for files
             st.stop()
 
 # Build My Local insights from CSV
@@ -415,21 +377,21 @@ if page == "🏠 Cafe_Madrid_UCM":
             st.metric("⭐" * star,
                       f"{row['Count'].values[0]:,}",
                       f"{row['Pct'].values[0]}%",
-                      delta_color = "off")
+                      delta_color="off")
     st.info(f"📊 **Total Reviews Analyzed:** {total:,} | Average Score: 4.3⭐")
     st.markdown("---")
     chart_sentiment_png = Path("images/graph_star_based_sentiment_vs_total_reviews_monthly.png")
     if chart_sentiment_png.exists():
-        st.markdown("### 📈 Monthly Sentiment Trend") 
+        st.markdown("### 📈 Monthly Sentiment Trend")
         with st.expander("ℹ️ How to read this chart"):
             st.markdown("""
             **Sentiment vs. Total Reviews** shows two things at once:
-    
+
             - 🟢 **Green (Positive, 5/4 stars)**, 🟡 **Yellow (Neutral, 3 stars)**, 🔴 **Red (Negative, 2/1 stars)**  
             → The stacked bars show the **% breakdown** of review sentiment each month *(left axis)*
-    
+
             - ⚫ **Black dashed line** → The **total number of reviews** received that month *(right axis)*
-    
+
             **How to interpret it:**
             - A tall green bar = most reviews were positive that month
             - A spike in the line = unusually high review volume
@@ -458,22 +420,12 @@ if page == "🏠 Cafe_Madrid_UCM":
             st.markdown("### ✅ Best Aspect")
             st.success("**Food**")
             st.metric("Score", "92/100", "Top rated", delta_color="off")
-            st.markdown("""
-                <style>
-                [data-testid="stMetricValue"] { color: green; }
-                </style>
-                """, unsafe_allow_html=True)
         with c2:
             st.markdown("### ⚠️ Needs Attention")
             st.warning("**PRICE**")
             st.metric("Score", "47/100", "⚠️ Lowest rated", delta_color="off")
-            st.markdown("""
-                <style>
-                [data-testid="stMetricValue"] { color: red; }
-                </style>
-                """, unsafe_allow_html=True)
-        
-        # ── CATEGORY SCORES ──────────────────────────────────────────────────────────
+
+        # ── CATEGORY SCORES ──────────────────────────────────────────────────
         st.markdown("---")
         with st.popover("ℹ️ About categories"):
             st.markdown("""
@@ -481,9 +433,9 @@ if page == "🏠 Cafe_Madrid_UCM":
             Mentions that don't fit a specific category — overall impressions, 
             vague compliments/complaints, or multi-topic comments.  
             *Examples: "great experience", "wouldn't recommend", "came back again"*
-    
+
              ---
-    
+
             **⭐ Features**  
             Specific amenities and special attributes of the café.  
             *Examples: gluten-free options, WiFi, dog-friendly, outdoor terrace, 
@@ -491,27 +443,33 @@ if page == "🏠 Cafe_Madrid_UCM":
             """)
         st.markdown("### 🏆 Category Performance Scores")
         st.caption(
-        "Score 0–100 combining **volume of mentions** (50%) and "
-        "**average customer rating** (50%) per category. "
-        "Higher = more talked about AND better rated."
+            "Score 0–100 combining **volume of mentions** (50%) and "
+            "**average customer rating** (50%) per category. "
+            "Higher = more talked about AND better rated."
         )
 
         CAT_EMOJI = {
-        "food": "🍽️", "coffee": "☕", "service": "👥",
-        "atmosphere": "🏠", "location": "📍", "price": "💶",
-        "features": "⭐", "general": "🔹",
+            "food": "🍽️", "coffee": "☕", "service": "👥",
+            "atmosphere": "🏠", "location": "📍", "price": "💶",
+            "features": "⭐", "general": "🔹",
         }
 
+        # ── FIX: compute score dynamically (no category_score column needed) ──
         cat_summary = (
-        global_df.groupby("category")
-        .agg(
-        total_mentions=("mentions", "sum"),
-        avg_rating=("avg_rating", "mean"),
-        score=("sentiment", "first"),
+            global_df.groupby("category")
+            .agg(
+                total_mentions=("mentions", "sum"),
+                avg_rating=("avg_rating", "mean"),
+            )
+            .reset_index()
         )
-        .reset_index()
-        .sort_values("score", ascending=False)
-        )
+        _max_mentions = cat_summary["total_mentions"].max() or 1
+        cat_summary["score"] = (
+            (cat_summary["total_mentions"] / _max_mentions * 50)
+            + ((cat_summary["avg_rating"] - 1) / 4 * 50)
+        ).clip(0, 100).round(0).astype(int)
+        cat_summary = cat_summary.sort_values("score", ascending=False)
+        # ─────────────────────────────────────────────────────────────────────
 
         col_a, col_b = st.columns(2)
         for i, row in enumerate(cat_summary.itertuples()):
@@ -550,11 +508,11 @@ if page == "🏠 Cafe_Madrid_UCM":
             with (col_a if i % 2 == 0 else col_b):
                 st.markdown(card_html, unsafe_allow_html=True)
 
-                st.caption(
-                "🟢 Score ≥ 75 · Strong &nbsp;&nbsp; "
-                "🟡 50–74 · Moderate &nbsp;&nbsp; "
-                "🔴 < 50 · Needs attention"
-                )
+        st.caption(
+            "🟢 Score ≥ 75 · Strong &nbsp;&nbsp; "
+            "🟡 50–74 · Moderate &nbsp;&nbsp; "
+            "🔴 < 50 · Needs attention"
+        )
 
         st.markdown("---")
         cp, cs = st.columns(2)
@@ -573,7 +531,7 @@ if page == "🏠 Cafe_Madrid_UCM":
         if MY_LOCAL_GOOD or MY_LOCAL_BAD:
             st.markdown("---")
             st.markdown("## 💬 What Customers Say About Us")
-            
+
             cg, cb = st.columns(2)
             with cg:
                 st.markdown("### ✅ What We Do Well")
@@ -637,7 +595,6 @@ This page lets you explore **what customers mention most**, broken down by topic
                 "the full category breakdown."
             )
         else:
-            # Filters row
             fc1, fc2, fc3 = st.columns([2, 2, 1])
             with fc1:
                 all_cats  = sorted(global_df_cat["category"].unique())
@@ -663,7 +620,6 @@ This page lets you explore **what customers mention most**, broken down by topic
                     continue
 
                 with st.expander(f"{cat}  —  {len(cat_data)} items shown", expanded=True):
-                    # Bar chart coloured by sentiment
                     sent_color = {
                         "Muy Positivo": "#28a745",
                         "Positivo":     "#85c985",
@@ -690,7 +646,6 @@ This page lets you explore **what customers mention most**, broken down by topic
                     )
                     st.plotly_chart(fig_cat, use_container_width=True)
 
-                    # Searchable table
                     display = cat_data[
                         ["insight","mentions","avg_rating","sentiment"]
                     ].copy()
@@ -713,24 +668,23 @@ This page lets you explore **what customers mention most**, broken down by topic
 # PAGE 2 — COMPETITOR ANALYSIS
 # ═════════════════════════════════════════════════════════════════════════════
 elif page == "🔍 Competitor Analysis":
-    
-    
+
     map_path = Path("images/mapa_cafeterias_seeccionadas_madrid_20260210.html")
     if map_path.exists():
         st.markdown("## 📍 Map — Average Scores of Most-Rated Madrid Cafeterias")
         st.caption(
-        "📌 Showing the most-rated coffee shops in Madrid plotted by real location. "
-        "Each marker represents one coffee shop — browse the map to compare scores across the city and different neighboors.")
+            "📌 Showing the most-rated coffee shops in Madrid plotted by real location. "
+            "Each marker represents one coffee shop — browse the map to compare scores across the city and different neighboors.")
         with open(map_path, "r", encoding="utf-8") as f:
             components.html(f.read(), height=400, scrolling=False)
     st.markdown("---")
     st.markdown("## 📊 Market Overview")
     st.info(
-    "The analysis below focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
-    "selected to give you a view of your **direct competitors**. The reviews selected are only the ones with 4 stars or above"
-    "Note that the map above display additional cafes — this section only considers "
-    "the nearest ones to ensure the insights are meaningful for your area."
-    )    
+        "The analysis below focuses on the **12 coffee shops closest to your location** , with a relevant number of reviews in Google Maps, "
+        "selected to give you a view of your **direct competitors**. The reviews selected are only the ones with 4 stars or above. "
+        "Note that the map above display additional cafes — this section only considers "
+        "the nearest ones to ensure the insights are meaningful for your area."
+    )
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.metric("Total Coffee Shop", len(per_rest_df["restaurant"].unique()))
@@ -794,7 +748,7 @@ elif page == "🔍 Competitor Analysis":
             text=wide["num_restaurants"], textposition="outside",
         ))
         fig2.update_layout(title="Insights Present Across Multiple Coffee Shops",
-                           yaxis_title="Number of  Coffee Shops",
+                           yaxis_title="Number of Coffee Shops",
                            height=400, showlegend=False, xaxis_tickangle=-45)
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -802,7 +756,8 @@ elif page == "🔍 Competitor Analysis":
     with tab2:
         st.markdown("### 🏪 Insights for coffee shop")
         restaurants = sorted(per_rest_df["restaurant"].unique())
-        sel = st.selectbox("Select a coffee shop:", options = restaurants, help="Choose a coffee shop to see its detailed review analysis.")
+        sel = st.selectbox("Select a coffee shop:", options=restaurants,
+                           help="Choose a coffee shop to see its detailed review analysis.")
         rd  = per_rest_df[per_rest_df["restaurant"] == sel].sort_values("mentions", ascending=False)
 
         st.markdown(f"## ☕ {sel}")
@@ -822,7 +777,6 @@ elif page == "🔍 Competitor Analysis":
                         cc1, cc2 = st.columns([3, 1])
                         with cc1: st.markdown(f"**{row['insight'].title()}**")
                         with cc2: st.markdown(f"*{row['mentions']} mentions*")
-                            
 
     # ── TAB 4: COMPARISON ────────────────────────────────────────────────────
     with tab4:
@@ -830,14 +784,14 @@ elif page == "🔍 Competitor Analysis":
         with st.expander("ℹ️ How to read this comparison"):
             st.markdown("""
         This chart compares **what customers mention most** between two coffee shops.
-    
+
         - 📊 Values are shown as **% of each cafe's total mentions** — so a cafe with 1000 reviews 
         and one with 50 reviews are on **equal footing**
         - 🔵 **Blue bars** = First cafe selected
         - 🔴 **Red bars** = Second cafe selected
         - A bar present for only one cafe means that topic is **unique** to that cafe
         - The chart shows the **top 15 insights** ranked by combined mention share
-    
+
         > ⚠️ Competitor data contains **positive reviews only**. 
         My Local includes **positive reviews only** for a fair comparison.
         """)
@@ -847,7 +801,6 @@ elif page == "🔍 Competitor Analysis":
         has_my_local   = bool(MY_LOCAL_GOOD)
         all_options    = ([MY_LOCAL_LABEL] if has_my_local else []) + restaurants
 
-    # ── My Local series (positive only for fair comparison) ──────────────
         if has_my_local:
             my_local_comp = pd.DataFrame([
                 {"insight": i["insight"].lower(), "mentions": i["mentions"]}
@@ -856,28 +809,20 @@ elif page == "🔍 Competitor Analysis":
         else:
             my_local_comp = pd.DataFrame(columns=["insight", "mentions"])
             st.info(
-            "📂 Upload `global_insights_v2.csv` via the sidebar to enable "
-            "My Local in the comparison."
+                "📂 Upload `global_insights_v2.csv` via the sidebar to enable "
+                "My Local in the comparison."
             )
 
-        # ── Cafe selectors ────────────────────────────────────────────────────
         col1, col2 = st.columns(2)
         with col1:
-            rest1 = st.selectbox(
-                "First cafe:", 
-                all_options, 
-                key="r1",
-                help="Select the first coffee shop to compare."
-            )
+            rest1 = st.selectbox("First cafe:", all_options, key="r1",
+                                 help="Select the first coffee shop to compare.")
         with col2:
-            rest2 = st.selectbox(
-                "Second cafe:",
-                [r for r in all_options if r != rest1],
-                key="r2",
-                help="Select the second coffee shop to compare."
-            )
+            rest2 = st.selectbox("Second cafe:",
+                                 [r for r in all_options if r != rest1],
+                                 key="r2",
+                                 help="Select the second coffee shop to compare.")
 
-    # ── Get raw series per cafe ───────────────────────────────────────────
         def get_series(name):
             if name == MY_LOCAL_LABEL:
                 if my_local_comp.empty:
@@ -890,17 +835,14 @@ elif page == "🔍 Competitor Analysis":
 
         s1, s2 = get_series(rest1), get_series(rest2)
 
-    # ── Normalize to % of total mentions ─────────────────────────────────
         s1_total = s1.sum() if s1.sum() > 0 else 1
         s2_total = s2.sum() if s2.sum() > 0 else 1
 
         all_ins = list(set(s1.index) | set(s2.index))
 
-    # Store raw counts for tooltip
         raw1 = [int(s1.get(i, 0)) for i in all_ins]
         raw2 = [int(s2.get(i, 0)) for i in all_ins]
 
-    # Normalized %
         pct1 = [round((s1.get(i, 0) / s1_total) * 100, 1) for i in all_ins]
         pct2 = [round((s2.get(i, 0) / s2_total) * 100, 1) for i in all_ins]
 
@@ -912,19 +854,14 @@ elif page == "🔍 Competitor Analysis":
                 f"{rest2}_raw": raw2,
             },
             index=all_ins,
-    )
+        )
 
-    # Keep only insights mentioned by at least one cafe
         comp = comp[(comp[rest1] > 0) | (comp[rest2] > 0)]
-
-    # Sort by combined % and take top 15
         comp["_total"] = comp[rest1] + comp[rest2]
         comp = comp.sort_values("_total", ascending=False).head(15)
         comp = comp.drop(columns=["_total"])
 
-    # ── Chart ─────────────────────────────────────────────────────────────
         fig_comp = go.Figure()
-
         fig_comp.add_trace(go.Bar(
             name=rest1,
             x=comp.index,
@@ -932,13 +869,12 @@ elif page == "🔍 Competitor Analysis":
             marker_color="#3498db",
             customdata=comp[f"{rest1}_raw"],
             hovertemplate=(
-                    "<b>%{x}</b><br>"
-                    f"<b>{rest1}</b><br>"
-                    "Mentions: %{customdata}<br>"
-                    "Share: %{y}%<extra></extra>"
+                "<b>%{x}</b><br>"
+                f"<b>{rest1}</b><br>"
+                "Mentions: %{customdata}<br>"
+                "Share: %{y}%<extra></extra>"
             ),
         ))
-
         fig_comp.add_trace(go.Bar(
             name=rest2,
             x=comp.index,
@@ -946,13 +882,12 @@ elif page == "🔍 Competitor Analysis":
             marker_color="#e74c3c",
             customdata=comp[f"{rest2}_raw"],
             hovertemplate=(
-                    "<b>%{x}</b><br>"
-                    f"<b>{rest2}</b><br>"
-                    "Mentions: %{customdata}<br>"
-                    "Share: %{y}%<extra></extra>"
+                "<b>%{x}</b><br>"
+                f"<b>{rest2}</b><br>"
+                "Mentions: %{customdata}<br>"
+                "Share: %{y}%<extra></extra>"
             ),
         ))
-    
         fig_comp.update_layout(
             title=f"{rest1}  vs  {rest2}",
             yaxis_title="% of Total Mentions",
@@ -962,10 +897,7 @@ elif page == "🔍 Competitor Analysis":
             xaxis_tickangle=-45,
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         )
-
         st.plotly_chart(fig_comp, use_container_width=True)
-
-
 
     st.markdown("---")
     st.markdown(
