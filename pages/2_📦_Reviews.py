@@ -507,7 +507,7 @@ if page == "🏠 Cafe_Madrid_UCM":
         .agg(
         total_mentions=("mentions", "sum"),
         avg_rating=("avg_rating", "mean"),
-        score=("category_score", "first"),
+        score=("sentiment", "first"),
         )
         .reset_index()
         .sort_values("score", ascending=False)
