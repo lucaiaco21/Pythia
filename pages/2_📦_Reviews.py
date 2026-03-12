@@ -243,7 +243,7 @@ def check_password():
     if "password_correct" not in st.session_state:
         st.text_input("Enter Password to Access Detailed Analysis",
                       type="password", on_change=_entered, key="password")
-        st.info(f"Password is {len(PASSWORD)} letters")
+        st.info(f"Password is {len(PASSWORD)} characters")
         return False
     if not st.session_state["password_correct"]:
         st.text_input("Enter Password to Access Dashboard",
