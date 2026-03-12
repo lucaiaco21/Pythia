@@ -244,6 +244,7 @@ def check_password():
         st.text_input("Enter Password to Access Detailed Analysis",
                       type="password", on_change=_entered, key="password")
         st.info(f"Password is {len(PASSWORD)} characters")
+        st.info("If you do not have a password, please contact: marcio.iha@gmail.com or genesishg1509@gmail.com")
         return False
     if not st.session_state["password_correct"]:
         st.text_input("Enter Password to Access Dashboard",
